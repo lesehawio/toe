@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>درگاه احساسات و معجون‌ها</title>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+
+    :root {
+      --bg: #fdfdfd;
+      --primary: #3f51b5;
+      --accent: #ff9800;
+      --card-bg: #ffffff;
+      --text: #212121;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      direction: rtl;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    img.logo {
+      width: 250px;
+      margin: 0 auto 25px;
+      display: block;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      width: 100%;
+      max-width: 850px;
+    }
+
+    a.card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 20px var(--shadow);
+      padding: 30px 20px;
+      font-size: 1.3rem;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 600;
+      color: var(--primary);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    a.card:hover {
+      background-color: var(--primary);
+      color: #fff;
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(63, 81, 181, 0.35);
+    }
+
+    #question {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      a.card {
+        font-size: 1.1rem;
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://cdn.imgurl.ir/uploads/v969367_.png" alt="لوگوی بازی" class="logo" />
+
+  <h1>درگاه معبد احساسات</h1>
+
+  <div class="grid">
+    <a href="gloss/index.html" class="card">بخش احساسات</a>
+    <a href="test/index.html" class="card">بخش تست‌ها</a>
+    <a href="potion/index.html" class="card">کتابخانه معجون‌ها</a>
+  </div>
+
+  <div id="question"></div>
+
+</body>
+</html>
