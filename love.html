@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fff0f6">
+<title>فلوچارت خودتحلیلی عشق | قفسه‌ی عشق</title>
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%B9%D8%B4%D9%82.svg">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root{
+    --bg-start:#fff5f9; --bg-end:#ffd6e7;
+    --text-main:#5a1a38; --text-muted:#a35d7d;
+    --love-primary:#ec407a; --love-primary-dark:#c2185b;
+    --card-bg:rgba(255,255,255,.78);
+    --card-border:rgba(255,255,255,.9);
+    --shadow:0 10px 30px rgba(194,24,91,.12);
+    --radius-lg:28px;
+    --font:'Vazirmatn',Tahoma,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg-start)}
+  body{
+    direction:rtl; font-family:var(--font);
+    background:radial-gradient(circle at 50% 0%,#fff 0%,var(--bg-start) 40%,var(--bg-end) 100%);
+    color:var(--text-main); max-width:640px; margin:auto;
+    padding:calc(20px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+    min-height:100vh; position:relative; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased; line-height:1.9;
+  }
+
+  /* ===== امواج صورتی ===== */
+  .ambient-waves{position:fixed;bottom:0;left:0;width:100%;height:280px;z-index:0;pointer-events:none;overflow:hidden}
+  .ambient-waves svg{width:100%;height:100%;display:block}
+  .wave-group{transform-box:fill-box;transform-origin:center bottom}
+  .wave-path{transform-box:fill-box;transform-origin:center bottom}
+  .wave-group-1{animation:flowX1 24s ease-in-out infinite alternate}
+  .wave-group-2{animation:flowX2 30s ease-in-out infinite alternate}
+  .wave-group-3{animation:flowX3 36s ease-in-out infinite alternate}
+  @keyframes flowX1{0%{transform:translateX(-3%) rotate(.5deg)}100%{transform:translateX(3%) rotate(-1deg)}}
+  @keyframes flowX2{0%{transform:translateX(3%) rotate(-1deg)}100%{transform:translateX(-3%) rotate(1deg)}}
+  @keyframes flowX3{0%{transform:translateX(-2%) rotate(.8deg)}100%{transform:translateX(4%) rotate(-.5deg)}}
+  .wave-path-1{animation:breatheY1 15s ease-in-out infinite}
+  .wave-path-2{animation:breatheY2 19s ease-in-out infinite 2s}
+  .wave-path-3{animation:breatheY3 23s ease-in-out infinite 4s}
+  @keyframes breatheY1{0%,100%{transform:translateY(0) scaleY(1);opacity:.45}50%{transform:translateY(-14px) scaleY(1.08);opacity:.8}}
+  @keyframes breatheY2{0%,100%{transform:translateY(0) scaleY(1);opacity:.35}50%{transform:translateY(-20px) scaleY(1.12);opacity:.7}}
+  @keyframes breatheY3{0%,100%{transform:translateY(0) scaleY(1);opacity:.25}50%{transform:translateY(-10px) scaleY(1.05);opacity:.55}}
+
+  /* ===== هدر ===== */
+  .header-section{text-align:center;margin-bottom:25px;position:relative;z-index:2;animation:fadeInDown .8s ease both}
+  .joy-logo-container{position:relative;display:inline-block;margin-bottom:15px}
+  .joy-logo-container::before{
+    content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:160px;height:160px;background:radial-gradient(circle,rgba(236,64,122,.3) 0%,transparent 70%);
+    border-radius:50%;z-index:-1;animation:pulseGlow 4s ease-in-out infinite;
+  }
+  .joy-logo-frame{
+    width:120px;height:120px;border-radius:50%;background:#fff;
+    border:3px solid rgba(255,255,255,.9);
+    box-shadow:0 10px 30px rgba(194,24,91,.15),inset 0 0 20px rgba(236,64,122,.1);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    position:relative;animation:float 4s ease-in-out infinite;
+  }
+  .joy-logo-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  h1{color:#c2185b;font-size:24px;font-weight:800;margin:0;letter-spacing:-.5px}
+  .subtitle{font-size:12px;color:var(--text-muted);margin-top:5px;font-weight:500;letter-spacing:1px}
+
+  /* ===== دکمه بازگشت ===== */
+  .back-home{
+    display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    color:var(--text-muted);font-size:13px;font-weight:600;
+    padding:10px 18px;border-radius:50px;
+    background:rgba(255,255,255,.6);border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    margin-bottom:15px;position:relative;z-index:2;transition:all .3s ease;
+  }
+  .back-home:hover{background:#fff;color:var(--text-main);box-shadow:0 4px 15px rgba(0,0,0,.05);transform:translateX(5px)}
+  .back-home svg{width:16px;height:16px}
+
+  /* ===== کارت سوال ===== */
+  .question-card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--radius-lg);padding:35px 25px;
+    box-shadow:var(--shadow),inset 0 2px 10px rgba(255,255,255,.5);
+    margin-bottom:25px;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);
+    position:relative;z-index:2;overflow:hidden;animation:fadeInUp .6s ease both;
+  }
+  .question-card::before{
+    content:"";position:absolute;top:-60px;left:-40px;
+    width:180px;height:180px;background:radial-gradient(circle,rgba(236,64,122,.18) 0%,transparent 70%);
+    border-radius:50%;z-index:0;
+  }
+  .question-icon{display:flex;justify-content:center;margin-bottom:15px;position:relative;z-index:1}
+  .question-icon svg{width:32px;height:32px;color:var(--love-primary-dark);filter:drop-shadow(0 4px 8px rgba(236,64,122,.35))}
+  #question{
+    font-size:18px;font-weight:700;line-height:1.9;margin:0;
+    position:relative;z-index:1;text-align:center;min-height:80px;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ===== دکمه‌ها ===== */
+  .buttons-container{display:flex;justify-content:center;gap:15px;position:relative;z-index:2;animation:fadeInUp .6s ease .1s both}
+  button{
+    font-family:var(--font);font-size:16px;font-weight:700;
+    padding:14px 40px;border-radius:50px;border:none;cursor:pointer;
+    transition:all .3s cubic-bezier(.25,.8,.25,1);
+    box-shadow:0 4px 15px rgba(0,0,0,.05);position:relative;overflow:hidden;
+  }
+  #yesBtn{background:linear-gradient(135deg,#f8bbd0,#ec407a 50%,#c2185b);color:#3a0a20;box-shadow:0 8px 25px rgba(236,64,122,.45)}
+  #yesBtn::after{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transition:.5s}
+  #yesBtn:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(236,64,122,.55)}
+  #yesBtn:hover::after{left:100%}
+  #noBtn{background:rgba(255,255,255,.7);color:var(--text-muted);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+  #noBtn:hover{background:#fff;color:var(--text-main);transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+  button:active{transform:translateY(0) scale(.96)}
+
+  /* ===== کارت نتیجه ===== */
+  #result{
+    background:linear-gradient(145deg,#fff0f6,#ffe0ec);
+    border:1px solid rgba(236,64,122,.3);padding:25px;margin-top:25px;
+    border-radius:var(--radius-lg);display:none;line-height:2;
+    font-size:15px;font-weight:500;color:#5a1a38;
+    box-shadow:0 10px 30px rgba(194,24,91,.1),inset 0 2px 10px rgba(255,255,255,.5);
+    position:relative;z-index:2;text-align:right;
+  }
+  .result-header{
+    display:flex;align-items:center;gap:10px;margin-bottom:15px;
+    padding-bottom:12px;border-bottom:1px dashed rgba(236,64,122,.35);
+    font-weight:700;font-size:16px;color:var(--love-primary-dark);
+  }
+  .result-header svg{width:24px;height:24px;color:var(--love-primary);flex-shrink:0}
+  #resultText{white-space:pre-wrap;margin-bottom:20px;line-height:2}
+
+  /* ===== کارت معجون ===== */
+  .potion-inner{
+    background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);
+    border-radius:22px;padding:20px;margin-top:10px;
+    text-align:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 6px 20px rgba(194,24,91,.1);
+    animation:fadeInUp .5s ease both;
+  }
+  .potion-inner .potion-svg{width:140px;height:140px;margin:0 auto 12px;display:block;overflow:visible}
+  .potion-title{font-size:20px;font-weight:800;color:var(--love-primary-dark);margin:0 0 6px}
+  .potion-desc{font-size:13px;color:var(--text-muted);line-height:1.9;margin:0 0 16px}
+  .potion-content{
+    text-align:right;margin-top:18px;padding-top:16px;
+    border-top:1px dashed rgba(236,64,122,.35);
+  }
+  .potion-content h3{font-size:15px;font-weight:800;color:#c2185b;margin:18px 0 8px}
+  .potion-content h3:first-child{margin-top:0}
+  .potion-content p{font-size:14px;color:#5a1a38;margin:0 0 12px;line-height:1.95}
+  .potion-content ul,.potion-content ol{padding-right:20px;margin:0 0 14px;font-size:14px;color:#5a1a38}
+  .potion-content li{margin-bottom:7px;line-height:1.85}
+  .potion-content blockquote{
+    background:rgba(252,228,236,.6);border-right:4px solid #ec407a;
+    border-radius:6px;padding:10px 14px;margin:14px 0;
+    font-style:italic;color:#a3345a;font-size:14px;
+  }
+  .potion-content .highlight{
+    background:rgba(252,228,236,.7);padding:12px 16px;
+    border-right:4px solid #ec407a;border-radius:8px;margin:14px 0;
+    font-size:14px;line-height:1.95;
+  }
+  .potion-content .note{
+    margin-top:18px;padding:14px 16px;background:rgba(255,235,242,.75);
+    border-right:4px solid #c2185b;border-radius:12px;
+    color:#8c2044;font-weight:500;font-size:14px;line-height:1.9;
+  }
+
+  /* ===== دکمه‌های پایانی ===== */
+  .result-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:18px}
+  .result-actions button{font-size:14px;padding:12px 32px;width:100%;max-width:280px}
+  #continueBtn{background:linear-gradient(135deg,#f8bbd0,#ec407a 50%,#c2185b);color:#3a0a20;box-shadow:0 8px 25px rgba(236,64,122,.45)}
+  #continueBtn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(236,64,122,.55)}
+  .restart-btn{background:#fff;color:var(--love-primary-dark);border:1px solid rgba(236,64,122,.3);box-shadow:0 4px 15px rgba(194,24,91,.15)}
+  .restart-btn:hover{background:#fff5f9;transform:translateY(-2px);box-shadow:0 6px 20px rgba(194,24,91,.2)}
+
+  /* ===== پیام نهایی ===== */
+  #final{
+    background:linear-gradient(135deg,#f0f9f4,#dcfce7);color:#166534;
+    padding:30px 25px;margin-top:25px;border:2px dashed #86efac;
+    border-radius:var(--radius-lg);font-size:16px;font-weight:600;line-height:2;
+    display:none;text-align:center;position:relative;z-index:2;
+    box-shadow:0 10px 30px rgba(22,101,52,.08);white-space:pre-wrap;
+  }
+
+  /* ===== انیمیشن SVG ===== */
+  .bottle{transform-box:fill-box;transform-origin:center;animation:float 4s ease-in-out infinite}
+  .liquid{animation:liquid 3.5s ease-in-out infinite alternate}
+  .bubble{animation:bubble 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .b2{animation-delay:1s}
+  .b3{animation-delay:1.8s}
+  .glow{animation:glow 4s ease-in-out infinite}
+
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-11px) rotate(1deg)}}
+  @keyframes liquid{from{transform:translateY(3px)}to{transform:translateY(-4px)}}
+  @keyframes bubble{0%,100%{transform:translateY(5px);opacity:.35}50%{transform:translateY(-12px);opacity:1}}
+  @keyframes glow{0%,100%{opacity:.25}50%{opacity:.55}}
+  @keyframes pulseGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.8}50%{transform:translate(-50%,-50%) scale(1.2);opacity:1}}
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+  @media (min-width:601px){
+    #question{font-size:20px}
+    .joy-logo-frame{width:140px;height:140px}
+    h1{font-size:28px}
+    .potion-inner .potion-svg{width:180px;height:180px}
+    .potion-title{font-size:24px}
+  }
+  @media (max-width:400px){
+    #question{font-size:16px}
+    .joy-logo-frame{width:100px;height:100px}
+    button{padding:12px 30px;font-size:15px}
+    h1{font-size:22px}
+    .question-card{padding:25px 20px}
+    .potion-inner .potion-svg{width:120px;height:120px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    .ambient-waves{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- امواج صورتی -->
+<div class="ambient-waves" aria-hidden="true">
+  <svg viewBox="0 0 600 210" preserveAspectRatio="none">
+    <g class="wave-group wave-group-3"><path class="wave-path wave-path-3" d="M-50 145 C130 95 200 195 330 135 S520 90 650 150 L650 220 L-50 220Z" fill="#f48fb1"/></g>
+    <g class="wave-group wave-group-2"><path class="wave-path wave-path-2" d="M-50 105 C110 45 180 165 300 100 S500 45 650 112 L650 220 L-50 220Z" fill="#f8bbd0"/></g>
+    <g class="wave-group wave-group-1"><path class="wave-path wave-path-1" d="M-50 65 C100 5 160 135 270 70 S470 5 650 78 L650 220 L-50 220Z" fill="#fce4ec"/></g>
+  </svg>
+</div>
+
+<!-- بازگشت -->
+<a href="index.html" class="back-home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  بازگشت به قفسه‌ی عشق
+</a>
+
+<!-- هدر -->
+<div class="header-section">
+  <div class="joy-logo-container">
+    <div class="joy-logo-frame">
+      <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%B9%D8%B4%D9%82.svg" alt="لوگوی عشق">
+    </div>
+  </div>
+  <h1>فلوچارت خودتحلیلی عشق</h1>
+  <p class="subtitle">A GENTLE SPACE FOR LOVE</p>
+</div>
+
+<!-- سوال -->
+<div class="question-card" id="questionCard">
+  <div class="question-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  </div>
+  <div id="question"></div>
+</div>
+
+<!-- دکمه‌ها -->
+<div class="buttons-container" id="buttonsContainer">
+  <button id="yesBtn">بله</button>
+  <button id="noBtn">خیر</button>
+</div>
+
+<!-- نتیجه: راهکار + معجون با هم -->
+<div id="result">
+  <div class="result-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+    </svg>
+    راهکار پیشنهادی
+  </div>
+  <div id="resultText"></div>
+  <div id="potionMount"></div>
+  <div class="result-actions">
+    <button id="continueBtn">ادامه</button>
+    <button class="restart-btn" id="restartBtn">شروع دوباره</button>
+  </div>
+</div>
+
+<!-- پیام نهایی -->
+<div id="final"></div>
+
+<script>
+  /* ============================================================
+     داده‌های کامل ۱۰ معجون عشق
+     ============================================================ */
+  const potions = {
+    deepSelfCare: {
+      title:"خودمراقبتی عمیق و دوست‌داشتن خود",
+      desc:"در جهانی که مدام ازت می‌خواد بیشتر باشی، ایستادن و گفتن «همین‌که هستم، کافی‌ام».",
+      colors:{light:"#fce4ec",mid:"#f06292",dark:"#ad1457"},
+      content:`
+        <p>در جهانی که مدام ازت می‌خواد «بیشتر» باشی—قوی‌تر، زیباتر، مفیدتر، موفق‌تر... <strong>خودمراقبتی</strong> یعنی ایستادن روبه‌روی این فشارها و گفتن یک جمله‌ی ساده اما پرقدرت:</p>
+        <blockquote>«همین‌که هستم، کافی‌ام.»</blockquote>
+        <p>خودمراقبتی عمیق، فقط ماسک شب یا حمام کف‌آلود نیست. یعنی با خودت صادقانه بپرسی: «من واقعاً چی نیاز دارم؟»</p>
+        <ul><li>شاید فقط خواب...</li><li>شاید یه لیوان چای کنار پنجره</li><li>شاید سکوتی زیر پتو، یا دست‌هایی که بازوهات رو نوازش کنن</li><li>یا فقط یه آغوش گرم از خودت، برای خودت</li></ul>
+        <h3>دوست داشتن خود یعنی چی؟</h3>
+        <p>یعنی با خودت مثل کسی رفتار کنی که عاشقشی. کسی که نازشو می‌کشی، آروم صداش می‌زنی، پشتش هستی. یعنی وقتی اشتباه می‌کنی، خودتو تحقیر نمی‌کنی. وقتی غم داری، به خودت نمی‌گی "زود باش، جمعش کن."</p>
+        <blockquote>بلکه می‌گی: «می‌دونم، سخته... ولی من باهاتم.»</blockquote>
+        <h3>گاهی عشق بزرگ، از خودت شروع می‌شه</h3>
+        <ul><li>از گفتن «نه» به چیزی که اذیتت می‌کنه</li><li>از ترک آدمایی که تو رو خاموش می‌کنن</li><li>از یادآوری اینکه تو هم حق داری نیاز داشته باشی، زخمی باشی، و باز هم دوست‌داشتنی بمونی</li></ul>
+        <h3>خودمراقبتی یعنی چی در روزهای سخت؟</h3>
+        <p>یعنی تبدیل کردن خودت به پناهگاهت. جایی که وقتی به هم ریختی، بتونی بری توش نفس بکشی. بدون ترس، بدون عجله برای «درست شدن».</p>
+        <div class="note">عشق همیشه فریاد نمی‌زنه.<br>گاهی فقط توی یه آینه زمزمه می‌کنه:<br>«من هنوز اینجام. برای تو. با تو.»</div>
+      `
+    },
+    healthyConnections: {
+      title:"تقویت ارتباطات سالم و مرزگذاری",
+      desc:"یاد گرفتن «نه» گفتن، محافظت از فضای شخصی، و احترام به فضای دیگران.",
+      colors:{light:"#f8bbd0",mid:"#ec407a",dark:"#880e4f"},
+      content:`
+        <p>ارتباط سالم مثل یک باغچه‌ست که هر روز با مراقبت و توجه باید آبش بدیم تا گل‌های رنگارنگِ <strong>عشق، احترام و اعتماد</strong> در آن شکوفا بشن. اما این باغچه وقتی رشد می‌کنه که مرزهای روشن و سالم داشته باشیم.</p>
+        <h3>مرزگذاری یعنی چی؟</h3>
+        <p>یعنی یاد گرفتنِ <em>«نه» گفتن</em> وقتی چیزی برایت درست نیست، یعنی توانایی محافظت از فضای شخصی و روانی‌ات، و همچنین احترام گذاشتن به فضای دیگران.</p>
+        <p>وقتی مرزهایت را بشناسی، دیگه لازم نیست نگران باشی که دیگران از تو سوءاستفاده کنند یا تو را از خودت دور کنند.</p>
+        <h3>ارتباطات سالم یعنی</h3>
+        <ul><li>شنیدن واقعی</li><li>گفتنِ صادقانه</li><li>پذیرفتنِ متفاوت بودن بدون قضاوت</li></ul>
+        <p>وقتی با خودت و دیگران صادق باشی، رابطه‌هایت عمیق‌تر و پرمهرتر می‌شوند.</p>
+        <h3>چطوری مرزگذاری کنیم؟</h3>
+        <p>اول از همه باید نیازها و محدودیت‌های خودت را بشناسی و به آن‌ها احترام بگذاری. سپس به آرامی و با مهربانی آن‌ها را به دیگران اطلاع دهی. به یاد داشته باش که مرزها نشانه‌ی <strong>عشق به خود</strong> هستند، نه بی‌رحمی.</p>
+        <h3>تقویت ارتباطات سالم</h3>
+        <p>نیازمند صبر و تمرین است. گاهی باید گفتگوهای سختی داشته باشی، اما این گفت‌وگوها به رشد رابطه کمک می‌کنند. یادت باشد که تو شایسته‌ی عشق و احترام هستی.</p>
+        <div class="note">با این معجون، تو می‌تونی عشق سالم را در زندگی‌ات جاری کنی، نه فقط برای خودت، بلکه برای اطرافیانت هم آرامش و امنیت بسازی.</div>
+      `
+    },
+    empathyListening: {
+      title:"تمرین همدلی و شنیدن فعال",
+      desc:"واقعاً گوش کردن، نه فقط به کلمات، بلکه به احساسات پشت آن‌ها.",
+      colors:{light:"#fce4ec",mid:"#f48fb1",dark:"#c2185b"},
+      content:`
+        <p>گاهی در دل روابط، مهم‌ترین هدیه‌ای که می‌توانیم به هم بدهیم، <strong>واقعاً گوش کردن</strong> است؛ نه فقط به کلمات، بلکه به احساسات پشت آن‌ها. تمرین همدلی یعنی اینکه بتوانیم پای درد دل دیگری بنشینیم و دنیا را از نگاه او ببینیم، بدون قضاوت و بدون عجله برای دادن راه‌حل.</p>
+        <h3>شنیدن فعال چیست؟</h3>
+        <p>شنیدن فعال فراتر از شنیدن معمولی است؛ این یعنی حضور کامل در لحظه، تمرکز بر صحبت‌های طرف مقابل، و بازخورد دادن به گونه‌ای که او بداند شنیده و فهمیده شده است.</p>
+        <blockquote>وقتی شنونده فعال باشیم، می‌گوییم:<br>«تو برای من مهمی، و حرف‌هایت ارزش دارد.»</blockquote>
+        <h3>چرا همدلی مهم است؟</h3>
+        <p>همدلی پلی است میان دل‌ها که تنهایی را کم می‌کند، اعتماد را می‌سازد، و عشق را عمیق‌تر می‌کند.</p>
+        <p>این مهارت به ما کمک می‌کند درک کنیم که دیگران هم انسان‌هایی با احساسات و دردهای خاص خود هستند، و باعث می‌شود کمتر قضاوت کنیم و بیشتر بپذیریم.</p>
+        <h3>چطور تمرین کنیم؟</h3>
+        <ul><li>وقتی کسی با تو صحبت می‌کند، تمام حواس‌ات را جمع کن و چشم در چشم او نگاه کن.</li><li>سعی کن احساسات پشت کلمات را بفهمی، مثلاً با جملاتی مثل: «می‌فهمم که این موضوع برایت سخت است» یا «احساس می‌کنم این مسئله تو را ناراحت کرده».</li><li>از قطع کردن صحبت خودداری کن، حتی اگر بخواهی کمک کنی.</li><li>اگر چیزی نفهمیدی، به جای حدس زدن بپرس: «می‌تونی بیشتر توضیح بدی؟»</li></ul>
+        <div class="note">گوش دادن با دل، بهترین هدیه‌ای است که می‌توانی به کسی بدهی.<br>این معجون، عشق را در دل‌ها روشن می‌کند و پیوندها را عمیق‌تر می‌سازد.</div>
+      `
+    },
+    positiveMeditation: {
+      title:"مدیتیشن تمرکز بر احساس‌های مثبت",
+      desc:"بازگرداندن آرامش و روشنایی به درون، با تمرکز بر یک حس مثبت.",
+      colors:{light:"#f8bbd0",mid:"#e91e63",dark:"#880e4f"},
+      content:`
+        <p>گاهی در هیاهوی روزمره، ذهن‌مان پر می‌شود از افکار پراکنده و احساسات سنگین. <strong>مدیتیشن تمرکز بر احساس‌های مثبت</strong> یک مسیر ساده و موثر است برای بازگرداندن آرامش و روشنایی به درون خودمان.</p>
+        <h3>چطور انجامش بدیم؟</h3>
+        <ul><li>یک جای آرام پیدا کن، بنشین یا دراز بکش، راحت باش.</li><li>چند نفس عمیق بکش؛ با هر دم، حس تازه و زندگی را به درونت بیاور، و با هر بازدم، تنش و سنگینی‌ها را رها کن.</li><li>حالا به احساسی که دوست داری بیشتر تجربه کنی فکر کن؛ می‌تواند شادی، امید، آرامش، محبت یا هر حس مثبت دیگری باشد.</li><li>آن حس را به آرامی در ذهن‌ات تجسم کن، مثل یک نور گرم و نرم که در دل سینه‌ات می‌درخشد و تمام وجودت را روشن می‌کند.</li><li>به هر نقطه‌ای از بدنت که این حس مثبت می‌رسد توجه کن، احساس کن چطور عضلات آرام می‌شوند، تنش‌ها کم می‌شود، و قلبت با نرمی می‌تپد.</li><li>اگر ذهنت پرت شد، آرام به نفس‌هایت بازگرد، و دوباره به آن حس خوب و آرام‌بخش برگرد.</li><li>این مدیتیشن را می‌توانی ۵ تا ۱۵ دقیقه ادامه دهی، و هر زمان که آماده بودی با آرامش و لبخندی کوچک، به دنیای بیرون بازگردی.</li></ul>
+        <h3>چرا این مدیتیشن موثر است؟</h3>
+        <p>تمرکز بر احساس‌های مثبت، مانند یک چراغ راهنما در دل تاریکی است. این تمرین به تو کمک می‌کند تا انرژی درونی‌ات را بازسازی کنی، تعادل روانی‌ات را تقویت کنی، و ذهن‌ات را از افکار منفی و اضطراب پاکسازی کنی.</p>
+        <p>هر بار که این معجون را به کار می‌بری، دریچه‌ای تازه به سوی آرامش و امید درونت باز می‌شود.</p>
+        <div class="note">تو لایق آرامشی که از درون می‌آید هستی،<br>و این نور، همیشه در قلب تو می‌درخشد.</div>
+      `
+    },
+    expressLove: {
+      title:"بیان و نوشتن احساسات عاشقانه",
+      desc:"پلی بین دل و ذهن، دریچه‌ای برای رهایی و درک بهتر خود و معشوق.",
+      colors:{light:"#fce4ec",mid:"#f06292",dark:"#ad1457"},
+      content:`
+        <p>عشق، یکی از زیباترین و پیچیده‌ترین احساسات انسانی است. گاهی دل پر از حرف‌ها و احساسات ناب می‌شود که گفتن‌شان سخت است، یا نمی‌دانیم چگونه بیان‌شان کنیم. نوشتن احساسات عاشقانه، پلی است بین دل و ذهن، و دریچه‌ای است برای رهایی و درک بهتر خود و معشوق.</p>
+        <h3>چرا نوشتن؟</h3>
+        <p>نوشتن کمک می‌کند تا احساسات عاشقانه را به زبان ساده و صادقانه بیان کنیم، بی آنکه ترس از قضاوت یا ناتوانی در گفتن داشته باشیم. هر واژه، هر جمله، هر خطی که می‌نویسی، نوری است که به قلبت می‌تاباند و به آرامش‌ات می‌افزاید.</p>
+        <h3>چگونه شروع کنیم؟</h3>
+        <ul><li>دفترچه یا صفحه‌ای اختصاصی برای نوشتن احساسات عاشقانه‌ات داشته باش.</li><li>بدون نگرانی از ساختار یا درست بودن، هر آنچه در دلت می‌گذرد را بنویس؛ احساسات، آرزوها، خاطرات شیرین یا حتی ترس‌هایت را.</li><li>از کلمات ساده و خودت استفاده کن، مثل یک دوست صمیمی که با او حرف می‌زنی.</li><li>هر وقت دلت خواست، نوشته‌هایت را مرور کن، این کار کمک می‌کند خودت را بهتر بفهمی و عاشقانه‌تر زندگی کنی.</li></ul>
+        <h3>فواید این معجون</h3>
+        <ul><li>آرامش‌بخش است و فشارهای درونی را کم می‌کند.</li><li>کمک می‌کند احساسات پیچیده عاشقانه را دسته‌بندی و مدیریت کنی.</li><li>باعث رشد خودآگاهی و شناخت بهتر از خود و نیازهای عشقی‌ات می‌شود.</li><li>فضای امنی ایجاد می‌کند که بتوانی بدون ترس و خجالت، درونت را باز کنی.</li></ul>
+        <div class="note">بیان و نوشتن احساسات عاشقانه،<br>راهی است برای در آغوش گرفتن خودت و عشقت،<br>و هر بار که این معجون را می‌سازی،<br>قلبت روشن‌تر و سبک‌تر می‌شود.</div>
+      `
+    },
+    creativeActivities: {
+      title:"فعالیت‌های خلاقانه و هنری",
+      desc:"خلق کردن به جای حرف زدن، برای بیان احساسات عمیق و پیچیده.",
+      colors:{light:"#f8bbd0",mid:"#d81b60",dark:"#880e4f"},
+      content:`
+        <p>گاهی بهترین راه برای بیان احساسات عمیق و پیچیده، حرف زدن نیست، بلکه خلق کردن است. فعالیت‌های خلاقانه و هنری، مثل نقاشی، نوشتن، موسیقی، عکاسی یا هر هنر دیگری، به تو اجازه می‌دهند دنیای درونت را به زبان بی‌کلام بیان کنی.</p>
+        <h3>چرا فعالیت‌های خلاقانه مهم‌اند؟</h3>
+        <p>آن‌ها به تو کمک می‌کنند از فشارهای روانی و اضطراب رها شوی. وقتی درگیر خلق کردن می‌شوی، ذهن‌ات آرام می‌گیرد و به تو فرصت می‌دهد که در لحظه باشی و از افکار منفی دور شوی. این فعالیت‌ها باعث تقویت اعتماد به نفس و احساس ارزشمندی می‌شوند. هنر، پلی است بین تو و احساسات‌ات، و میان تو و جهان پیرامون.</p>
+        <h3>چگونه شروع کنیم؟</h3>
+        <ul><li>یک فضای ساده و بی‌دغدغه برای خلاقیتت فراهم کن.</li><li>بدون نگرانی از نتیجه، فقط اجازه بده دست و ذهنت حرکت کنند.</li><li>اگر نمی‌دانی از کجا شروع کنی، یک رنگ، یک کلمه، یا یک صدا را انتخاب کن و با آن بازی کن.</li><li>هر روز حتی برای چند دقیقه، زمانی را به فعالیت هنری اختصاص بده.</li></ul>
+        <h3>فواید این معجون</h3>
+        <ul><li>فعال شدن خلاقیت باعث ترشح هورمون‌های شادی و کاهش استرس می‌شود.</li><li>با خلق کردن، احساساتت را بهتر می‌شناسی و به زبان دل، آن‌ها را بیان می‌کنی.</li><li>ایجاد آثار هنری، به تو حس دستاورد و انگیزه می‌دهد.</li><li>این مسیر، تو را به آرامش و تعادل عمیق‌تر درونی می‌رساند.</li></ul>
+        <div class="note">فعالیت‌های خلاقانه، یک راه دلنشین و قدرتمند برای زندگی بهتر است؛<br>همچون نغمه‌ای شیرین که به قلب تو جان می‌بخشد و به روح تو پرواز.</div>
+      `
+    },
+    lettingGo: {
+      title:"تمرین رهایی از وابستگی و کنترل",
+      desc:"آزادسازی از زنجیرهای نامرئی وابستگی، برای رسیدن به آرامش واقعی.",
+      colors:{light:"#e1bee7",mid:"#ab47bc",dark:"#4a148c"},
+      content:`
+        <p>گاهی احساس می‌کنیم که زندگیمان در بند وابستگی‌ها و نیاز به کنترل کردن دیگران یا شرایط گرفتار شده است. این وابستگی‌ها می‌توانند انرژی‌مان را بگیرند، آرامش را از ما بگیرند، و ما را در چرخه‌ای بی‌پایان از نگرانی و استرس گرفتار کنند. اما رهایی از این زنجیرهای نامرئی، کلید رسیدن به آزادی و آرامش واقعی است.</p>
+        <h3>چرا رهایی از وابستگی مهم است؟</h3>
+        <ul><li>وابستگی زیاد به افراد یا شرایط، ما را آسیب‌پذیر می‌کند و حس ناامنی می‌آورد.</li><li>تلاش برای کنترل هر چیزی، باعث خستگی روانی و جسمی می‌شود.</li><li>وقتی رها می‌شویم، اجازه می‌دهیم زندگی جریان پیدا کند و فرصت‌های جدید خلق شود.</li><li>این رهایی باعث می‌شود خودمان را بیشتر دوست داشته باشیم و به خودمان اعتماد کنیم.</li></ul>
+        <h3>چگونه این تمرین را شروع کنیم؟</h3>
+        <ul><li>آگاهی پیدا کن: ابتدا باید بفهمی به چه چیزهایی وابسته‌ای و کدام جنبه‌ها را بیش از حد کنترل می‌کنی.</li><li>احساساتت را بپذیر: وابستگی و نیاز به کنترل معمولاً از ترس و نگرانی سرچشمه می‌گیرند؛ این احساسات را بدون قضاوت بپذیر.</li><li>نفس عمیق بکش و رها کن: هر زمان که احساس کنترل‌گری یا وابستگی شدید کردی، چند نفس عمیق بکش و با هر بازدم، بخشی از آن اضطراب را رها کن.</li><li>تمرین اعتماد به خود و جهان: به خودت یادآوری کن که تو توانایی مدیریت زندگی‌ات را داری و گاهی باید اجازه دهی جریان زندگی خودش راهش را پیدا کند.</li><li>فعال باش: کارهایی انجام بده که حس استقلال و قدرت به تو بدهد، مثل مدیتیشن، ورزش، یا هنر.</li></ul>
+        <h3>فواید این معجون</h3>
+        <ul><li>کاهش استرس و نگرانی‌های بی‌پایان.</li><li>افزایش اعتماد به نفس و خودمختاری.</li><li>بهبود کیفیت روابط با دیگران، چون وابستگی کمتر، آزادی بیشتر می‌آورد.</li><li>تجربه آرامش عمیق و شادی حقیقی درون.</li></ul>
+        <div class="note">رهایی از وابستگی و کنترل، نه جدا شدن از دنیا، بلکه پیوندی عمیق‌تر با خود و زندگی است.<br>با این تمرین، می‌توانی بال‌های آزادی‌ات را باز کنی و در آغوش جهان، با آرامش پرواز کنی.</div>
+      `
+    },
+    sharedMoments: {
+      title:"ایجاد لحظات مشترک بدون فشار و انتظارات",
+      desc:"جادوی واقعی در لحظاتی نهفته که بدون انتظار و اجبار شکل می‌گیرد.",
+      colors:{light:"#fce4ec",mid:"#ec407a",dark:"#880e4f"},
+      content:`
+        <p>گاهی رابطه‌ها و دوستی‌ها آن‌قدر پیچیده می‌شوند که هر دیدار یا مکالمه پر از فشار برای رضایت دادن یا اثبات چیزی می‌شود. اما جادوی واقعی در لحظات مشترکی نهفته است که بدون انتظار و بدون اجبار، فقط با حضور ساده و واقعی دو نفر شکل می‌گیرد.</p>
+        <h3>چرا لحظات بدون فشار مهم‌اند؟</h3>
+        <ul><li>وقتی انتظارات و فشارها کم باشند، می‌توانیم خودِ واقعی‌مان باشیم.</li><li>این نوع لحظات فضایی امن و آرام برای رشد رابطه فراهم می‌کنند.</li><li>کاهش استرس و نگرانی، به قلب‌ها اجازه می‌دهد راحت‌تر به هم نزدیک شوند.</li><li>این لحظات، پایه‌های اعتماد و محبت را قوی‌تر می‌کنند.</li></ul>
+        <h3>چگونه این لحظات را بسازیم؟</h3>
+        <ul><li>آگاه باش به انتظاراتت: پیش از دیدار یا صحبت، نگاهی به انتظاراتت بینداز و سعی کن آنها را آرام کنی.</li><li>حضور کامل داشته باش: به جای فکر کردن به گذشته یا آینده، با تمام وجود در لحظه باش و به طرف مقابلت گوش بده.</li><li>آزاد باش از نیاز به کنترل: بگذار جریان رابطه خودش جریان پیدا کند، بدون اینکه بخواهی همه چیز را مدیریت کنی.</li><li>پذیرش بدون قضاوت: حتی اگر طرف مقابل متفاوت رفتار کند، او را همان‌گونه که هست بپذیر.</li><li>لذت ببر از سادگی: گاهی فقط یک نگاه، یک لبخند یا سکوتی همراه با هم بودن، ارزشمندتر از هزار کلمه است.</li></ul>
+        <h3>فواید این معجون</h3>
+        <ul><li>ایجاد حس امنیت و آرامش در رابطه.</li><li>بهبود کیفیت ارتباط و کاهش تنش‌ها.</li><li>افزایش حس صمیمیت و محبت واقعی.</li><li>کمک به هر دو طرف برای رشد فردی و مشترک.</li></ul>
+        <div class="note">لحظات مشترک بدون فشار و انتظارات، مانند باغچه‌ای هستند که در آن دو گل به آرامی و به شکل طبیعی رشد می‌کنند.<br>با ساختن این فضاها، می‌توانی ارتباطاتت را به گلستانی از شادی، آرامش و اعتماد تبدیل کنی.</div>
+      `
+    },
+    forgiveness: {
+      title:"یادگیری بخشش و پذیرش تغییرات",
+      desc:"رها کردن بار سنگین کینه، و همراهی با جریان زندگی.",
+      colors:{light:"#f8bbd0",mid:"#f06292",dark:"#ad1457"},
+      content:`
+        <p>زندگی پر از تغییر است؛ مثل جویباری که هیچ‌وقت آرام و یک‌نواخت نمی‌ماند. گاهی آدم‌ها، شرایط، یا حتی خودمان تغییر می‌کنیم. این تغییرات می‌توانند ما را به چالش بکشند، اما وقتی یاد می‌گیریم با بخشش و پذیرش با آنها روبرو شویم، درهای تازه‌ای به روی آرامش و رشد باز می‌شود.</p>
+        <h3>چرا بخشش مهم است؟</h3>
+        <ul><li>بخشش، بار سنگین کینه، رنجش و درد را از قلبمان برمی‌دارد.</li><li>بخشش یعنی آزاد کردن خودمان از قید و بندهای گذشته.</li><li>وقتی بخشش می‌کنیم، انرژی مثبت بیشتری به زندگی خود و دیگران می‌دهیم.</li></ul>
+        <h3>چگونه بخشش را یاد بگیریم؟</h3>
+        <ul><li>با خودت مهربان باش: گاهی سخت‌ترین بخشش، بخشش خودمان است. اجازه بده اشتباهاتت را بپذیری و خودت را دوست داشته باش.</li><li>دیدگاهت را تغییر بده: سعی کن ببینی پشت هر رفتار یا تغییر، چه درس‌ها و فرصت‌هایی پنهان است.</li><li>به مرور رها کن: بخشش ناگهانی نیست؛ یک مسیر است که با گام‌های کوچک ساخته می‌شود.</li><li>نوشتن یا حرف زدن کمک می‌کند: احساساتت را بنویس یا با کسی که به او اعتماد داری در میان بگذار.</li><li>توجه به حال حاضر: با پذیرش تغییرات، در همین لحظه می‌توانی آرامش را تجربه کنی.</li></ul>
+        <h3>پذیرش تغییرات، کلید آرامش</h3>
+        <p>تغییر یعنی زندگی در جریان است، و مقاومت در برابر آن، درد و کشمکش را زیاد می‌کند. پذیرش به معنای تسلیم شدن نیست، بلکه شناخت واقعیت و همراهی با آن است. وقتی تغییرات را می‌پذیری، دروازه‌های خلاقیت، شادی و آزادی به روی تو باز می‌شود.</p>
+        <h3>فواید این معجون</h3>
+        <ul><li>کاهش استرس و اضطراب ناشی از مقاومت در برابر تغییر</li><li>افزایش قدرت تطبیق و انعطاف‌پذیری</li><li>گسترش عشق و مهربانی نسبت به خود و دیگران</li><li>رشد شخصی و ارتقای کیفیت زندگی</li></ul>
+        <div class="note">بخشش و پذیرش، همچون آبی‌ست که زخم‌های دل را شستشو می‌دهد و بذر امید را می‌کارد.<br>با یادگیری این مهارت، می‌توانی قلبت را سبک و پرانرژی نگه داری و مسیر زندگی‌ات را با آرامش بیشتری طی کنی.</div>
+      `
+    },
+    nourishLove: {
+      title:"تغذیه جسمی و روحی برای تعادل هورمونی عشق",
+      desc:"مراقبت از جسم و روح، برای تجربه‌ی سالم و پایدار عشق.",
+      colors:{light:"#fce4ec",mid:"#f48fb1",dark:"#c2185b"},
+      content:`
+        <p>عشق، یکی از زیباترین و قدرتمندترین احساساتی است که می‌تواند زندگی ما را پر از شادی، انگیزه و معنا کند. اما همانند هر احساسی، برای تجربه‌ی سالم و پایدار آن، باید جسم و روح خود را در تعادل نگه داریم. هورمون‌های عشق مانند اکسی‌توسین، دوپامین، سروتونین و اندورفین در این مسیر نقش بسیار مهمی دارند و تغذیه‌ی مناسب، مراقبت‌های روحی و جسمی می‌تواند به تنظیم و تقویت این هورمون‌ها کمک کند.</p>
+        <h3>تغذیه جسمی</h3>
+        <ul><li>غذاهای تازه و طبیعی بخور: میوه‌ها و سبزیجات رنگارنگ، مغزها و دانه‌ها سرشار از ویتامین‌ها و مواد معدنی هستند که به تعادل هورمونی کمک می‌کنند.</li><li>مصرف امگا-3: ماهی‌های چرب مانند سالمون و گردو باعث بهبود خلق و خو و عملکرد مغز می‌شوند و هورمون‌های عشق را تقویت می‌کنند.</li><li>کاهش قند و غذاهای فرآوری‌شده: این مواد می‌توانند تعادل هورمونی را به هم بزنند و احساسات را نامتعادل کنند.</li><li>آب کافی بنوش: کم‌آبی بدن می‌تواند بر خلق و انرژی شما تأثیر منفی بگذارد.</li></ul>
+        <h3>تغذیه روحی</h3>
+        <ul><li>خودمراقبتی و توجه به نیازهای درونی: به خودت اجازه بده احساساتت را بشنوی و با مهربانی با خودت رفتار کنی.</li><li>زمان گذاشتن برای آرامش و تفکر: مدیتیشن، تنفس عمیق و لحظاتی در سکوت می‌تواند هورمون‌های عشق را تقویت کند.</li><li>ارتباطات مثبت و حمایتگرانه: بودن در کنار افرادی که دوستت دارند و حمایتت می‌کنند، اکسی‌توسین را فعال می‌کند و حس اعتماد و امنیت را افزایش می‌دهد.</li><li>فعالیت‌های شادی‌بخش: خنده، موسیقی، رقص، یا هر فعالیتی که قلبت را سبک و شاد می‌کند، هورمون‌های مثبت را در بدنت جاری می‌کند.</li></ul>
+        <h3>نکته‌های طلایی</h3>
+        <p>عشق سالم با تعادل شروع می‌شود؛ نه فقط در رابطه با دیگران، بلکه در رابطه با خودت.<br>بدن و ذهن تو یک تیم هستند؛ مراقبت از هر دو، تجربه‌ی عمیق‌تر و آرام‌تری از عشق را ممکن می‌سازد.<br>هر روز یک قدم کوچک بردار، مثلاً یک غذای سالم بخور، پنج دقیقه نفس عمیق بکش، یا یک یادداشت مهربانانه برای خودت بنویس.<br>وقتی جسم و روح تو با هم هم‌صدا باشند، هورمون‌های عشق آزادانه جریان می‌یابند، قلبت بازتر و زندگی‌ات روشن‌تر می‌شود.</p>
+        <div class="note">این معجونِ روزانه‌ی توست برای ساختن عشق پایدار، زیبا و شاداب در هر لحظه.</div>
+      `
+    }
+  };
+
+  /* ============================================================
+     الگوریتم فلوچارت خودتحلیلی عشق
+     ============================================================ */
+  const steps = [
+    {
+      text:"آیا در حال تجربه‌ی یک احساس عمیق مثبت نسبت به یک فرد، گروه، یا حتی یک مفهوم (مثل هنر، کار، خدا) هستم؟",
+      yes: 1,
+      no: {
+        message:"ممکنه در حال تجربه احساس دیگه‌ای باشی یا نیاز به بررسی بیشتر باشه.\n\n• یک نفس عمیق بکش\n• به خودت اجازه بده که احساس فعلی‌ات رو بشناسی\n• لازم نیست همه‌چیز رو همین الان بفهمی",
+        next: "done",
+        potion: "positiveMeditation"
+      }
+    },
+    {
+      text:"آیا این احساس شامل تمایل به نزدیکی، مراقبت، حمایت و توجه به آن موضوع/فرد است؟",
+      yes: 2,
+      no: {
+        message:"ممکنه احساس دیگری مثل تحسین یا علاقه سطحی باشه، نه عشق عمیق.\n\n• این رو بپذیر، بدون قضاوت\n• گاهی علاقه‌های سطحی هم می‌تونن شروع یک مسیر عمیق‌تر باشن\n• با خودت صادق باش",
+        next: "done",
+        potion: "expressLove"
+      }
+    },
+    {
+      text:"آیا این احساس باعث می‌شود که به رشد و شادی آن فرد یا موضوع اهمیت بدهم حتی اگر به نفع خودم نباشد؟",
+      yes: 3,
+      no: {
+        message:"ممکن است احساس وابستگی، هوس یا علاقه کنترل‌شده باشد.\n\n• به خودت نگاه کن: آیا این عشق، آزادی می‌آورد یا اسارت؟\n• اگر وابستگی یا کنترل‌گری حس می‌کنی، این رو جدی بگیر",
+        next: "done",
+        potion: "lettingGo"
+      }
+    },
+    {
+      text:"آیا احساس می‌کنم که این عشق من را به سمت خودشناسی، رشد شخصی و بهبود روابط سوق می‌دهد؟",
+      yes: 4,
+      no: 5
+    },
+    {
+      text:"آیا می‌توانم در برابر مشکلات و ناسازگاری‌ها با صبر، فهم و گفتگو رفتار کنم؟",
+      yes: {
+        message:"✅ عشق سالم و پخته\n\n🧪 معجون: ارتباط عمیق، حمایت متقابل، مراقبت از خود و طرف مقابل، توسعه مهارت‌های حل تعارض.",
+        next: "done",
+        potion: "healthyConnections"
+      },
+      no: 6
+    },
+    {
+      text:"آیا احساس می‌کنم که این عشق همراه با اضطراب، ترس از رهاشدگی، یا کنترل‌گری است؟",
+      yes: {
+        message:"⚠️ عشق وابسته یا ناسالم\n\n🧪 معجون: خودآگاهی، مشاوره، تمرین مرزبندی، افزایش اعتماد به نفس و خودمختاری.",
+        next: "done",
+        potion: "lettingGo"
+      },
+      no: 7
+    },
+    {
+      text:"آیا من و طرف مقابل در ارتباط متقابل، همدلانه و رضایت‌بخش هستیم؟",
+      yes: {
+        message:"✅ رابطه‌ی عشق متقابل و پایدار\n\n🧪 معجون: استمرار در مراقبت و حفظ تعادل بین خود و دیگری، رشد مشترک.",
+        next: "done",
+        potion: "sharedMoments"
+      },
+      no: {
+        message:"⚠️ نیاز به بررسی مجدد رابطه، گفتگو و بازنگری انتظارات\n\n🧪 معجون: مشاوره، خودشناسی، شفاف‌سازی احساسات و نیازها.",
+        next: "done",
+        potion: "empathyListening"
+      }
+    }
+  ];
+
+  const finalMessage = "تو مسیر عشقت رو دیدی و همراهی کردی.\n\nاین خودش یک قدم بزرگه.\n\nیادت باشه: عشق، پایان نیست — فقط یک سفره.\n\nو تو، می‌تونی توش رشد کنی، ببخشی، و آزاد باشی. 💗";
+
+  let currentStep = 0;
+  let nextStep = null;
+  let finalPotion = null;
+
+  const questionEl = document.getElementById("question");
+  const questionCard = document.getElementById("questionCard");
+  const resultEl = document.getElementById("result");
+  const resultTextEl = document.getElementById("resultText");
+  const potionMount = document.getElementById("potionMount");
+  const finalEl = document.getElementById("final");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const continueBtn = document.getElementById("continueBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const buttonsContainer = document.getElementById("buttonsContainer");
+
+  /* ===== SVG بطری ===== */
+  function potionSVG(colors){
+    const id = colors.mid.replace("#","");
+    return `
+      <svg class="potion-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="glass-${id}" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#ffffff" stop-opacity=".4"/>
+            <stop offset=".35" stop-color="#b9e8e6" stop-opacity=".08"/>
+            <stop offset=".7" stop-color="#ffffff" stop-opacity=".02"/>
+            <stop offset="1" stop-color="#9bd8dc" stop-opacity=".35"/>
+          </linearGradient>
+          <linearGradient id="potion-${id}" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="${colors.light}"/>
+            <stop offset=".45" stop-color="${colors.mid}"/>
+            <stop offset="1" stop-color="${colors.dark}"/>
+          </linearGradient>
+          <linearGradient id="cork-${id}" x1="0" y1="0" x2="1" y2="0">
+            <stop stop-color="#80502f"/><stop offset=".5" stop-color="#d5a16b"/><stop offset="1" stop-color="#88512d"/>
+          </linearGradient>
+          <clipPath id="inside-${id}">
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 319 258 319 L142 319 Q124 319 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z"/>
+          </clipPath>
+          <filter id="blur-${id}"><feGaussianBlur stdDeviation="15"/></filter>
+        </defs>
+
+        <g class="glow"><ellipse cx="200" cy="225" rx="115" ry="130" fill="${colors.mid}" opacity=".35" filter="url(#blur-${id})"/></g>
+        <ellipse cx="200" cy="345" rx="77" ry="12" fill="#000" opacity=".3"/>
+
+        <g class="bottle">
+          <g>
+            <path d="M170 58 Q170 48 180 48 L220 48 Q230 48 230 58 L225 107 L175 107Z" fill="url(#cork-${id})" stroke="#6b432e" stroke-width="2"/>
+            <path d="M180 53 Q175 65 180 88" fill="none" stroke="#f4c38c" stroke-width="4" opacity=".5"/>
+            <path d="M190 52 L190 99" stroke="#71462d" opacity=".25"/>
+            <rect x="174" y="100" width="52" height="9" rx="3" fill="#70452f"/>
+          </g>
+          <g>
+            <path d="M166 105 L234 105 L234 151 Q234 165 252 182 L148 182 Q166 165 166 151Z" fill="url(#glass-${id})" stroke="#c4e7e9" stroke-width="3"/>
+          </g>
+          <g clip-path="url(#inside-${id})">
+            <rect x="120" y="225" width="160" height="110" fill="url(#potion-${id})"/>
+            <g class="liquid">
+              <path d="M115 227 Q150 215 180 227 Q220 239 250 223 Q270 216 290 225 L290 340 L110 340Z" fill="${colors.light}" opacity=".7"/>
+            </g>
+            <g fill="#fff">
+              <circle class="bubble" cx="157" cy="270" r="5" opacity=".6"/>
+              <circle class="bubble b2" cx="225" cy="285" r="4"/>
+              <circle class="bubble b3" cx="190" cy="248" r="3"/>
+              <circle class="bubble b2" cx="245" cy="258" r="2.5"/>
+              <circle class="bubble b3" cx="170" cy="300" r="2"/>
+            </g>
+          </g>
+          <g>
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 322 256 322 L144 322 Q124 322 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z" fill="url(#glass-${id})" stroke="#c6e9ed" stroke-width="3.5"/>
+            <path d="M140 224 Q140 203 157 185 Q175 167 175 150 L175 137" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".65"/>
+            <path d="M260 232 L260 298" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+            <path d="M136 307 Q200 317 264 307" fill="none" stroke="#fff" stroke-width="2" opacity=".4"/>
+          </g>
+          <g>
+            <circle cx="200" cy="252" r="25" fill="#fff" fill-opacity=".12" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/>
+            <path d="M200 231 L204 246 L219 252 L204 258 L200 273 L196 258 L181 252 L196 246Z" fill="#fff" opacity=".9"/>
+          </g>
+        </g>
+
+        <g fill="${colors.light}">
+          <path class="bubble" d="M105 157 L109 169 L121 173 L109 177 L105 189 L101 177 L89 173 L101 169Z"/>
+          <path class="bubble b2" d="M290 130 L293 139 L302 142 L293 145 L290 154 L287 145 L278 142 L287 139Z"/>
+          <circle class="bubble b3" cx="290" cy="190" r="3"/>
+        </g>
+      </svg>
+    `;
+  }
+
+  /* ===== نمایش سوال ===== */
+  function showQuestion(stepIndex){
+    currentStep = stepIndex;
+    const step = steps[stepIndex];
+
+    questionEl.style.animation = "none";
+    void questionEl.offsetHeight;
+    questionEl.style.animation = "fadeInUp .5s ease both";
+    questionEl.textContent = step.text;
+
+    resultEl.style.display = "none";
+    finalEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+    buttonsContainer.style.display = "flex";
+    yesBtn.style.display = "inline-block";
+    noBtn.style.display = "inline-block";
+  }
+
+  /* ===== نمایش راهکار + معجون با هم ===== */
+  function showResult(message, potionKey){
+    const p = potions[potionKey];
+    resultTextEl.textContent = message;
+    potionMount.innerHTML = `
+      <div class="potion-inner">
+        ${potionSVG(p.colors)}
+        <h3 class="potion-title">${p.title}</h3>
+        <p class="potion-desc">${p.desc}</p>
+        <div class="potion-content">${p.content}</div>
+      </div>
+    `;
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "block";
+    resultEl.style.animation = "none";
+    void resultEl.offsetHeight;
+    resultEl.style.animation = "fadeInUp .5s ease both";
+    resultEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== نمایش پیام نهایی + معجون ===== */
+  function showFinal(message, potionKey){
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "none";
+
+    finalEl.textContent = message;
+    finalEl.style.display = "block";
+    finalEl.style.animation = "none";
+    void finalEl.offsetHeight;
+    finalEl.style.animation = "fadeInUp .6s ease both";
+
+    if(potionKey){
+      const p = potions[potionKey];
+      const wrap = document.createElement("div");
+      wrap.id = "finalPotionMount";
+      wrap.innerHTML = `
+        <div class="potion-inner" style="margin-top:20px;background:rgba(255,255,255,.9);">
+          ${potionSVG(p.colors)}
+          <h3 class="potion-title">${p.title}</h3>
+          <p class="potion-desc">${p.desc}</p>
+          <div class="potion-content">${p.content}</div>
+        </div>
+      `;
+      const old = document.getElementById("finalPotionMount");
+      if(old) old.remove();
+      finalEl.appendChild(wrap);
+    }
+
+    finalEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== دکمه بله ===== */
+  yesBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.yes === "number"){
+      showQuestion(step.yes);
+    } else if(step.yes && typeof step.yes === "object"){
+      nextStep = step.yes.next;
+      finalPotion = step.yes.potion;
+      showResult(step.yes.message, step.yes.potion);
+    } else if(typeof step.yes === "string"){
+      /* پیام نهایی مستقیم (مثل گام اول فایل اصلی) */
+      nextStep = "done";
+      finalPotion = "positiveMeditation";
+      showResult(step.yes, finalPotion);
+    }
+  };
+
+  /* ===== دکمه خیر ===== */
+  noBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.no === "number"){
+      showQuestion(step.no);
+    } else if(step.no && typeof step.no === "object"){
+      nextStep = step.no.next;
+      finalPotion = step.no.potion;
+      showResult(step.no.message, step.no.potion);
+    }
+  };
+
+  /* ===== ادامه ===== */
+  continueBtn.onclick = () => {
+    if(nextStep === "done"){
+      showFinal(finalMessage, finalPotion);
+    } else if(typeof nextStep === "number"){
+      showQuestion(nextStep);
+    }
+  };
+
+  /* ===== شروع دوباره ===== */
+  function resetApp(){
+    currentStep = 0;
+    nextStep = null;
+    finalPotion = null;
+    finalEl.style.display = "none";
+    finalEl.innerHTML = "";
+    resultEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+    showQuestion(0);
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
+
+  restartBtn.onclick = resetApp;
+
+  /* ===== شروع ===== */
+  showQuestion(0);
+</script>
+
+</body>
+</html>

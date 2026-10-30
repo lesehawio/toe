@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e9eceb">
+<title>معبد احساسات | Temple of Emotions</title>
+
+<!-- آیکون سایت (Favicon) با استفاده از لوگو -->
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D9%84%D9%88%DA%AF%D9%88.svg">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg: #edf1ef;
+  --surface: rgba(255, 255, 255, 0.65);
+  --surface-hover: rgba(255, 255, 255, 0.85);
+  --ink: #2c3634;
+  --muted: #6b7873;
+  --line: rgba(55, 67, 64, 0.08);
+  --shadow: 0 12px 40px rgba(48, 61, 57, 0.08);
+  --shadow-hover: 0 20px 50px rgba(48, 61, 57, 0.12);
+  --radius-card: 32px;
+  --radius-icon: 50%;
+}
+
+*{ box-sizing: border-box; }
+html{ min-height: 100%; background: var(--bg); }
+body{
+  margin: 0; min-height: 100vh; overflow-x: hidden;
+  font-family: 'Vazirmatn', Tahoma, sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 50% 0%, #f8faf9 0%, var(--bg) 70%);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app{
+  width: min(100%, 540px); min-height: 100svh; margin: auto;
+  position: relative; isolation: isolate; overflow: hidden;
+  padding: calc(25px + env(safe-area-inset-top)) 20px calc(30px + env(safe-area-inset-bottom));
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.6), transparent 50%),
+    linear-gradient(165deg, #f2f5f3 0%, #e6ebe8 100%);
+}
+
+/* خط بالایی - فقط متن نسخه */
+.topline{
+  display: flex; align-items: center; justify-content: flex-end;
+  position: relative; z-index: 2; padding: 0 5px;
+  min-height: 24px;
+}
+.edition{ font-size: 10px; letter-spacing: 2.5px; color: #89938f; font-weight: 700; }
+
+/* هدر - لوگو در مرکز، بزرگ و بدون قاب */
+.hero{ 
+  text-align: center; position: relative; z-index: 2; 
+  padding: 10px 0 20px; 
+}
+
+/* لوگو */
+.hero-logo {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 8px;
+  filter: drop-shadow(0 8px 20px rgba(48, 61, 57, 0.12));
+  animation: breathe-logo 8s ease-in-out infinite;
+}
+
+@keyframes breathe-logo {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.05) translateY(-4px); }
+}
+
+.eyebrow{ font-size: 10px; color: #8a9591; letter-spacing: 2px; margin-bottom: 8px; font-weight: 500;}
+
+/* عنوان - کوچکتر از لوگو */
+h1{
+  font-size: clamp(22px, 6vw, 28px); font-weight: 800;
+  letter-spacing: -1px; margin: 0; color: #2f3836;
+}
+
+.subtitle{ font-size: 12px; color: #7a8581; margin: 10px 0 0; line-height: 2; font-weight: 400;}
+
+/* خط موجی تزئینی */
+.wave-divider{ height: 32px; position: relative; margin: 5px 0 25px; opacity: 0.6; }
+.wave-divider svg{ width: 100%; height: 100%; display: block; }
+
+/* عنوان بخش */
+.section-head{
+  display: flex; justify-content: space-between; align-items: center;
+  margin: 0 5px 18px; position: relative; z-index: 2;
+}
+.section-head strong{ font-size: 14px; font-weight: 700; color: #3a4541;}
+.section-head span{ font-size: 11px; color: #8a9591; font-weight: 500;}
+
+/* گرید کارت‌ها */
+.emotions{
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px; position: relative; z-index: 2;
+}
+
+/* کارت احساسات - با انیمیشن نفس کشیدن */
+.emotion{
+  min-height: 175px; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-decoration: none; color: var(--ink);
+  
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  
+  -webkit-tap-highlight-color: transparent;
+  
+  animation: breathe 8s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              box-shadow 0.4s ease, 
+              background 0.4s ease;
+}
+
+/* تاخیر در نفس کشیدن */
+.emotion:nth-child(1) { animation-delay: 0s; }
+.emotion:nth-child(2) { animation-delay: 0.4s; }
+.emotion:nth-child(3) { animation-delay: 0.8s; }
+.emotion:nth-child(4) { animation-delay: 1.2s; }
+.emotion:nth-child(5) { animation-delay: 1.6s; }
+.emotion:nth-child(6) { animation-delay: 2.0s; }
+.emotion:nth-child(7) { animation-delay: 2.4s; }
+.emotion:nth-child(8) { animation-delay: 2.8s; }
+
+.emotion::before{
+  content: ""; position: absolute;
+  width: 140px; height: 140px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  top: -60px; left: -40px; z-index: 0;
+  transition: transform 0.5s ease;
+  animation: breathe-light 8s ease-in-out infinite;
+}
+.emotion::after{
+  content: ""; position: absolute; inset: auto -20% -40px; height: 70px;
+  border-radius: 50% 50% 0 0 / 40% 40% 0 0;
+  background: rgba(219, 226, 222, 0.3);
+  transform: rotate(-5deg); z-index: 0;
+  transition: transform 0.5s ease;
+}
+
+.emotion:hover, .emotion:focus-visible {
+  animation-play-state: paused;
+  transform: translateY(-6px) scale(1.02);
+  background: var(--surface-hover);
+  box-shadow: var(--shadow-hover);
+  outline: none;
+}
+.emotion:hover::before { transform: scale(1.2); }
+.emotion:hover::after { transform: rotate(0deg) scale(1.05); }
+
+.emotion:active {
+  transform: translateY(-2px) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+/* قاب دایره‌ای کامل */
+.icon-frame {
+  width: 100px; height: 100px;
+  border-radius: var(--radius-icon);
+  background: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 8px 25px rgba(48, 61, 57, 0.08),
+    inset 0 0 15px rgba(0,0,0,0.02);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  animation: breathe-frame 8s ease-in-out infinite;
+}
+
+.emotion:hover .icon-frame {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    0 12px 30px rgba(48, 61, 57, 0.15),
+    inset 0 0 20px rgba(0,0,0,0.03);
+  animation-play-state: paused;
+}
+
+.emotion img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(50, 60, 56, 0.05));
+  transition: transform 0.4s ease;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-4px) scale(1.02); }
+  100% { transform: translateY(0px) scale(1); }
+}
+.emotion:nth-child(odd) img { animation: float 5s ease-in-out infinite; }
+.emotion:nth-child(even) img { animation: float 5.5s ease-in-out infinite 0.5s; }
+
+/* --- کلیدواژه‌های انیمیشن نفس کشیدن --- */
+@keyframes breathe {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: var(--shadow);
+  }
+  50% { 
+    transform: scale(1.015);
+    box-shadow: 0 16px 45px rgba(48, 61, 57, 0.11);
+  }
+}
+
+@keyframes breathe-light {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.1); }
+}
+
+@keyframes breathe-frame {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.emotion span{
+  position: relative; z-index: 1;
+  margin-top: 2px; font-size: 15px; font-weight: 700; color: #2f3836;
+  letter-spacing: -0.3px;
+}
+.emotion small{
+  position: relative; z-index: 1;
+  margin-top: 2px; font-size: 9px; color: #96a09c; letter-spacing: 1px; font-weight: 600;
+}
+
+.footer{
+  position: relative; z-index: 2; text-align: center;
+  padding: 30px 0 10px; color: #9aa39f; font-size: 11px; letter-spacing: 0.5px;
+}
+.footer .dot{
+  display: inline-block; width: 5px; height: 5px;
+  background: #b0bbb6; border-radius: 50%;
+  vertical-align: middle; margin: 0 8px;
+  animation: breathe-mark 4s ease-in-out infinite;
+}
+
+@keyframes breathe-mark {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.ambient{
+  position: absolute; z-index: 0; left: -25%; right: -25%; bottom: -5px;
+  height: 240px; pointer-events: none; opacity: 0.8;
+}
+.ambient svg{ width: 100%; height: 100%; display: block; }
+
+.wave-a{ 
+  animation: 
+    driftA 18s ease-in-out infinite alternate,
+    swell 12s ease-in-out infinite;
+}
+.wave-b{ 
+  animation: 
+    driftB 22s ease-in-out infinite alternate,
+    swell 15s ease-in-out infinite 2s;
+}
+.wave-c{ 
+  animation: 
+    driftA 26s ease-in-out infinite alternate,
+    swell 18s ease-in-out infinite 4s;
+}
+
+@keyframes driftA { 
+  from { transform: translateX(-3%); } 
+  to { transform: translateX(3%); } 
+}
+@keyframes driftB { 
+  from { transform: translateX(3%); } 
+  to { transform: translateX(-3%); } 
+}
+
+@keyframes swell {
+  0%, 100% { 
+    transform: translateY(0) scaleY(1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translateY(-8px) scaleY(1.05);
+    opacity: 0.9;
+  }
+}
+
+@media(min-width: 650px){
+  body { display: grid; place-items: center; padding: 30px; }
+  .app {
+    min-height: min(920px, calc(100svh - 60px));
+    border-radius: 40px;
+    box-shadow: 0 30px 90px rgba(42, 55, 50, 0.15);
+    border: 1px solid rgba(255,255,255,0.6);
+  }
+  .emotions { gap: 18px; }
+  .emotion { min-height: 190px; }
+  .icon-frame { width: 120px; height: 120px; }
+  .hero-logo { width: 140px; height: 140px; }
+  h1 { font-size: 32px; }
+}
+
+@media(prefers-reduced-motion: reduce){
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .emotion img { animation: none; }
+  .emotion { animation: none; }
+  .hero-logo { animation: none; }
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="topline">
+    <div class="edition">THE INNER TEMPLE</div>
+  </div>
+
+  <header class="hero">
+    <!-- لوگوی بزرگ در مرکز هدر -->
+    <img 
+      src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D9%84%D9%88%DA%AF%D9%88.svg" 
+      alt="لوگوی معبد احساسات" 
+      class="hero-logo"
+    >
+    <div class="eyebrow">A QUIET SPACE WITHIN</div>
+    <h1>معبد احساسات</h1>
+    <p class="subtitle">به دنیای درونت خوش آمدی؛<br>احساست را انتخاب کن و بیشتر بشناس.</p>
+  </header>
+
+  <div class="wave-divider" aria-hidden="true">
+    <svg viewBox="0 0 360 32" preserveAspectRatio="none">
+      <path d="M0 16 C45 0 75 32 120 16 S195 0 240 16 S315 32 360 14" fill="none" stroke="#b8c2bd" stroke-width="1.5"/>
+      <path d="M0 22 C45 6 75 38 120 22 S195 6 240 22 S315 38 360 20" fill="none" stroke="#cbd3cf" stroke-width="1.2"/>
+    </svg>
+  </div>
+
+  <div class="section-head">
+    <strong>کدام احساس را می‌خواهی کشف کنی؟</strong>
+    <span>۰۸ احساس</span>
+  </div>
+
+  <nav class="emotions" aria-label="انتخاب احساس">
+    <a class="emotion" href="joy.html">
+      <div class="icon-frame">
+        <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%B4%D8%A7%D8%AF%DB%8C.svg" alt="شادی">
+      </div>
+      <span>شادی</span><small>JOY</small>
+    </a>
+    <a class="emotion" href="sadness.html">
+      <div class="icon-frame">
+        <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%BA%D9%85.svg" alt="غم">
+      </div>
+      <span>غم</span><small>SADNESS</small>
+    </a>
+    <a class="emotion" href="fear.html">
+      <div class="icon-frame">
+        <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%AA%D8%B1%D8%B3.svg" alt="ترس">
+      </div>
+      <span>ترس</span><small>FEAR</small>
+    </a>
+    <a class="emotion" href="anger.html">
+      <div class="icon-frame">
+        <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%AE%D8%B4%D9%85.svg" alt="خشم">
+      </div>
+      <span>خشم</span><small>ANGER</small>
+    </a>
+    <a class="emotion" href="disgust.html">
+      <div class="icon-frame">
+        <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D9%86%D9%81%D8%B1%D8%AA.svg" alt="نفرت">
+      </div>
+      <span>نفرت</span><small>DISGUST</small>
+    </a>
+    <a class="emotion" href="love.html">
+      <div class="icon-frame">
+        <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%B9%D8%B4%D9%82.svg" alt="عشق">
+      </div>
+      <span>عشق</span><small>LOVE</small>
+    </a>
+    <a class="emotion" href="calm.html">
+      <div class="icon-frame">
+        <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%A2%D8%B1%D8%A7%D9%85%D8%B4.svg" alt="آرامش">
+      </div>
+      <span>آرامش</span><small>CALM</small>
+    </a>
+  </nav>
+
+  <footer class="footer">شناخت احساسات، آغاز شناخت خویشتن <i class="dot"></i> EMOTIONAL DISCOVERY</footer>
+
+  <div class="ambient" aria-hidden="true">
+    <svg viewBox="0 0 600 210" preserveAspectRatio="none">
+      <path class="wave-a" d="M0 65 C100 5 160 125 270 70 S450 15 600 78 L600 210 L0 210Z" fill="#d5ddda" opacity=".6"/>
+      <path class="wave-b" d="M0 105 C110 45 180 155 300 100 S480 55 600 112 L600 210 L0 210Z" fill="#cbd5d0" opacity=".5"/>
+      <path class="wave-c" d="M0 145 C130 95 200 185 330 135 S500 100 600 150 L600 210 L0 210Z" fill="#c0ccc6" opacity=".4"/>
+    </svg>
+  </div>
+</main>
+</body>
+</html>

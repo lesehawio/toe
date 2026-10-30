@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#e0f7f9">
+<title>فلوچارت خودتحلیلی آرامش | قفسه‌ی آرامش</title>
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%A2%D8%B1%D8%A7%D9%85%D8%B4.svg">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root{
+    --bg-start:#f0fbf8; --bg-end:#b2dfdb;
+    --text-main:#004d40; --text-muted:#4a7a72;
+    --calm-primary:#4db6ac; --calm-primary-dark:#009688;
+    --card-bg:rgba(255,255,255,.78);
+    --card-border:rgba(255,255,255,.9);
+    --shadow:0 10px 30px rgba(0,150,136,.12);
+    --radius-lg:28px;
+    --font:'Vazirmatn',Tahoma,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg-start)}
+  body{
+    direction:rtl; font-family:var(--font);
+    background:radial-gradient(circle at 50% 0%,#fff 0%,var(--bg-start) 40%,var(--bg-end) 100%);
+    color:var(--text-main); max-width:640px; margin:auto;
+    padding:calc(20px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+    min-height:100vh; position:relative; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased; line-height:1.9;
+  }
+
+  /* ===== امواج فیروزه‌ای ===== */
+  .ambient-waves{position:fixed;bottom:0;left:0;width:100%;height:280px;z-index:0;pointer-events:none;overflow:hidden}
+  .ambient-waves svg{width:100%;height:100%;display:block}
+  .wave-group{transform-box:fill-box;transform-origin:center bottom}
+  .wave-path{transform-box:fill-box;transform-origin:center bottom}
+  .wave-group-1{animation:flowX1 30s ease-in-out infinite alternate}
+  .wave-group-2{animation:flowX2 36s ease-in-out infinite alternate}
+  .wave-group-3{animation:flowX3 42s ease-in-out infinite alternate}
+  @keyframes flowX1{0%{transform:translateX(-3%) rotate(.5deg)}100%{transform:translateX(3%) rotate(-1deg)}}
+  @keyframes flowX2{0%{transform:translateX(3%) rotate(-1deg)}100%{transform:translateX(-3%) rotate(1deg)}}
+  @keyframes flowX3{0%{transform:translateX(-2%) rotate(.8deg)}100%{transform:translateX(4%) rotate(-.5deg)}}
+  .wave-path-1{animation:breatheY1 18s ease-in-out infinite}
+  .wave-path-2{animation:breatheY2 22s ease-in-out infinite 2s}
+  .wave-path-3{animation:breatheY3 26s ease-in-out infinite 4s}
+  @keyframes breatheY1{0%,100%{transform:translateY(0) scaleY(1);opacity:.4}50%{transform:translateY(-14px) scaleY(1.08);opacity:.7}}
+  @keyframes breatheY2{0%,100%{transform:translateY(0) scaleY(1);opacity:.3}50%{transform:translateY(-20px) scaleY(1.12);opacity:.6}}
+  @keyframes breatheY3{0%,100%{transform:translateY(0) scaleY(1);opacity:.25}50%{transform:translateY(-10px) scaleY(1.05);opacity:.45}}
+
+  /* ===== هدر ===== */
+  .header-section{text-align:center;margin-bottom:25px;position:relative;z-index:2;animation:fadeInDown .8s ease both}
+  .joy-logo-container{position:relative;display:inline-block;margin-bottom:15px}
+  .joy-logo-container::before{
+    content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:160px;height:160px;background:radial-gradient(circle,rgba(77,182,172,.3) 0%,transparent 70%);
+    border-radius:50%;z-index:-1;animation:pulseGlow 5s ease-in-out infinite;
+  }
+  .joy-logo-frame{
+    width:120px;height:120px;border-radius:50%;background:#fff;
+    border:3px solid rgba(255,255,255,.9);
+    box-shadow:0 10px 30px rgba(0,150,136,.15),inset 0 0 20px rgba(77,182,172,.1);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    position:relative;animation:float 5s ease-in-out infinite;
+  }
+  .joy-logo-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  h1{color:#00796b;font-size:24px;font-weight:800;margin:0;letter-spacing:-.5px}
+  .subtitle{font-size:12px;color:var(--text-muted);margin-top:5px;font-weight:500;letter-spacing:1px}
+
+  /* ===== دکمه بازگشت ===== */
+  .back-home{
+    display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    color:var(--text-muted);font-size:13px;font-weight:600;
+    padding:10px 18px;border-radius:50px;
+    background:rgba(255,255,255,.6);border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    margin-bottom:15px;position:relative;z-index:2;transition:all .3s ease;
+  }
+  .back-home:hover{background:#fff;color:var(--text-main);box-shadow:0 4px 15px rgba(0,0,0,.05);transform:translateX(5px)}
+  .back-home svg{width:16px;height:16px}
+
+  /* ===== کارت سوال ===== */
+  .question-card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--radius-lg);padding:35px 25px;
+    box-shadow:var(--shadow),inset 0 2px 10px rgba(255,255,255,.5);
+    margin-bottom:25px;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);
+    position:relative;z-index:2;overflow:hidden;animation:fadeInUp .6s ease both;
+  }
+  .question-card::before{
+    content:"";position:absolute;top:-60px;left:-40px;
+    width:180px;height:180px;background:radial-gradient(circle,rgba(77,182,172,.18) 0%,transparent 70%);
+    border-radius:50%;z-index:0;
+  }
+  .question-icon{display:flex;justify-content:center;margin-bottom:15px;position:relative;z-index:1}
+  .question-icon svg{width:32px;height:32px;color:var(--calm-primary-dark);filter:drop-shadow(0 4px 8px rgba(77,182,172,.35))}
+  #question{
+    font-size:19px;font-weight:700;line-height:1.9;margin:0;
+    position:relative;z-index:1;text-align:center;min-height:70px;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ===== دکمه‌ها ===== */
+  .buttons-container{display:flex;justify-content:center;gap:15px;position:relative;z-index:2;animation:fadeInUp .6s ease .1s both}
+  button{
+    font-family:var(--font);font-size:16px;font-weight:700;
+    padding:14px 40px;border-radius:50px;border:none;cursor:pointer;
+    transition:all .3s cubic-bezier(.25,.8,.25,1);
+    box-shadow:0 4px 15px rgba(0,0,0,.05);position:relative;overflow:hidden;
+  }
+  #yesBtn{background:linear-gradient(135deg,#80cbc4,#4db6ac 50%,#00897b);color:#00332b;box-shadow:0 8px 25px rgba(77,182,172,.45)}
+  #yesBtn::after{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transition:.5s}
+  #yesBtn:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(77,182,172,.55)}
+  #yesBtn:hover::after{left:100%}
+  #noBtn{background:rgba(255,255,255,.7);color:var(--text-muted);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+  #noBtn:hover{background:#fff;color:var(--text-main);transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+  button:active{transform:translateY(0) scale(.96)}
+
+  /* ===== کارت نتیجه ===== */
+  #result{
+    background:linear-gradient(145deg,#f0fbf8,#dcefec);
+    border:1px solid rgba(77,182,172,.3);padding:25px;margin-top:25px;
+    border-radius:var(--radius-lg);display:none;line-height:2;
+    font-size:15px;font-weight:500;color:#004d40;
+    box-shadow:0 10px 30px rgba(0,150,136,.1),inset 0 2px 10px rgba(255,255,255,.5);
+    position:relative;z-index:2;text-align:right;
+  }
+  .result-header{
+    display:flex;align-items:center;gap:10px;margin-bottom:15px;
+    padding-bottom:12px;border-bottom:1px dashed rgba(77,182,172,.35);
+    font-weight:700;font-size:16px;color:var(--calm-primary-dark);
+  }
+  .result-header svg{width:24px;height:24px;color:var(--calm-primary);flex-shrink:0}
+  #resultText{white-space:pre-wrap;margin-bottom:20px;line-height:2}
+
+  /* ===== کارت معجون ===== */
+  .potion-inner{
+    background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);
+    border-radius:22px;padding:20px;margin-top:10px;
+    text-align:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 6px 20px rgba(0,150,136,.1);
+    animation:fadeInUp .5s ease both;
+  }
+  .potion-inner .potion-svg{width:140px;height:140px;margin:0 auto 12px;display:block;overflow:visible}
+  .potion-title{font-size:20px;font-weight:800;color:var(--calm-primary-dark);margin:0 0 6px}
+  .potion-desc{font-size:13px;color:var(--text-muted);line-height:1.9;margin:0 0 16px}
+  .potion-content{
+    text-align:right;margin-top:18px;padding-top:16px;
+    border-top:1px dashed rgba(77,182,172,.35);
+  }
+  .potion-content h3{font-size:15px;font-weight:800;color:#00796b;margin:18px 0 8px}
+  .potion-content h3:first-child{margin-top:0}
+  .potion-content p{font-size:14px;color:#004d40;margin:0 0 12px;line-height:1.95}
+  .potion-content ul,.potion-content ol{padding-right:20px;margin:0 0 14px;font-size:14px;color:#004d40}
+  .potion-content li{margin-bottom:7px;line-height:1.85}
+  .potion-content blockquote{
+    background:rgba(224,247,249,.7);border-right:4px solid #4db6ac;
+    border-radius:6px;padding:10px 14px;margin:14px 0;
+    font-style:italic;color:#00695c;font-size:14px;
+  }
+  .potion-content .highlight{
+    background:rgba(224,247,249,.8);padding:12px 16px;
+    border-right:4px solid #4db6ac;border-radius:8px;margin:14px 0;
+    font-size:14px;line-height:1.95;
+  }
+  .potion-content .note{
+    margin-top:18px;padding:14px 16px;background:rgba(232,245,233,.8);
+    border-right:4px solid #009688;border-radius:12px;
+    color:#004d40;font-weight:500;font-size:14px;line-height:1.9;
+  }
+
+  /* ===== دکمه‌های پایانی ===== */
+  .result-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:18px}
+  .result-actions button{font-size:14px;padding:12px 32px;width:100%;max-width:280px}
+  #continueBtn{background:linear-gradient(135deg,#80cbc4,#4db6ac 50%,#00897b);color:#00332b;box-shadow:0 8px 25px rgba(77,182,172,.45)}
+  #continueBtn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(77,182,172,.55)}
+  .restart-btn{background:#fff;color:var(--calm-primary-dark);border:1px solid rgba(77,182,172,.3);box-shadow:0 4px 15px rgba(0,150,136,.15)}
+  .restart-btn:hover{background:#f0fbf8;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,150,136,.2)}
+
+  /* ===== پیام نهایی ===== */
+  #final{
+    background:linear-gradient(135deg,#f0f9f4,#dcfce7);color:#166534;
+    padding:30px 25px;margin-top:25px;border:2px dashed #86efac;
+    border-radius:var(--radius-lg);font-size:16px;font-weight:600;line-height:2;
+    display:none;text-align:center;position:relative;z-index:2;
+    box-shadow:0 10px 30px rgba(22,101,52,.08);white-space:pre-wrap;
+  }
+
+  /* ===== انیمیشن SVG ===== */
+  .bottle{transform-box:fill-box;transform-origin:center;animation:float 5s ease-in-out infinite}
+  .liquid{animation:liquid 4s ease-in-out infinite alternate}
+  .bubble{animation:bubble 3.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .b2{animation-delay:1.2s}
+  .b3{animation-delay:2.1s}
+  .glow{animation:glow 5s ease-in-out infinite}
+
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+  @keyframes liquid{from{transform:translateY(3px)}to{transform:translateY(-4px)}}
+  @keyframes bubble{0%,100%{transform:translateY(5px);opacity:.3}50%{transform:translateY(-12px);opacity:.9}}
+  @keyframes glow{0%,100%{opacity:.2}50%{opacity:.5}}
+  @keyframes pulseGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.75}50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}}
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+  @media (min-width:601px){
+    #question{font-size:21px}
+    .joy-logo-frame{width:140px;height:140px}
+    h1{font-size:28px}
+    .potion-inner .potion-svg{width:180px;height:180px}
+    .potion-title{font-size:24px}
+  }
+  @media (max-width:400px){
+    #question{font-size:17px}
+    .joy-logo-frame{width:100px;height:100px}
+    button{padding:12px 30px;font-size:15px}
+    h1{font-size:22px}
+    .question-card{padding:25px 20px}
+    .potion-inner .potion-svg{width:120px;height:120px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    .ambient-waves{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- امواج فیروزه‌ای -->
+<div class="ambient-waves" aria-hidden="true">
+  <svg viewBox="0 0 600 210" preserveAspectRatio="none">
+    <g class="wave-group wave-group-3"><path class="wave-path wave-path-3" d="M-50 145 C130 95 200 195 330 135 S520 90 650 150 L650 220 L-50 220Z" fill="#4db6ac"/></g>
+    <g class="wave-group wave-group-2"><path class="wave-path wave-path-2" d="M-50 105 C110 45 180 165 300 100 S500 45 650 112 L650 220 L-50 220Z" fill="#80cbc4"/></g>
+    <g class="wave-group wave-group-1"><path class="wave-path wave-path-1" d="M-50 65 C100 5 160 135 270 70 S470 5 650 78 L650 220 L-50 220Z" fill="#b2dfdb"/></g>
+  </svg>
+</div>
+
+<!-- بازگشت -->
+<a href="index.html" class="back-home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  بازگشت به قفسه‌ی آرامش
+</a>
+
+<!-- هدر -->
+<div class="header-section">
+  <div class="joy-logo-container">
+    <div class="joy-logo-frame">
+      <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%A2%D8%B1%D8%A7%D9%85%D8%B4.svg" alt="لوگوی آرامش">
+    </div>
+  </div>
+  <h1>فلوچارت خودتحلیلی آرامش</h1>
+  <p class="subtitle">A QUIET SPACE FOR CALM</p>
+</div>
+
+<!-- سوال -->
+<div class="question-card" id="questionCard">
+  <div class="question-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  </div>
+  <div id="question"></div>
+</div>
+
+<!-- دکمه‌ها -->
+<div class="buttons-container" id="buttonsContainer">
+  <button id="yesBtn">بله</button>
+  <button id="noBtn">خیر</button>
+</div>
+
+<!-- نتیجه -->
+<div id="result">
+  <div class="result-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+    </svg>
+    راهکار پیشنهادی
+  </div>
+  <div id="resultText"></div>
+  <div id="potionMount"></div>
+  <div class="result-actions">
+    <button id="continueBtn">ادامه</button>
+    <button class="restart-btn" id="restartBtn">شروع دوباره</button>
+  </div>
+</div>
+
+<!-- پیام نهایی -->
+<div id="final"></div>
+
+<script>
+  /* ============================================================
+     داده‌های کامل ۱۰ معجون آرامش
+     ============================================================ */
+  const potions = {
+    deepBreathing: {
+      title:"تمرین نفس‌عمیق و تنفس آگاهانه",
+      desc:"بازگرداندن ریتم طبیعی بدن، از طریق دم و بازدم آگاهانه.",
+      colors:{light:"#e0f7f9",mid:"#4db6ac",dark:"#00695c"},
+      content:`
+        <p>نفس، تنها چیزی‌ست که همیشه با توست — در خواب، در بیداری، در ترس، در آرامش. اما اغلب، از آن غافلیم. «تنفس آگاهانه» یعنی برگشتن به همین سادگی: دم، بازدم، و توجهی که بین این دو جریان می‌آید.</p>
+        <h3>چرا تنفس آگاهانه کار می‌کند؟</h3>
+        <p>تنفس آهسته و عمیق، عصب واگ را فعال می‌کند — همان عصبی که سیستم «آرامش و هضم» را روشن می‌کند. این همان مکانیزمی‌ست که در درمان‌های اضطراب، به‌عنوان «آرام‌سازی فیزیولوژیک» آموزش داده می‌شود. هر بازدم طولانی، یک پیام امنیت به مغز می‌فرستد.</p>
+        <h3>چطور تمرین کنم؟</h3>
+        <ul><li>یک دست روی سینه، یک دست روی شکم بگذار.</li><li>از بینی، ۴ ثانیه دم بکش — شکم باید بالا بیاید، نه سینه.</li><li>۴ ثانیه نگه دار.</li><li>از دهان، ۶ ثانیه بازدم کن — آرام، طولانی.</li><li>۵ تا ۱۰ بار تکرار کن. اگر ذهنت پرت شد، آرام برگرد به نفس.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>فعال‌سازی سیستم پاراسمپاتیک</li><li>کاهش ضربان قلب و فشار خون</li><li>بازگرداندن حس کنترل به بدن</li><li>آماده‌سازی ذهن برای حضور در لحظه</li></ul>
+        <div class="note">نفس، پلی‌ست بین بدن و آرامش.<br>هر بازدم، یک قدم کوچک<br>به سوی «الان امنم».</div>
+      `
+    },
+    mindfulness: {
+      title:"مدیتیشن ذهن‌آگاهی",
+      desc:"حضور در لحظه، بدون قضاوت — دیدن افکار، بدون گرفتار شدن در آن‌ها.",
+      colors:{light:"#e8f5e9",mid:"#66bb6a",dark:"#1b5e20"},
+      content:`
+        <p>ذهن‌آگاهی یعنی بودن در همین لحظه — نه در گذشته، نه در آینده. یعنی دیدن افکار، بدون قضاوت، و برگشتن به نفس، به بدن، به همین حالا. این تمرین، ساده است اما آسان نیست.</p>
+        <h3>چرا ذهن‌آگاهی کار می‌کند؟</h3>
+        <p>تحقیقات نشان می‌دهد ذهن‌آگاهی، فعالیت «شبکه‌ی حالت پیش‌فرض» (default mode network) را کاهش می‌دهد — همان شبکه‌ای که در نشخوار فکری و اضطراب فعال است. با تمرین منظم، مغز یاد می‌گیرد از حالت «گرفتار در فکر» به حالت «ناظر آرام» برود.</p>
+        <h3>چطور تمرین کنم؟</h3>
+        <ul><li>بنشین، چشم‌هایت را ببند یا نیمه‌باز بگذار.</li><li>توجهت را به نفس ببر — حس ورود و خروج هوا.</li><li>وقتی فکری آمد، برچسب بزن: «فکر». بعد آرام برگرد به نفس.</li><li>لازم نیست فکر را دور کنی. فقط نباید در آن غرق شوی.</li><li>۵ تا ۱۰ دقیقه شروع کن. کم‌کم بیشتر.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش نشخوار فکری و اضطراب</li><li>افزایش تمرکز و حضور</li><li>ایجاد فاصله‌ی سالم بین «من» و «افکار»</li><li>تقویت توانایی تنظیم هیجانی</li></ul>
+        <div class="note">ذهن‌آگاهی، کنترل افکار نیست.<br>دیدن آن‌هاست،<br>مثل ابرهایی که از آسمان می‌گذرند.</div>
+      `
+    },
+    relaxingMusic: {
+      title:"گوش دادن به موسیقی آرامش‌بخش",
+      desc:"استفاده از صدا برای تنظیم سیستم عصبی و بازگرداندن آرامش.",
+      colors:{light:"#e0f2f1",mid:"#26a69a",dark:"#004d40"},
+      content:`
+        <p>موسیقی، زبانی‌ست که مستقیم به قلب می‌رود — بدون واسطه‌ی کلمه. یک ملودی آرام، می‌تواند در چند دقیقه، تنشی را که ساعت‌ها با آن دست‌وپنجه نرم کرده‌ای، نرم کند.</p>
+        <h3>چرا موسیقی کار می‌کند؟</h3>
+        <p>موسیقی، سیستم لیمبیک (مرکز هیجانات مغز) را فعال می‌کند. ریتم آرام (حدود ۶۰ ضربه در دقیقه) با ضربان قلب هماهنگ می‌شود و سیستم پاراسمپاتیک را فعال می‌کند. این همان چیزی‌ست که در موسیقی‌درمانی، «هم‌تنظیمی صوتی» نامیده می‌شود.</p>
+        <h3>چطور از موسیقی استفاده کنم؟</h3>
+        <ul><li>یک پلی‌لیست آرام بساز — نه غمگین، نه شاد. فقط آرام.</li><li>هدفون بگذار، چشمانت را ببند، و برای ۵ تا ۱۰ دقیقه فقط گوش کن.</li><li>به هیچ چیز فکر نکن. اگر فکری آمد، بگذار برود.</li><li>می‌توانی همراه با موسیقی، نفس عمیق بکشی یا بدن را آرام تکان دهی.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش کورتیزول (هورمون استرس)</li><li>فعال‌سازی سیستم پاراسمپاتیک</li><li>ایجاد فضای امن ذهنی</li><li>بازگرداندن حس حضور و اکنون</li></ul>
+        <div class="note">گاهی آرامش، فقط یک ملودی‌ست<br>که در گوشت زمزمه می‌کند:<br>«الان، همه‌چیز خوبه.»</div>
+      `
+    },
+    natureWalk: {
+      title:"پیاده‌روی در طبیعت یا فضای سبز",
+      desc:"بازگرداندن ریتم بدن به طبیعت، برای آرامش عمیق.",
+      colors:{light:"#f1f8e9",mid:"#8bc34a",dark:"#33691e"},
+      content:`
+        <p>بدن ما، در طبیعت ساخته شده — نه در اتاق‌های بسته و صفحه‌های روشن. «پیاده‌روی در طبیعت» یعنی برگشتن به جایی که بدن، در آن، خودش را به یاد می‌آورد.</p>
+        <h3>چرا طبیعت کار می‌کند؟</h3>
+        <p>تحقیقات نشان می‌دهد گذراندن وقت در طبیعت، کورتیزول را کاهش می‌دهد، فشار خون را پایین می‌آورد، و حالت «نشخوار فکری» را کم می‌کند. این همان چیزی‌ست که در ژاپن «شینرین-یوکو» (حمام جنگل) نامیده می‌شود و در درمان استرس، به‌عنوان یک مداخله‌ی معتبر شناخته شده است.</p>
+        <h3>چطور پیاده‌روی کنم؟</h3>
+        <ul><li>یک پارک، یک باغ، یا حتی یک خیابان پر درخت انتخاب کن.</li><li>گوشی را در جیب بگذار. هدف، «بودن» است، نه «چک کردن».</li><li>به حس پاهایت روی زمین توجه کن. به صداها. به بوها. به نور.</li><li>سرعت را کم کن. لازم نیست جایی برسی.</li><li>حتی ۱۰ دقیقه هم کافی‌ست.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش کورتیزول و فشار خون</li><li>کاهش نشخوار فکری</li><li>بازگرداندن حس حضور در بدن</li><li>ایجاد ارتباط با چیزی بزرگ‌تر از خود</li></ul>
+        <div class="note">طبیعت، عجله ندارد.<br>و تو،<br>لازم نیست همیشه عجله داشته باشی.</div>
+      `
+    },
+    aromatherapy: {
+      title:"استفاده از رایحه‌درمانی",
+      desc:"استفاده از بوها برای فعال‌سازی سیستم آرامش در مغز.",
+      colors:{light:"#f3e5f5",mid:"#ba68c8",dark:"#4a148c"},
+      content:`
+        <p>بو، مستقیم‌ترین راه به حافظه و هیجان است. یک رایحه‌ی آشنا می‌تواند در یک لحظه، تو را به جای دیگری ببرد — به امنیت، به آرامش، به خاطره‌ای که فراموش کرده بودی.</p>
+        <h3>چرا رایحه‌درمانی کار می‌کند؟</h3>
+        <p>بویایی، تنها حسی‌ست که مستقیماً به سیستم لیمبیک (مرکز هیجانات و حافظه) متصل است. اسطوخودوس، بابونه، و بهارنارنج، در تحقیقات بالینی به‌عنوان آرام‌بخش‌های طبیعی شناخته شده‌اند که می‌توانند اضطراب و بی‌خوابی را کاهش دهند.</p>
+        <h3>چطور استفاده کنم؟</h3>
+        <ul><li>یک رایحه انتخاب کن که در کنارش احساس امنیت می‌کنی — اسطوخودوس، بابونه، بهارنارنج، یا حتی بوی آشپزخانه‌ی مادر.</li><li>یک قطره روی مچ دست، یا چند قطره در دیفیوزر، یا یک کیسه‌ی کوچک کنار بالش.</li><li>چند نفس عمیق بکش و اجازه بده رایحه، تو را به حس امنیت برگرداند.</li><li>این رایحه را به یک آیین روزانه تبدیل کن — مثلاً هر شب قبل از خواب.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش اضطراب و بی‌خوابی</li><li>فعال‌سازی سیستم لیمبیک و خاطرات امن</li><li>ایجاد یک نشانه‌ی آرامش در روز</li><li>بازگرداندن حس امنیت از طریق حس بویایی</li></ul>
+        <div class="note">گاهی آرامش، فقط یک بوست.<br>بوی چیزی که یادت می‌اندازد:<br>«جایی هست که در آن، امنی.»</div>
+      `
+    },
+    dailyWriting: {
+      title:"نوشتن روزانه و ثبت احساسات",
+      desc:"تخلیه‌ی ذهن روی کاغذ، برای بازگرداندن فضای درونی.",
+      colors:{light:"#e8eaf6",mid:"#7986cb",dark:"#283593"},
+      content:`
+        <p>ذهن، انبار نیست. گاهی باید خالی‌اش کنی — روی کاغذ، بدون سانسور، بدون قضاوت. «نوشتن روزانه» یعنی دادن یک فضای امن به افکار و احساسات، تا از درون، به بیرون بیایند.</p>
+        <h3>چرا نوشتن کار می‌کند؟</h3>
+        <p>در روانشناسی، «بیان نوشتاری» (expressive writing) یکی از مؤثرترین ابزارهای کاهش استرس و پردازش هیجانی‌ست. وقتی افکار را می‌نویسیم، مغز آن‌ها را «پردازش‌شده» می‌بیند و شدت نشخوار فکری کاهش می‌یابد. این همان اصل «تخلیه‌ی شناختی» است.</p>
+        <h3>چطور بنویسم؟</h3>
+        <ul><li>یک دفتر یا یک فایل ساده انتخاب کن.</li><li>هر روز ۵ تا ۱۰ دقیقه بنویس — هر چه در ذهنت هست، بدون ویرایش.</li><li>لازم نیست جمله‌ها کامل باشند. می‌توانی فقط کلمه بنویسی، یا حتی خط بکشی.</li><li>در پایان، یک جمله‌ی مهربان به خودت اضافه کن: «همین که نوشتم، کافی‌ست.»</li><li>لازم نیست کسی آن را بخواند. این فقط برای توست.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش نشخوار فکری و استرس</li><li>تخلیه‌ی هیجانی و سبک شدن ذهن</li><li>افزایش خودآگاهی و شناخت الگوهای فکری</li><li>ایجاد یک فضای امن برای بیان درونی</li></ul>
+        <div class="note">کاغذ، قاضی نیست.<br>فقط یک فضاست<br>که می‌توانی در آن،<br>بدون ترس، خودت باشی.</div>
+      `
+    },
+    warmBath: {
+      title:"حمام گرم یا استفاده از آب گرم",
+      desc:"استفاده از گرمای آب برای شل کردن تنش‌های بدن.",
+      colors:{light:"#e0f7fa",mid:"#4dd0e1",dark:"#006064"},
+      content:`
+        <p>آب گرم، یکی از قدیمی‌ترین و ساده‌ترین راه‌های آرامش است. گرمای آب، تنش عضلانی را شل می‌کند، ضربان قلب را آرام می‌کند، و بدن را به حالت «استراحت» می‌برد.</p>
+        <h3>چرا آب گرم کار می‌کند؟</h3>
+        <p>گرما، عروق خونی را گشاد می‌کند و جریان خون را افزایش می‌دهد. این همان مکانیزمی‌ست که در «گرما‌درمانی» (thermotherapy) برای کاهش تنش عضلانی و اضطراب استفاده می‌شود. آب گرم همچنین، سیستم پاراسمپاتیک را فعال می‌کند و حس امنیت بدنی می‌آورد.</p>
+        <h3>چطور استفاده کنم؟</h3>
+        <ul><li>یک حمام گرم، یا یک دوش گرم طولانی، یا حتی یک کیسه‌ی آب گرم روی شانه‌ها.</li><li>لازم نیست عجله کنی. اجازه بده آب، تنش را از بدنت بشوید.</li><li>همراه با آب گرم، چند نفس عمیق بکش و به حس گرما روی پوستت توجه کن.</li><li>می‌توانی یک رایحه‌ی آرام‌بخش هم اضافه کنی.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>شل شدن تنش عضلانی</li><li>کاهش ضربان قلب و فشار خون</li><li>فعال‌سازی سیستم پاراسمپاتیک</li><li>ایجاد حس امنیت بدنی و آرامش</li></ul>
+        <div class="note">آب گرم، فقط بدن را نمی‌شوید.<br>گاهی تنشی را هم<br>که در عضلاتت جا خوش کرده،<br>با خودش می‌برد.</div>
+      `
+    },
+    yogaStretching: {
+      title:"یوگا یا حرکات کششی ملایم",
+      desc:"بازگرداندن جریان بدن، از طریق حرکت آهسته و آگاهانه.",
+      colors:{light:"#f1f8e9",mid:"#9ccc65",dark:"#33691e"},
+      content:`
+        <p>بدن، در تنش، جمع می‌شود. شانه‌ها بالا می‌آیند، فک سفت می‌شود، کمر قوس می‌گیرد. «یوگا و کشش ملایم» یعنی بازگرداندن جریان بدن — نه برای ورزش، بلکه برای بازگشت به خود.</p>
+        <h3>چرا کشش ملایم کار می‌کند؟</h3>
+        <p>کشش ملایم، سیستم عصبی را از حالت «سمپاتیک» (جنگ یا گریز) به حالت «پاراسمپاتیک» (استراحت و هضم) می‌برد. همچنین، «حس عمقی» (proprioception) را فعال می‌کند — یعنی مغز، دوباره می‌فهمد بدن کجاست و در چه حالی‌ست. این همان چیزی‌ست که در درمان تروما، «بازگشت به بدن» نامیده می‌شود.</p>
+        <h3>چطور تمرین کنم؟</h3>
+        <ul><li>یک فضای آرام پیدا کن، یک زیرانداز پهن کن.</li><li>با چند حرکت ساده شروع کن: چرخش شانه‌ها، کشش گردن، خم شدن آرام به جلو.</li><li>لازم نیست کامل یا زیبا باشد. هدف، «حس کردن» است، نه «درست انجام دادن».</li><li>با هر حرکت، نفس بکش. با هر بازدم، کمی بیشتر رها کن.</li><li>۱۰ تا ۱۵ دقیقه کافی‌ست.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>شل شدن تنش عضلانی</li><li>فعال‌سازی سیستم پاراسمپاتیک</li><li>بازگرداندن حس بدن و حضور</li><li>بهبود خلق و کاهش اضطراب</li></ul>
+        <div class="note">بدن، خانه‌ی توست.<br>گاهی فقط کافی‌ست<br>به آن برگردی<br>و کمی کشش بدهی‌اش.</div>
+      `
+    },
+    calmEnvironment: {
+      title:"ایجاد فضای آرام در محیط زندگی",
+      desc:"ساختن یک محیط امن، برای آرامش پایدار.",
+      colors:{light:"#e0f2f1",mid:"#80cbc4",dark:"#00695c"},
+      content:`
+        <p>محیط، بر حال ما اثر می‌گذارد — بیشتر از آنچه فکر می‌کنیم. نور تند، شلوغی، صداهای بلند، همه می‌توانند سیستم عصبی را تحریک کنند. «ایجاد فضای آرام» یعنی آگاهانه ساختن محیطی که در آن، بدن بتواند استراحت کند.</p>
+        <h3>چرا محیط کار می‌کند؟</h3>
+        <p>مغز، دائماً محیط را اسکن می‌کند برای «تهدید» یا «امنیت». وقتی محیط شلوغ و پر از محرک است، سیستم هشدار فعال می‌ماند. اما وقتی محیط آرام است — نور ملایم، رنگ‌های سرد، صداهای کم — مغز پیام می‌گیرد: «الان می‌توانی استراحت کنی.»</p>
+        <h3>چطور محیط را آرام کنم؟</h3>
+        <ul><li>نور را ملایم کن — از لامپ‌های گرم یا نور طبیعی استفاده کن.</li><li>یک گوشه‌ی کوچک بساز که فقط برای آرامش باشد: یک صندلی، یک پتوی نرم، یک شیء آشنا.</li><li>صداهای اضافی را کم کن — یا با یک صدای طبیعت، جایگزین کن.</li><li>یک رایحه‌ی آرام‌بخش در فضا بگذار.</li><li>لازم نیست کل خانه را تغییر دهی. یک گوشه کافی‌ست.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش بار شناختی و حسی</li><li>فعال‌سازی سیستم امنیت در مغز</li><li>ایجاد یک پناهگاه فیزیکی برای آرامش</li><li>تقویت حس کنترل بر محیط</li></ul>
+        <div class="note">تو لازم نیست دنیا را آرام کنی.<br>گاهی فقط یک گوشه‌ی کوچک،<br>کافی‌ست.</div>
+      `
+    },
+    positiveVisualization: {
+      title:"تکنیک‌های تجسم مثبت و تصویرسازی ذهنی",
+      desc:"ساختن یک تصویر امن در ذهن، برای آرامش درونی.",
+      colors:{light:"#fff8e1",mid:"#ffca28",dark:"#ff6f00"},
+      content:`
+        <p>ذهن، تصویر می‌سازد — چه بخواهیم، چه نخواهیم. «تجسم مثبت» یعنی آگاهانه انتخاب کردن تصویری که می‌خواهیم در ذهن داشته باشیم — یک تصویر امن، آرام، و شفابخش.</p>
+        <h3>چرا تجسم کار می‌کند؟</h3>
+        <p>مغز، بین «تصویر ذهنی» و «واقعیت» تفاوت زیادی نمی‌گذارد. وقتی یک تصویر امن را در ذهن می‌سازیم، مغز همان پاسخ آرامش را فعال می‌کند که اگر واقعاً در آن فضا بودیم. این همان اصل «تصویرسازی هدایت‌شده» (guided imagery) است که در درمان اضطراب و درد استفاده می‌شود.</p>
+        <h3>چطور تجسم کنم؟</h3>
+        <ul><li>چشم‌هایت را ببند و چند نفس عمیق بکش.</li><li>یک مکان امن را در ذهن بساز — یک ساحل، یک جنگل، یک اتاق گرم.</li><li>آن را در جزئیات ببین: رنگ‌ها، صداها، بو، حس گرما یا خنکی روی پوست.</li><li>چند دقیقه در آن فضا بمان. اجازه بده بدنت پاسخ آرامش بدهد.</li><li>هر وقت ترس یا استرس آمد، به همان تصویر برگرد.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>فعال‌سازی پاسخ آرامش در مغز</li><li>کاهش اضطراب و تنش</li><li>ایجاد یک پناهگاه ذهنی قابل دسترس</li><li>تقویت توانایی خودتنظیمی هیجانی</li></ul>
+        <div class="note">تو می‌توانی جایی در ذهنت بسازی<br>که هیچ‌کس نتواند آن را از تو بگیرد.<br>یک گوشه‌ی امن.<br>همیشه در دسترس.</div>
+      `
+    }
+  };
+
+  /* ============================================================
+     الگوریتم فلوچارت خودتحلیلی آرامش
+     ============================================================ */
+  const steps = [
+    {
+      text:"آیا در این لحظه احساس ثبات، آرامش و رضایت کلی نسبت به خود و محیط داری؟",
+      yes: 1,
+      no: 4
+    },
+    {
+      text:"آیا ذهن‌ات آرام و بدون تنش است؟ (مثلاً افکار مزاحم یا اضطراب ندارم)",
+      yes: 2,
+      no: 4
+    },
+    {
+      text:"آیا بدن‌ات در حالت ریلکس و راحتی است؟ (تنش عضلانی کم است، نفس‌کشیدن طبیعی)",
+      yes: 3,
+      no: 4
+    },
+    {
+      text:"آیا می‌توانی به راحتی در لحظه حضور داشته باشی و از آن لذت ببری؟",
+      yes: {
+        message:"✅ آرامش سالم و پایدار\n\n• روتین آرامش‌بخش روزانه‌ات را حفظ کن\n• مراقبه، تنفس عمیق، ذهن‌آگاهی\n• این حالت را جشن بگیر",
+        next: "done",
+        potion: "mindfulness"
+      },
+      no: 4
+    },
+    {
+      text:"آیا دلیل خاصی برای نداشتن آرامش وجود دارد؟ (استرس، نگرانی، درد جسمی، محیط نامناسب)",
+      yes: 5,
+      no: 6
+    },
+    {
+      text:"آیا می‌توانی برای رفع یا کاهش این عامل اقدام کنی؟",
+      yes: {
+        message:"🟠 شروع به اقدام برای کاهش استرس یا تنش\n\n• تغییر محیط، مدیتیشن، ورزش ملایم\n• صحبت با دوست یا مشاور\n• یک قدم کوچک بردار",
+        next: "done",
+        potion: "calmEnvironment"
+      },
+      no: {
+        message:"🟠 پذیرش و مدیریت شرایط\n\n• تمرین تنفس\n• خودمراقبتی\n• یادآوری این‌که این وضعیت موقتی است\n• تو فقط لازم نیست امروز حلش کنی",
+        next: "done",
+        potion: "deepBreathing"
+      }
+    },
+    {
+      text:"آیا احساس ناراحتی یا اضطراب مبهم داری که علت مشخصی ندارد؟",
+      yes: {
+        message:"🟠 تمرین خودآگاهی و ثبت احساسات\n\n• یادداشت‌برداری روزانه\n• مدیتیشن\n• مراجعه به متخصص در صورت تداوم",
+        next: "done",
+        potion: "dailyWriting"
+      },
+      no: {
+        message:"🟢 وضعیت نرمال\n\n• کمی صبر کن و خودت را بیشتر بشناس\n• شاید فقط به یک لحظه‌ی سکوت نیاز داری",
+        next: "done",
+        potion: "relaxingMusic"
+      }
+    }
+  ];
+
+  const finalMessage = "تو مسیر آرامشت رو دیدی و همراهی کردی.\n\nاین خودش یک قدم بزرگه.\n\nیادت باشه: آرامش، مقصد نیست — یک تمرینه.\n\nو تو، هر روز می‌تونی دوباره بهش برگردی. 🌿";
+
+  let currentStep = 0;
+  let nextStep = null;
+  let finalPotion = null;
+
+  const questionEl = document.getElementById("question");
+  const questionCard = document.getElementById("questionCard");
+  const resultEl = document.getElementById("result");
+  const resultTextEl = document.getElementById("resultText");
+  const potionMount = document.getElementById("potionMount");
+  const finalEl = document.getElementById("final");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const continueBtn = document.getElementById("continueBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const buttonsContainer = document.getElementById("buttonsContainer");
+
+  /* ===== SVG بطری ===== */
+  function potionSVG(colors){
+    const id = colors.mid.replace("#","");
+    return `
+      <svg class="potion-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="glass-${id}" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#ffffff" stop-opacity=".4"/>
+            <stop offset=".35" stop-color="#b9e8e6" stop-opacity=".08"/>
+            <stop offset=".7" stop-color="#ffffff" stop-opacity=".02"/>
+            <stop offset="1" stop-color="#9bd8dc" stop-opacity=".35"/>
+          </linearGradient>
+          <linearGradient id="potion-${id}" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="${colors.light}"/>
+            <stop offset=".45" stop-color="${colors.mid}"/>
+            <stop offset="1" stop-color="${colors.dark}"/>
+          </linearGradient>
+          <linearGradient id="cork-${id}" x1="0" y1="0" x2="1" y2="0">
+            <stop stop-color="#80502f"/><stop offset=".5" stop-color="#d5a16b"/><stop offset="1" stop-color="#88512d"/>
+          </linearGradient>
+          <clipPath id="inside-${id}">
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 319 258 319 L142 319 Q124 319 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z"/>
+          </clipPath>
+          <filter id="blur-${id}"><feGaussianBlur stdDeviation="15"/></filter>
+        </defs>
+
+        <g class="glow"><ellipse cx="200" cy="225" rx="115" ry="130" fill="${colors.mid}" opacity=".35" filter="url(#blur-${id})"/></g>
+        <ellipse cx="200" cy="345" rx="77" ry="12" fill="#000" opacity=".3"/>
+
+        <g class="bottle">
+          <g>
+            <path d="M170 58 Q170 48 180 48 L220 48 Q230 48 230 58 L225 107 L175 107Z" fill="url(#cork-${id})" stroke="#6b432e" stroke-width="2"/>
+            <path d="M180 53 Q175 65 180 88" fill="none" stroke="#f4c38c" stroke-width="4" opacity=".5"/>
+            <path d="M190 52 L190 99" stroke="#71462d" opacity=".25"/>
+            <rect x="174" y="100" width="52" height="9" rx="3" fill="#70452f"/>
+          </g>
+          <g>
+            <path d="M166 105 L234 105 L234 151 Q234 165 252 182 L148 182 Q166 165 166 151Z" fill="url(#glass-${id})" stroke="#c4e7e9" stroke-width="3"/>
+          </g>
+          <g clip-path="url(#inside-${id})">
+            <rect x="120" y="225" width="160" height="110" fill="url(#potion-${id})"/>
+            <g class="liquid">
+              <path d="M115 227 Q150 215 180 227 Q220 239 250 223 Q270 216 290 225 L290 340 L110 340Z" fill="${colors.light}" opacity=".7"/>
+            </g>
+            <g fill="#fff">
+              <circle class="bubble" cx="157" cy="270" r="5" opacity=".6"/>
+              <circle class="bubble b2" cx="225" cy="285" r="4"/>
+              <circle class="bubble b3" cx="190" cy="248" r="3"/>
+              <circle class="bubble b2" cx="245" cy="258" r="2.5"/>
+              <circle class="bubble b3" cx="170" cy="300" r="2"/>
+            </g>
+          </g>
+          <g>
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 322 256 322 L144 322 Q124 322 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z" fill="url(#glass-${id})" stroke="#c6e9ed" stroke-width="3.5"/>
+            <path d="M140 224 Q140 203 157 185 Q175 167 175 150 L175 137" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".65"/>
+            <path d="M260 232 L260 298" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+            <path d="M136 307 Q200 317 264 307" fill="none" stroke="#fff" stroke-width="2" opacity=".4"/>
+          </g>
+          <g>
+            <circle cx="200" cy="252" r="25" fill="#fff" fill-opacity=".12" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/>
+            <path d="M200 231 L204 246 L219 252 L204 258 L200 273 L196 258 L181 252 L196 246Z" fill="#fff" opacity=".9"/>
+          </g>
+        </g>
+
+        <g fill="${colors.light}">
+          <path class="bubble" d="M105 157 L109 169 L121 173 L109 177 L105 189 L101 177 L89 173 L101 169Z"/>
+          <path class="bubble b2" d="M290 130 L293 139 L302 142 L293 145 L290 154 L287 145 L278 142 L287 139Z"/>
+          <circle class="bubble b3" cx="290" cy="190" r="3"/>
+        </g>
+      </svg>
+    `;
+  }
+
+  /* ===== نمایش سوال ===== */
+  function showQuestion(stepIndex){
+    currentStep = stepIndex;
+    const step = steps[stepIndex];
+
+    questionEl.style.animation = "none";
+    void questionEl.offsetHeight;
+    questionEl.style.animation = "fadeInUp .5s ease both";
+    questionEl.textContent = step.text;
+
+    resultEl.style.display = "none";
+    finalEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+    buttonsContainer.style.display = "flex";
+    yesBtn.style.display = "inline-block";
+    noBtn.style.display = "inline-block";
+  }
+
+  /* ===== نمایش راهکار + معجون با هم ===== */
+  function showResult(message, potionKey){
+    const p = potions[potionKey];
+    resultTextEl.textContent = message;
+    potionMount.innerHTML = `
+      <div class="potion-inner">
+        ${potionSVG(p.colors)}
+        <h3 class="potion-title">${p.title}</h3>
+        <p class="potion-desc">${p.desc}</p>
+        <div class="potion-content">${p.content}</div>
+      </div>
+    `;
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "block";
+    resultEl.style.animation = "none";
+    void resultEl.offsetHeight;
+    resultEl.style.animation = "fadeInUp .5s ease both";
+    resultEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== نمایش پیام نهایی + معجون ===== */
+  function showFinal(message, potionKey){
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "none";
+
+    finalEl.textContent = message;
+    finalEl.style.display = "block";
+    finalEl.style.animation = "none";
+    void finalEl.offsetHeight;
+    finalEl.style.animation = "fadeInUp .6s ease both";
+
+    if(potionKey){
+      const p = potions[potionKey];
+      const wrap = document.createElement("div");
+      wrap.id = "finalPotionMount";
+      wrap.innerHTML = `
+        <div class="potion-inner" style="margin-top:20px;background:rgba(255,255,255,.9);">
+          ${potionSVG(p.colors)}
+          <h3 class="potion-title">${p.title}</h3>
+          <p class="potion-desc">${p.desc}</p>
+          <div class="potion-content">${p.content}</div>
+        </div>
+      `;
+      const old = document.getElementById("finalPotionMount");
+      if(old) old.remove();
+      finalEl.appendChild(wrap);
+    }
+
+    finalEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== دکمه بله ===== */
+  yesBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.yes === "number"){
+      showQuestion(step.yes);
+    } else if(step.yes && typeof step.yes === "object"){
+      nextStep = step.yes.next;
+      finalPotion = step.yes.potion;
+      showResult(step.yes.message, step.yes.potion);
+    }
+  };
+
+  /* ===== دکمه خیر ===== */
+  noBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.no === "number"){
+      showQuestion(step.no);
+    } else if(step.no && typeof step.no === "object"){
+      nextStep = step.no.next;
+      finalPotion = step.no.potion;
+      showResult(step.no.message, step.no.potion);
+    }
+  };
+
+  /* ===== ادامه ===== */
+  continueBtn.onclick = () => {
+    if(nextStep === "done"){
+      showFinal(finalMessage, finalPotion);
+    } else if(typeof nextStep === "number"){
+      showQuestion(nextStep);
+    }
+  };
+
+  /* ===== شروع دوباره ===== */
+  function resetApp(){
+    currentStep = 0;
+    nextStep = null;
+    finalPotion = null;
+    finalEl.style.display = "none";
+    finalEl.innerHTML = "";
+    resultEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+    showQuestion(0);
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
+
+  restartBtn.onclick = resetApp;
+
+  /* ===== شروع ===== */
+  showQuestion(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#eef2f7">
+<title>تحلیل عاطفی غم | قفسه‌ی غم</title>
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%BA%D9%85.svg">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root{
+    --bg-start:#f8fafc; --bg-end:#dbe4ee;
+    --text-main:#2c3e50; --text-muted:#607d8b;
+    --grief-primary:#64b5f6; --grief-primary-dark:#1c6ea4;
+    --card-bg:rgba(255,255,255,.78);
+    --card-border:rgba(255,255,255,.9);
+    --shadow:0 10px 30px rgba(28,110,164,.1);
+    --radius-lg:28px;
+    --font:'Vazirmatn',Tahoma,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg-start)}
+  body{
+    direction:rtl; font-family:var(--font);
+    background:radial-gradient(circle at 50% 0%,#fff 0%,var(--bg-start) 40%,var(--bg-end) 100%);
+    color:var(--text-main); max-width:640px; margin:auto;
+    padding:calc(20px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+    min-height:100vh; position:relative; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased; line-height:1.9;
+  }
+
+  /* ===== امواج سرد ===== */
+  .ambient-waves{position:fixed;bottom:0;left:0;width:100%;height:280px;z-index:0;pointer-events:none;overflow:hidden}
+  .ambient-waves svg{width:100%;height:100%;display:block}
+  .wave-group{transform-box:fill-box;transform-origin:center bottom}
+  .wave-path{transform-box:fill-box;transform-origin:center bottom}
+  .wave-group-1{animation:flowX1 26s ease-in-out infinite alternate}
+  .wave-group-2{animation:flowX2 32s ease-in-out infinite alternate}
+  .wave-group-3{animation:flowX3 38s ease-in-out infinite alternate}
+  @keyframes flowX1{0%{transform:translateX(-3%) rotate(.5deg)}100%{transform:translateX(3%) rotate(-1deg)}}
+  @keyframes flowX2{0%{transform:translateX(3%) rotate(-1deg)}100%{transform:translateX(-3%) rotate(1deg)}}
+  @keyframes flowX3{0%{transform:translateX(-2%) rotate(.8deg)}100%{transform:translateX(4%) rotate(-.5deg)}}
+  .wave-path-1{animation:breatheY1 16s ease-in-out infinite}
+  .wave-path-2{animation:breatheY2 20s ease-in-out infinite 2s}
+  .wave-path-3{animation:breatheY3 24s ease-in-out infinite 4s}
+  @keyframes breatheY1{0%,100%{transform:translateY(0) scaleY(1);opacity:.4}50%{transform:translateY(-14px) scaleY(1.08);opacity:.7}}
+  @keyframes breatheY2{0%,100%{transform:translateY(0) scaleY(1);opacity:.3}50%{transform:translateY(-20px) scaleY(1.12);opacity:.6}}
+  @keyframes breatheY3{0%,100%{transform:translateY(0) scaleY(1);opacity:.25}50%{transform:translateY(-10px) scaleY(1.05);opacity:.5}}
+
+  /* ===== هدر ===== */
+  .header-section{text-align:center;margin-bottom:25px;position:relative;z-index:2;animation:fadeInDown .8s ease both}
+  .joy-logo-container{position:relative;display:inline-block;margin-bottom:15px}
+  .joy-logo-container::before{
+    content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:160px;height:160px;background:radial-gradient(circle,rgba(100,181,246,.3) 0%,transparent 70%);
+    border-radius:50%;z-index:-1;animation:pulseGlow 4s ease-in-out infinite;
+  }
+  .joy-logo-frame{
+    width:120px;height:120px;border-radius:50%;background:#fff;
+    border:3px solid rgba(255,255,255,.9);
+    box-shadow:0 10px 30px rgba(28,110,164,.15),inset 0 0 20px rgba(100,181,246,.1);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    position:relative;animation:float 5s ease-in-out infinite;
+  }
+  .joy-logo-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  h1{color:#456990;font-size:24px;font-weight:800;margin:0;letter-spacing:-.5px}
+  .subtitle{font-size:12px;color:var(--text-muted);margin-top:5px;font-weight:500;letter-spacing:1px}
+
+  /* ===== دکمه بازگشت ===== */
+  .back-home{
+    display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    color:var(--text-muted);font-size:13px;font-weight:600;
+    padding:10px 18px;border-radius:50px;
+    background:rgba(255,255,255,.6);border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    margin-bottom:15px;position:relative;z-index:2;transition:all .3s ease;
+  }
+  .back-home:hover{background:#fff;color:var(--text-main);box-shadow:0 4px 15px rgba(0,0,0,.05);transform:translateX(5px)}
+  .back-home svg{width:16px;height:16px}
+
+  /* ===== کارت سوال ===== */
+  .question-card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--radius-lg);padding:35px 25px;
+    box-shadow:var(--shadow),inset 0 2px 10px rgba(255,255,255,.5);
+    margin-bottom:25px;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);
+    position:relative;z-index:2;overflow:hidden;animation:fadeInUp .6s ease both;
+  }
+  .question-card::before{
+    content:"";position:absolute;top:-60px;left:-40px;
+    width:180px;height:180px;background:radial-gradient(circle,rgba(100,181,246,.15) 0%,transparent 70%);
+    border-radius:50%;z-index:0;
+  }
+  .question-icon{display:flex;justify-content:center;margin-bottom:15px;position:relative;z-index:1}
+  .question-icon svg{width:32px;height:32px;color:var(--grief-primary-dark);filter:drop-shadow(0 4px 8px rgba(100,181,246,.3))}
+  #question{
+    font-size:19px;font-weight:700;line-height:1.9;margin:0;
+    position:relative;z-index:1;text-align:center;min-height:70px;
+    display:flex;align-items:center;justify-content:center;white-space:pre-wrap;
+  }
+
+  /* ===== دکمه‌ها ===== */
+  .buttons-container{display:flex;justify-content:center;gap:15px;position:relative;z-index:2;animation:fadeInUp .6s ease .1s both}
+  button{
+    font-family:var(--font);font-size:16px;font-weight:700;
+    padding:14px 40px;border-radius:50px;border:none;cursor:pointer;
+    transition:all .3s cubic-bezier(.25,.8,.25,1);
+    box-shadow:0 4px 15px rgba(0,0,0,.05);position:relative;overflow:hidden;
+  }
+  #yesBtn{background:linear-gradient(135deg,#90caf9,#64b5f6 50%,#42a5f5);color:#0d2c4a;box-shadow:0 8px 25px rgba(100,181,246,.4)}
+  #yesBtn:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(100,181,246,.5)}
+  #noBtn{background:rgba(255,255,255,.7);color:var(--text-muted);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+  #noBtn:hover{background:#fff;color:var(--text-main);transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+  button:active{transform:translateY(0) scale(.96)}
+
+  /* ===== کارت نتیجه (راهکار + معجون با هم) ===== */
+  #result{
+    background:linear-gradient(145deg,#f0f6fd,#e3eef9);
+    border:1px solid rgba(100,181,246,.3);padding:25px;margin-top:25px;
+    border-radius:var(--radius-lg);display:none;line-height:2;
+    font-size:15px;font-weight:500;color:#2c4a6b;
+    box-shadow:0 10px 30px rgba(28,110,164,.08),inset 0 2px 10px rgba(255,255,255,.5);
+    position:relative;z-index:2;text-align:right;
+  }
+  .result-header{
+    display:flex;align-items:center;gap:10px;margin-bottom:15px;
+    padding-bottom:12px;border-bottom:1px dashed rgba(100,181,246,.3);
+    font-weight:700;font-size:16px;color:var(--grief-primary-dark);
+  }
+  .result-header svg{width:24px;height:24px;color:var(--grief-primary);flex-shrink:0}
+  #resultText{white-space:pre-wrap;margin-bottom:20px;line-height:2}
+
+  /* ===== کارت معجون ===== */
+  .potion-inner{
+    background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);
+    border-radius:22px;padding:20px;margin-top:10px;
+    text-align:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 6px 20px rgba(28,110,164,.08);
+    animation:fadeInUp .5s ease both;
+  }
+  .potion-inner .potion-svg{width:140px;height:140px;margin:0 auto 12px;display:block;overflow:visible}
+  .potion-title{font-size:20px;font-weight:800;color:var(--grief-primary-dark);margin:0 0 6px}
+  .potion-desc{font-size:13px;color:var(--text-muted);line-height:1.9;margin:0 0 16px}
+  .potion-content{
+    text-align:right;margin-top:18px;padding-top:16px;
+    border-top:1px dashed rgba(100,181,246,.3);
+  }
+  .potion-content h3{
+    font-size:15px;font-weight:800;color:#2e5d81;margin:18px 0 8px;
+  }
+  .potion-content h3:first-child{margin-top:0}
+  .potion-content p{font-size:14px;color:#37474f;margin:0 0 12px;line-height:1.95}
+  .potion-content ul,.potion-content ol{padding-right:20px;margin:0 0 14px;font-size:14px;color:#37474f}
+  .potion-content li{margin-bottom:7px;line-height:1.85}
+  .potion-content blockquote{
+    background:rgba(224,235,246,.6);border-right:4px solid #64b5f6;
+    border-radius:6px;padding:10px 14px;margin:14px 0;
+    font-style:italic;color:#2e5d81;font-size:14px;
+  }
+  .potion-content .highlight{
+    background:rgba(224,235,246,.7);padding:12px 16px;
+    border-right:4px solid #64b5f6;border-radius:8px;margin:14px 0;
+    font-size:14px;line-height:1.95;
+  }
+  .potion-content .note{
+    margin-top:18px;padding:14px 16px;background:rgba(246,233,233,.7);
+    border-right:4px solid #d32f2f;border-radius:12px;
+    color:#a62525;font-weight:500;font-size:14px;line-height:1.9;
+  }
+
+  /* ===== دکمه‌های پایانی ===== */
+  .result-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:18px}
+  .result-actions button{font-size:14px;padding:12px 32px;width:100%;max-width:280px}
+  #continueBtn{background:linear-gradient(135deg,#90caf9,#64b5f6 50%,#42a5f5);color:#0d2c4a;box-shadow:0 8px 25px rgba(100,181,246,.4)}
+  #continueBtn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(100,181,246,.5)}
+  .restart-btn{background:#fff;color:var(--grief-primary-dark);border:1px solid rgba(100,181,246,.3);box-shadow:0 4px 15px rgba(28,110,164,.15)}
+  .restart-btn:hover{background:#f8fafc;transform:translateY(-2px);box-shadow:0 6px 20px rgba(28,110,164,.2)}
+
+  /* ===== پیام نهایی ===== */
+  #final{
+    background:linear-gradient(135deg,#f0f9f4,#dcfce7);color:#166534;
+    padding:30px 25px;margin-top:25px;border:2px dashed #86efac;
+    border-radius:var(--radius-lg);font-size:16px;font-weight:600;line-height:2;
+    display:none;text-align:center;position:relative;z-index:2;
+    box-shadow:0 10px 30px rgba(22,101,52,.08);white-space:pre-wrap;
+  }
+
+  /* ===== انیمیشن SVG ===== */
+  .bottle{transform-box:fill-box;transform-origin:center;animation:float 5s ease-in-out infinite}
+  .liquid{animation:liquid 4s ease-in-out infinite alternate}
+  .bubble{animation:bubble 3.5s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .b2{animation-delay:1.2s}
+  .b3{animation-delay:2.1s}
+  .glow{animation:glow 5s ease-in-out infinite}
+
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}
+  @keyframes liquid{from{transform:translateY(3px)}to{transform:translateY(-4px)}}
+  @keyframes bubble{0%,100%{transform:translateY(5px);opacity:.3}50%{transform:translateY(-12px);opacity:.9}}
+  @keyframes glow{0%,100%{opacity:.2}50%{opacity:.5}}
+  @keyframes pulseGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.8}50%{transform:translate(-50%,-50%) scale(1.2);opacity:1}}
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+  @media (min-width:601px){
+    #question{font-size:21px}
+    .joy-logo-frame{width:140px;height:140px}
+    h1{font-size:28px}
+    .potion-inner .potion-svg{width:180px;height:180px}
+    .potion-title{font-size:24px}
+  }
+  @media (max-width:400px){
+    #question{font-size:17px}
+    .joy-logo-frame{width:100px;height:100px}
+    button{padding:12px 30px;font-size:15px}
+    h1{font-size:22px}
+    .question-card{padding:25px 20px}
+    .potion-inner .potion-svg{width:120px;height:120px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    .ambient-waves{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- امواج سرد -->
+<div class="ambient-waves" aria-hidden="true">
+  <svg viewBox="0 0 600 210" preserveAspectRatio="none">
+    <g class="wave-group wave-group-3"><path class="wave-path wave-path-3" d="M-50 145 C130 95 200 195 330 135 S520 90 650 150 L650 220 L-50 220Z" fill="#90caf9"/></g>
+    <g class="wave-group wave-group-2"><path class="wave-path wave-path-2" d="M-50 105 C110 45 180 165 300 100 S500 45 650 112 L650 220 L-50 220Z" fill="#bbdefb"/></g>
+    <g class="wave-group wave-group-1"><path class="wave-path wave-path-1" d="M-50 65 C100 5 160 135 270 70 S470 5 650 78 L650 220 L-50 220Z" fill="#e3f2fd"/></g>
+  </svg>
+</div>
+
+<!-- بازگشت -->
+<a href="index.html" class="back-home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  بازگشت به قفسه‌ی غم
+</a>
+
+<!-- هدر -->
+<div class="header-section">
+  <div class="joy-logo-container">
+    <div class="joy-logo-frame">
+      <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%BA%D9%85.svg" alt="لوگوی معبد">
+    </div>
+  </div>
+  <h1>تحلیل عاطفی غم</h1>
+  <p class="subtitle">A GENTLE SPACE FOR GRIEF</p>
+</div>
+
+<!-- سوال -->
+<div class="question-card" id="questionCard">
+  <div class="question-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  </div>
+  <div id="question"></div>
+</div>
+
+<!-- دکمه‌ها -->
+<div class="buttons-container" id="buttonsContainer">
+  <button id="yesBtn">بله</button>
+  <button id="noBtn">خیر</button>
+</div>
+
+<!-- نتیجه: راهکار + معجون با هم -->
+<div id="result">
+  <div class="result-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+    </svg>
+    راهکار پیشنهادی
+  </div>
+  <div id="resultText"></div>
+  <div id="potionMount"></div>
+  <div class="result-actions">
+    <button id="continueBtn">ادامه</button>
+    <button class="restart-btn" id="restartBtn">شروع دوباره</button>
+  </div>
+</div>
+
+<!-- پیام نهایی -->
+<div id="final"></div>
+
+<script>
+  /* ============================================================
+     داده‌های کامل ۱۰ معجون غم
+     ============================================================ */
+  const potions = {
+    tearCalm: {
+      title:"اشک‌آرام",
+      desc:"اجازه دادن به اشک، برای سبک شدن قفسه‌ی سینه.",
+      colors:{light:"#e3f2fd",mid:"#64b5f6",dark:"#1c6ea4"},
+      content:`
+        <p>گاهی وقتا غم مثل ابری سنگین میاد می‌شینه روی دل آدم... نه داد می‌زنه، نه اشک می‌ریزه، فقط فشار میاره. اما اشک... اشک گاهی همون راه تنفسیه که دل پیدا می‌کنه تا زنده بمونه.</p>
+        <blockquote>نه برای مظلوم‌نمایی، نه برای جلب توجه.<br>برای خودت.<br>برای قلبت که خسته‌ست.</blockquote>
+        <h3>طرز استفاده</h3>
+        <ul><li>یه جای امن پیدا کن، جایی که قضاوت نشی (یه پتو، یه آغوش، یا حتی زیر دوش آب گرم).</li><li>به خودت بگو: <strong>«الان اجازه دارم گریه کنم.»</strong></li><li>حتی اگه اشک نیومد، فقط اجازه بده بیاد.</li><li>اگه خواستی، می‌تونی وسطش حرف بزنی یا بنویسی.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>سبک‌شدن قفسه‌ی سینه</li><li>تخلیه‌ی انرژی‌های فشرده‌ی درونی</li><li>احساس همدلی با خود</li><li>نزدیک‌تر شدن به آرامش</li></ul>
+        <div class="note">اگر کسی بهت گفت «گریه نکن»، یادت باشه اون نمی‌فهمه.<br>گریه نشونه‌ی ضعف نیست — گاهی تنها نشونه‌ی زنده‌بودنه.</div>
+      `
+    },
+    hugFree: {
+      title:"آغوش بی‌قید",
+      desc:"آغوشی بی هیچ شرطی، بی قضاوت، بی حرف.",
+      colors:{light:"#e0f2f1",mid:"#4db6ac",dark:"#00695c"},
+      content:`
+        <p>وقتی غم از همه طرف می‌پیچه دور دلت، وقتی احساس می‌کنی کسی نیست... یا حتی بدتر: هستن، ولی هیچ‌کس نمی‌فهمه چی داری می‌کشی، اون‌وقته که دلت یه چیز ساده اما عمیق می‌خواد: <strong>آغوش… بی هیچ شرطی.</strong></p>
+        <h3>چجوری درستش کنیم؟</h3>
+        <ul><li>اگر کسی رو داری که بتونی بهش اعتماد کنی، بغلش کن.</li><li>اما اگه نه... <strong>خودت رو بغل کن.</strong> جدی می‌گم.</li><li>دوتا بازوت رو ببر دور خودت. فشار بده، انگار یه لحظه قراره همه چی آروم شه.</li><li>سرت رو خم کن. پلک‌هات رو ببند.</li><li>یه جمله‌ی آروم بگو به خودت: <strong>«اینجا امنه... من باهاتم...»</strong></li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش تنش در عضلات شونه و سینه</li><li>ترشح اکسی‌توسین، هورمون عشق و پیوند</li><li>ترمیم ارتباط گسسته‌ی تو با خودت</li><li>التیام لایه‌های عمیق غم</li><li>احساس دیده‌شدن، حتی اگه فقط توسط خودت</li></ul>
+        <div class="note">گاهی «آغوش بی‌قید» از خودت به خودت، شجاعانه‌ترین و شفابخش‌ترین کاریه که می‌تونی بکنی.</div>
+      `
+    },
+    griefNotebook: {
+      title:"دفتر سوگ خاموش",
+      desc:"برای وقتایی که نمی‌تونی حرف بزنی، فقط می‌تونی بنویسی.",
+      colors:{light:"#e0ebf6",mid:"#64b5f6",dark:"#2e5d81"},
+      content:`
+        <p>بعضی غم‌ها… نه اشک دارن، نه صدا، نه حتی یک نفر که بشنوه‌شون. یه‌جوری ساکتن که انگار توی یه بطری، ته اقیانوس گیر کردن. و تو فقط حسشون می‌کنی… بدون اینکه بتونی اسم بذاری روشون.</p>
+        <blockquote>"دفتر سوگ خاموش" برای همین لحظه‌ها ساخته شده.<br>برای وقتایی که نمی‌تونی حرف بزنی.<br>فقط می‌تونی بنویسی.<br>بی‌قضاوت. بی‌نظم. بی‌دلیل.</blockquote>
+        <h3>چطور ازش استفاده کنم؟</h3>
+        <ul><li>یه دفتر یا برگه جدا برایش کنار بذار.</li><li>روش بنویس: «اینجا جای سوگ‌هایی‌ه که کسی ندیده.»</li><li>هرچی دلت خواست بنویس. می‌تونه یه اسم باشه. یه جمله نصفه. یه نقاشی بی‌معنی. حتی فقط خط‌خطی.</li><li>اگه دلت خواست، صفحه‌ها رو بعدش بسوزون. یا پاره کن. یا نگه دار توی یه پاکت خاکستری.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>تخلیه‌ی غم‌های نامرئی</li><li>پیدا کردن زبان خاموشِ درد</li><li>سبک‌شدن بدن و سینه</li><li>ترمیم زخم‌هایی که حرف ندارن، فقط صداشون خفه‌ست</li><li>ایجاد حس کنترل بر اندوهی که قبلاً رها بوده</li></ul>
+        <div class="note">تو لازم نیست همیشه سوگت رو با صدای بلند زندگی کنی.<br>گاهی سکوتِ ثبت‌شده، از هزار فریاد حقیقی‌تره.</div>
+      `
+    },
+    grayVoice: {
+      title:"صدای خاکستری",
+      desc:"یه صدای امن که غمت رو تأیید می‌کنه، بدون اینکه بخواد درستش کنه.",
+      colors:{light:"#eceff1",mid:"#90a4ae",dark:"#455a64"},
+      content:`
+        <p>غم همیشه جیغ نمی‌کشه... گاهی فقط می‌نشیند یک‌گوشه و زمزمه می‌کنه. یه صدا، که نه سیاهه نه سفید… یه صدای خاکستری. نه گریه‌ست، نه موسیقی… یه چیزی وسط این دوتاست.</p>
+        <blockquote>«صدای خاکستری» یعنی: یه پلی‌لیست کوتاه، یه وُیس با صدای خودت، یا یه صدای تکرارشونده مثل باد، بارون، یا حتی هُمای یخچال خونه‌ی مادربزرگت...</blockquote>
+        <h3>چطور ازش استفاده کنم؟</h3>
+        <ul><li>یه فایل صوتی ضبط کن، با صدای آروم. حتی اگه هیچی نمی‌گی فقط نفس می‌کشی.</li><li>یا برو سراغ آهنگ‌هایی که نه غمگینن نه شاد، فقط آهسته‌ن.</li><li>بشین جایی راحت. هدفون بذار. گوش بده.</li><li>هیچ کار دیگه‌ای نکن. فقط اجازه بده صدا، همراه غمت بشه.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش احساس تنهایی</li><li>همدلی بی‌کلام</li><li>نظم دادن به درهم‌ریختگی ذهنی</li><li>کمک به تخلیه‌ی آرام غم</li><li>ساختن فضایی برای «هم‌نشینی با درد»، نه «فرار ازش»</li></ul>
+        <div class="note">گاهی برای سبک‌شدن، نیازی به تحلیل نیست.<br>فقط یکی باید باشه که کنار دلت بنشینه و بگه: «میدونم سخته… ولی این صدای من کنارته.»</div>
+      `
+    },
+    silentCandle: {
+      title:"شمع خاموشی",
+      desc:"آیین ساده‌ای برای پایان‌دادن به یک حس، با احترام.",
+      colors:{light:"#f5f5f5",mid:"#bdbdbd",dark:"#616161"},
+      content:`
+        <p>بعضی غم‌ها نمی‌خوان با گریه تموم شن، نمی‌خوان حل شن، یا حتی فهمیده شن. فقط باید «تموم شن»... مثل شعله‌ای که باید خاموش شه، نه چون بی‌ارزشه، چون وقتشه.</p>
+        <blockquote>«شمع خاموشی» یک آیین ساده‌ست برای پایان‌دادن به یک حس، یک رابطه، یک فکر، یا حتی فقط یک لحظه‌ی دردناک. نه با نفرت، نه با فراموشی، بلکه با احترام.</blockquote>
+        <h3>چطور انجامش بدم؟</h3>
+        <ul><li>یه شمع آروم انتخاب کن، ترجیحاً ساده و سفید.</li><li>توی یک شب ساکت، روشنش کن.</li><li>به چیزی که می‌خوای رها کنی فکر کن… بدون جنگ، فقط نگاهش کن.</li><li>زیر لب بگو: <em>«ازت ممنونم که بودی… اما دیگه وقتشه بری.»</em></li><li>بعد، شمع رو فوت کن.</li><li>چند دقیقه در تاریکی بشین. بذار سکوت، خالی کنه دلت رو.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>بستنِ آرام یک فصل</li><li>کاهش چسبندگی ذهنی به گذشته</li><li>بالا بردن حس رهایی و پذیرش</li><li>فراهم‌کردن فضایی برای شروع دوباره</li></ul>
+        <div class="note">رهایی یعنی نگه نداشتن چیزی که خودش دیگه نمی‌خواد بمونه.<br>شمع خاموشی، نه برای پایان، بلکه برای باز شدن یک در جدید توی دلته...</div>
+      `
+    },
+    rainBreath: {
+      title:"نفس با بوی بارون",
+      desc:"تمرین تنفسی ساده با تصور بارون، بوی خاک، و خنکی نسیم.",
+      colors:{light:"#e1f5fe",mid:"#81d4fa",dark:"#0277bd"},
+      content:`
+        <p>بعضی وقتا، غم شبیه یه آسمونه گرفته‌ست... نه گریه داره، نه فریاد… فقط یه سنگینی، یه ابر توی دل.</p>
+        <blockquote>«نفس با بوی بارون» یک تمرین تنفسی ساده‌ست که با تصور بارون، بوی خاک، و خنکی نسیم، ذهن رو از بغض خالی می‌کنه و بدن رو توی آغوش آرامش می‌ذاره.</blockquote>
+        <h3>چطور انجامش بدم؟</h3>
+        <ul><li>یه جای آروم پیدا کن، ترجیحاً کنار پنجره یا جایی که یه کم هوا بیاد.</li><li>چشماتو ببند. تصور کن بارون داره می‌باره، نم‌نم، با بوی خاک...</li><li>نفس عمیق بکش: از بینی، آروم... تا ته دل.</li><li>نگه دار، سه ثانیه.</li><li>از دهان، خیلی آروم بیرون بده، انگار داری غمتو فوت می‌کنی.</li><li>با هر دم، بگو توی دلت: «هوای تازه...» با هر بازدم، بگو: «غمم بره...»</li><li>این چرخه رو ۵ تا ۷ بار تکرار کن.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>آرام‌سازی سیستم عصبی</li><li>تخلیه‌ی لطیف احساسات سنگین</li><li>حس سبکی، مثل بوی بارون روی خاک خشک</li><li>باز شدن راه اشک یا الهام</li></ul>
+        <div class="note">گاهی فقط کافیه یه لحظه نفس بکشی...<br>همون‌جوری که زمین وقتی بارون می‌باره، بوی خودش رو رها می‌کنه.<br>تو هم می‌تونی بوی دلت رو توی جهان پخش کنی… با همون سادگی.</div>
+      `
+    },
+    brokenHeart: {
+      title:"بندِ دل",
+      desc:"تکیه‌گاهی برای وقتی که دلت آویزون یه اتفاقه.",
+      colors:{light:"#fce4ec",mid:"#f48fb1",dark:"#ad1457"},
+      content:`
+        <p>بعضی وقتا، یه چیزی گلوت رو گرفته، اشکات راه نمی‌گیرن، اما دلت آویزون یه اتفاقه... نه کامل از دست رفته، نه کامل پیش توئه...</p>
+        <p>اون لحظه‌ها که فقط یه تلنگر کافیه بند دلت پاره بشه — این معجون، مثل یه تکیه‌گاهه؛ کمک می‌کنه اون بند رو محکم‌تر کنی، یا با دل خودت آروم‌تر خداحافظی کنی.</p>
+        <blockquote>«بندِ دل» همون نخی‌ه که تو رو نگه می‌داره — نه برای موندن در درد، بلکه برای لمسش، تا وقتی آماده‌ای براش.</blockquote>
+        <h3>چطور درستش کنم؟</h3>
+        <ul><li>یه تکه نخ بردار (یا اگه نداری، فقط با دستات تصورش کن).</li><li>دستت رو بذار روی سینه‌ات، همون‌جایی که گُر گرفته یا سنگینه.</li><li>چشمت رو ببند و به دل‌ت بگو:<br>«من تو رو حس می‌کنم. بند دلم به تو بنده.<br>اگه بخوای بمونی، من هستم.<br>اگه بخوای بری، من نگهت نمی‌دارم…<br>اما تا اون لحظه، باهات نفس می‌کشم.»</li><li>سه نفس عمیق بکش.</li><li>اگه دلت خواست، اون نخ رو دور مچت ببند. یه بندِ کوچیک برای دل.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>ایجاد حس اتصال با دل و درد</li><li>جلوگیری از انفجار ناگهانی احساس</li><li>آماده‌سازی برای رها کردن یا تداوم پیوند</li><li>صدور مجوز برای درد: «باش… تا هر وقت که باید.»</li></ul>
+        <div class="note">یادداشت صمیمی:<br>بعضی دردها فقط می‌خوان که بهشون توجه کنی. همین. نه فرار، نه تحلیل.<br>گاهی فقط باید بگی:<br>«آره، تو هستی. و منم هستم. و تا وقتی که باهامی، تنهام نیستم.»</div>
+      `
+    },
+    nightnote: {
+      title:"دل‌نوشته‌ی شب‌تاب",
+      desc:"یه جمله‌ی روشن در دل تاریکی شب.",
+      colors:{light:"#e8eaf6",mid:"#7986cb",dark:"#283593"},
+      content:`
+        <p>بعضی شب‌ها، نه خواب میاد، نه اشک، نه صدا. فقط یه تاریکی می‌پیچه دور دلت، و تو می‌خوای یه چیزی بگی... فقط برای خودت.</p>
+        <p><strong>«دل‌نوشته‌ی شب‌تاب»</strong> یه تکه نوشته‌ست. ساده، بی‌قصد نمایش، بی‌نیاز از جواب. یه کلمه یا جمله که از دل تاریکی بیرون میاد، ولی تصمیم می‌گیره نور بده.</p>
+        <blockquote>نه به خاطر اینکه همه‌چی خوبه،<br>بلکه چون دل می‌خواد «خوب بمونه».</blockquote>
+        <h3>چطور درستش کنم؟</h3>
+        <ul><li>یه کاغذ کوچیک یا نُت باز کن.</li><li>به دل‌ت گوش بده… توی شب، یا توی حس شب.</li><li>یه جمله بنویس که برات روشنه. مثلاً:<br>«من هنوز اینجام.»<br>«درد هست، ولی من هم هستم.»<br>«همه‌چی تاریکه، ولی این نُت روشنه.»<br>«شاید فردا کمی بهتر باشه.»</li><li>نُت رو بذار کنار چراغ خواب، زیر بالش، یا جایی که چشم دلت ببینه‌ش.</li><li>اگه دوست داشتی، یه شمع یا چراغ کوچیک کنارش روشن کن.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>کاهش احساس رهاشدگی یا فروپاشی در تاریکی</li><li>ساختن نقطه‌ی کوچک امید در دل شب</li><li>پیوند دادن لحظه‌ی حال با توانایی درک فردا</li><li>تبدیل غم به سکوت امن، نه خلأ پوچ</li></ul>
+        <div class="note">دل‌نوشته‌ی شب‌تاب، نه دروغ می‌گه، نه شعار می‌ده.<br>فقط یه یادآوریه که می‌گه:<br>«تو هنوز اینجایی. و تاریکی، کل داستان نیست.»</div>
+      `
+    },
+    tenderSpace: {
+      title:"خلوتِ مهرآلود",
+      desc:"خلوتی که توش فقط پذیرش هست؛ نه عجله، نه قضاوت، نه جواب.",
+      colors:{light:"#f3e5f5",mid:"#ba68c8",dark:"#4a148c"},
+      content:`
+        <p>گاهی نه باید تحلیل کرد، نه باید گریخت… فقط باید موند، توی مه. جایی که همه‌چی تار و نامعلومه، اما یه چیز روشنه: <strong>«تو مهمی، حتی وقتی هیچ‌کس اینجا نیست.»</strong></p>
+        <p><strong>خلوتِ مهرآلود</strong> یه فضاست، نه یه وظیفه. خلوتی که توش فقط پذیرش هست؛ نه عجله، نه قضاوت، نه جواب.</p>
+        <blockquote>خلوت یعنی همراهی بی‌کلام با خودت،<br>توی مهی که نرمه، گرمه، و خالی از فشار.</blockquote>
+        <h3>چطور دعوتش کنم؟</h3>
+        <ul><li>یه جای نیمه‌تاریک یا ساکت پیدا کن. می‌تونه زیر پتو، توی بالکن، یا حتی فقط در ذهن باشه.</li><li>نور زیاد نه؛ یه شمع کوچیک یا نور خیلی ملایم کافیه.</li><li>چشم‌هات رو ببند. خودتو تصور کن در مه... مهی که دیدت رو گرفته اما نمی‌ترسونی.</li><li>با نفس کشیدن، قدم بزن در این فضای آرام.</li><li>زیر لب جمله‌هایی بگو مثل:<br>«در این خلوت، من امنم.»<br>«بودن کافیه، نه دانستن.»<br>«غم هم گاهی آغوشه.»</li><li>می‌تونی موسیقی آروم پخش کنی، یا یه بوی آشنا همراهت باشه.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>بازگشت لطیف به بدن، بدون اجبار به تغییر</li><li>ایجاد حس هم‌دلی درونی، حتی در اوج غم</li><li>کاهش اضطراب و نیاز به "جواب فوری"</li><li>ساختن یک توقف مهرآلود در طوفان احساسات</li></ul>
+        <div class="note">«خلوتِ مهرآلود» بهت نمی‌گه چه کار کنی.<br>فقط کنارت می‌شینه، توی همون مه.<br>تا وقتی که آماده باشی، نفس بکشی،<br>و کم‌کم، خودت راهت رو پیدا کنی.</div>
+      `
+    },
+    rescueElegy: {
+      title:"مرثیه‌ی نجات‌بخش",
+      desc:"به درد اجازه بده حرف بزنه، تا ازش عبور کنی.",
+      colors:{light:"#e8eaf6",mid:"#9fa8da",dark:"#1a237e"},
+      content:`
+        <p>گاهی بعضی دردها اون‌قدر عمیق‌ان که دیگه با گریه نمی‌رن… باید «سوگواری» بشن، اما نه از جنس غرق شدن— از جنسِ نجات دادن خود.</p>
+        <p><strong>مرثیه‌ی نجات‌بخش</strong> یعنی به درد اجازه بدی حرف بزنه، نه برای جلب ترحم، بلکه برای اینکه صداش شنیده بشه… و بعد، رها بشه.</p>
+        <blockquote>این مرثیه، نه شعره، نه ناله...<br>یه زمزمه‌ی درونی‌ئه که بهت کمک می‌کنه<br>تو از دل غم، عبور کنی.</blockquote>
+        <h3>چطور دعوتش کنم؟</h3>
+        <ul><li>اسمش رو صدا بزن: «من آماده‌م که سوگم رو نجات بدم، نه دفنش کنم.»</li><li>یه قلم و کاغذ بیار. نه برای نوشتن فکرها—برای نوشتن آه‌ها.</li><li>بنویس هر چی گلوگیر شده: یه اسم، یه جمله‌ی ناقص، یه خاطره که جا مونده.<br>«کاش اون لحظه بغلم کرده بود...»<br>«نمی‌دونم چرا رفت...»<br>«هنوزم صدات توی گوشمه…»</li><li>یا یه فایل صوتی ضبط کن. آروم. شاید فقط صدای نفست باشه، یا یه شعر قدیمی زمزمه‌وار.</li><li>اگه کسی هست که امنه، براش بخون. یا اگه نه، بذار باد بخونه‌ش. یا شب.</li><li>در پایان، دستت رو بذار روی قلبت و زمزمه کن: <strong>«این مرثیه تموم نشد… ولی من ازش عبور کردم.»</strong></li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>آزادسازی سنگینی‌های نگفته</li><li>بازیابی آرامش در دل سوگ</li><li>درک اینکه درد، پایان نیست—فقط یک عبور است</li><li>پیدا کردن صدای خود، حتی وقتی خاموش بوده‌ای</li></ul>
+        <div class="note">«مرثیه‌ی نجات‌بخش» برای وقتیه که دیگه منتظر قهرمان نمی‌مونی...<br>چون می‌فهمی که خودت، همون صدای نجات‌بخشی هستی<br>که آروم، از دل تاریکی میاد...<br>و تو رو زنده نگه می‌داره.</div>
+      `
+    }
+  };
+
+  /* ============================================================
+     الگوریتم درخت تصمیم غم
+     ============================================================ */
+  const steps = [
+    {
+      text:"آیا چیزی را از دست داده‌ام؟",
+      yes: 1,
+      no: 5
+    },
+    {
+      text:"آیا آن چیز برایم مهم بود؟",
+      yes: 2,
+      no: {
+        message:"✅ غم کوچکی داشتی، اما چون خیلی برات مهم نبود، خودت رو به آرومی نوازش کن و عبور کن.\n\n• یک نفس عمیق بکش\n• به خودت لبخند کوچیکی بزن\n• بگو: «این هم می‌گذره»",
+        next: "done",
+        potion: "tenderSpace"
+      }
+    },
+    {
+      text:"آیا فرصتی برای خداحافظی، عزاداری، یا پذیرش داشتم؟",
+      yes: {
+        message:"⚫ پذیرش سوگ\n\n✅ غم فعالِ سالم (آزادسازی عاطفی)\n\n➡️ با یک معجون، این غم سالم رو همراهی کن",
+        next: "done",
+        potion: "tearCalm"
+      },
+      no: {
+        message:"🟠 غم سرکوب‌شده\n\n▪ نوشتن، گریه، صحبت با یک دوست یا مشاور\n\n→ بعد از تخلیه: غم سالم و سبک‌تر می‌شه\n\n➡️ معجون جایگزین (نوشتار درمانی یا آغوش امن)",
+        next: "done",
+        potion: "griefNotebook"
+      }
+    },
+    {
+      text:"", // رزرو
+      yes: "",
+      no: ""
+    },
+    {
+      text:"آیا نیازم نادیده گرفته شده؟ (مثل عشق، درک، توجه، امنیت)",
+      yes: 6,
+      no: 8
+    },
+    {
+      text:"آیا احساس تنهایی یا طرد شدگی دارم؟",
+      yes: {
+        message:"⚫ غم از نیاز برآورده‌نشده\n\n▪ بازنگری مرزها یا درخواست واضح‌تر از دیگران\n▪ با کسی حرف بزن یا بنویس\n\n➡️ اقدام به تأمین تدریجی نیازت",
+        next: "done",
+        potion: "hugFree"
+      },
+      no: {
+        message:"⚫ غم از نیاز برآورده‌نشده\n\n▪ بازنگری مرزها یا درخواست واضح‌تر از دیگران\n▪ با کسی حرف بزن یا بنویس\n\n➡️ اقدام به تأمین تدریجی نیازت",
+        next: "done",
+        potion: "brokenHeart"
+      }
+    },
+    {
+      text:"✅ در حال حاضر غم فعال نیست یا ریشه مشخصی نداره.\n\n🟦 فقط با یک مراقبت ساده مثل چای، قدم زدن یا آغوش خودت رو تغذیه کن.",
+      yes: "",
+      no: "",
+      done: true,
+      potion: "rainBreath"
+    }
+  ];
+
+  const finalMessage = "تو مسیر غمت رو دیدی و همراهی کردی.\n\nاین خودش یک قدم بزرگه.\n\nیادت باشه: غم، پایان نیست — فقط یک عبوره.\n\nو تو، از توش رد می‌شی. 🌿";
+
+  let currentStep = 0;
+  let nextStep = null;
+  let finalPotion = null;
+
+  const questionEl = document.getElementById("question");
+  const questionCard = document.getElementById("questionCard");
+  const resultEl = document.getElementById("result");
+  const resultTextEl = document.getElementById("resultText");
+  const potionMount = document.getElementById("potionMount");
+  const finalEl = document.getElementById("final");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const continueBtn = document.getElementById("continueBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const buttonsContainer = document.getElementById("buttonsContainer");
+
+  /* ===== SVG بطری ===== */
+  function potionSVG(colors){
+    const id = colors.mid.replace("#","");
+    return `
+      <svg class="potion-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="glass-${id}" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#ffffff" stop-opacity=".4"/>
+            <stop offset=".35" stop-color="#b9e8e6" stop-opacity=".08"/>
+            <stop offset=".7" stop-color="#ffffff" stop-opacity=".02"/>
+            <stop offset="1" stop-color="#9bd8dc" stop-opacity=".35"/>
+          </linearGradient>
+          <linearGradient id="potion-${id}" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="${colors.light}"/>
+            <stop offset=".45" stop-color="${colors.mid}"/>
+            <stop offset="1" stop-color="${colors.dark}"/>
+          </linearGradient>
+          <linearGradient id="cork-${id}" x1="0" y1="0" x2="1" y2="0">
+            <stop stop-color="#80502f"/><stop offset=".5" stop-color="#d5a16b"/><stop offset="1" stop-color="#88512d"/>
+          </linearGradient>
+          <clipPath id="inside-${id}">
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 319 258 319 L142 319 Q124 319 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z"/>
+          </clipPath>
+          <filter id="blur-${id}"><feGaussianBlur stdDeviation="15"/></filter>
+        </defs>
+
+        <g class="glow"><ellipse cx="200" cy="225" rx="115" ry="130" fill="${colors.mid}" opacity=".3" filter="url(#blur-${id})"/></g>
+        <ellipse cx="200" cy="345" rx="77" ry="12" fill="#000" opacity=".3"/>
+
+        <g class="bottle">
+          <g>
+            <path d="M170 58 Q170 48 180 48 L220 48 Q230 48 230 58 L225 107 L175 107Z" fill="url(#cork-${id})" stroke="#6b432e" stroke-width="2"/>
+            <path d="M180 53 Q175 65 180 88" fill="none" stroke="#f4c38c" stroke-width="4" opacity=".5"/>
+            <path d="M190 52 L190 99" stroke="#71462d" opacity=".25"/>
+            <rect x="174" y="100" width="52" height="9" rx="3" fill="#70452f"/>
+          </g>
+          <g>
+            <path d="M166 105 L234 105 L234 151 Q234 165 252 182 L148 182 Q166 165 166 151Z" fill="url(#glass-${id})" stroke="#c4e7e9" stroke-width="3"/>
+          </g>
+          <g clip-path="url(#inside-${id})">
+            <rect x="120" y="225" width="160" height="110" fill="url(#potion-${id})"/>
+            <g class="liquid">
+              <path d="M115 227 Q150 215 180 227 Q220 239 250 223 Q270 216 290 225 L290 340 L110 340Z" fill="${colors.light}" opacity=".7"/>
+            </g>
+            <g fill="#fff">
+              <circle class="bubble" cx="157" cy="270" r="5" opacity=".6"/>
+              <circle class="bubble b2" cx="225" cy="285" r="4"/>
+              <circle class="bubble b3" cx="190" cy="248" r="3"/>
+              <circle class="bubble b2" cx="245" cy="258" r="2.5"/>
+              <circle class="bubble b3" cx="170" cy="300" r="2"/>
+            </g>
+          </g>
+          <g>
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 322 256 322 L144 322 Q124 322 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z" fill="url(#glass-${id})" stroke="#c6e9ed" stroke-width="3.5"/>
+            <path d="M140 224 Q140 203 157 185 Q175 167 175 150 L175 137" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".65"/>
+            <path d="M260 232 L260 298" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+            <path d="M136 307 Q200 317 264 307" fill="none" stroke="#fff" stroke-width="2" opacity=".4"/>
+          </g>
+          <g>
+            <circle cx="200" cy="252" r="25" fill="#fff" fill-opacity=".12" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/>
+            <path d="M200 231 L204 246 L219 252 L204 258 L200 273 L196 258 L181 252 L196 246Z" fill="#fff" opacity=".9"/>
+          </g>
+        </g>
+
+        <g fill="${colors.light}">
+          <path class="bubble" d="M105 157 L109 169 L121 173 L109 177 L105 189 L101 177 L89 173 L101 169Z"/>
+          <path class="bubble b2" d="M290 130 L293 139 L302 142 L293 145 L290 154 L287 145 L278 142 L287 139Z"/>
+          <circle class="bubble b3" cx="290" cy="190" r="3"/>
+        </g>
+      </svg>
+    `;
+  }
+
+  /* ===== نمایش سوال ===== */
+  function showQuestion(stepIndex){
+    currentStep = stepIndex;
+    const step = steps[stepIndex];
+
+    if(step.done){
+      showFinal(step.text, step.potion);
+      return;
+    }
+
+    questionEl.style.animation = "none";
+    void questionEl.offsetHeight;
+    questionEl.style.animation = "fadeInUp .5s ease both";
+    questionEl.textContent = step.text;
+
+    resultEl.style.display = "none";
+    finalEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+    buttonsContainer.style.display = "flex";
+    yesBtn.style.display = "inline-block";
+    noBtn.style.display = "inline-block";
+  }
+
+  /* ===== نمایش راهکار + معجون با هم ===== */
+  function showResult(message, potionKey){
+    const p = potions[potionKey];
+
+    resultTextEl.textContent = message;
+    potionMount.innerHTML = `
+      <div class="potion-inner">
+        ${potionSVG(p.colors)}
+        <h3 class="potion-title">${p.title}</h3>
+        <p class="potion-desc">${p.desc}</p>
+        <div class="potion-content">${p.content}</div>
+      </div>
+    `;
+
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "block";
+    resultEl.style.animation = "none";
+    void resultEl.offsetHeight;
+    resultEl.style.animation = "fadeInUp .5s ease both";
+    resultEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== نمایش پیام نهایی + معجون ===== */
+  function showFinal(message, potionKey){
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "none";
+
+    finalEl.textContent = message;
+    finalEl.style.display = "block";
+    finalEl.style.animation = "none";
+    void finalEl.offsetHeight;
+    finalEl.style.animation = "fadeInUp .6s ease both";
+
+    /* اگه معجون داشت، کارت معجون هم زیرش نمایش بده */
+    if(potionKey){
+      const p = potions[potionKey];
+      const wrap = document.createElement("div");
+      wrap.id = "finalPotionMount";
+      wrap.innerHTML = `
+        <div class="potion-inner" style="margin-top:20px;background:rgba(255,255,255,.9);">
+          ${potionSVG(p.colors)}
+          <h3 class="potion-title">${p.title}</h3>
+          <p class="potion-desc">${p.desc}</p>
+          <div class="potion-content">${p.content}</div>
+        </div>
+      `;
+      /* حذف نسخه‌ی قبلی اگه هست */
+      const old = document.getElementById("finalPotionMount");
+      if(old) old.remove();
+      finalEl.appendChild(wrap);
+    }
+
+    finalEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== دکمه بله ===== */
+  yesBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.yes === "number"){
+      showQuestion(step.yes);
+    } else if(step.yes && typeof step.yes === "object"){
+      nextStep = step.yes.next;
+      finalPotion = step.yes.potion;
+      showResult(step.yes.message, step.yes.potion);
+    }
+  };
+
+  /* ===== دکمه خیر ===== */
+  noBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.no === "number"){
+      showQuestion(step.no);
+    } else if(step.no && typeof step.no === "object"){
+      nextStep = step.no.next;
+      finalPotion = step.no.potion;
+      showResult(step.no.message, step.no.potion);
+    }
+  };
+
+  /* ===== ادامه ===== */
+  continueBtn.onclick = () => {
+    if(nextStep === "done"){
+      showFinal(finalMessage, finalPotion);
+    } else if(typeof nextStep === "number"){
+      showQuestion(nextStep);
+    }
+  };
+
+  /* ===== شروع دوباره ===== */
+  function resetApp(){
+    currentStep = 0;
+    nextStep = null;
+    finalPotion = null;
+
+    finalEl.style.display = "none";
+    finalEl.innerHTML = "";
+    resultEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+
+    showQuestion(0);
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
+
+  restartBtn.onclick = resetApp;
+
+  /* ===== شروع ===== */
+  showQuestion(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#fff5f0">
+<title>تحلیل خودآگاه خشم | قفسه‌ی خشم</title>
+<link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%AE%D8%B4%D9%85.svg">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root{
+    --bg-start:#fff8f5; --bg-end:#ffe0d6;
+    --text-main:#4a1a0a; --text-muted:#8c5a4a;
+    --anger-primary:#ff7043; --anger-primary-dark:#d84315;
+    --card-bg:rgba(255,255,255,.78);
+    --card-border:rgba(255,255,255,.9);
+    --shadow:0 10px 30px rgba(216,67,21,.12);
+    --radius-lg:28px;
+    --font:'Vazirmatn',Tahoma,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--bg-start)}
+  body{
+    direction:rtl; font-family:var(--font);
+    background:radial-gradient(circle at 50% 0%,#fff 0%,var(--bg-start) 40%,var(--bg-end) 100%);
+    color:var(--text-main); max-width:640px; margin:auto;
+    padding:calc(20px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+    min-height:100vh; position:relative; overflow-x:hidden;
+    -webkit-font-smoothing:antialiased; line-height:1.9;
+  }
+
+  /* ===== امواج گرم ===== */
+  .ambient-waves{position:fixed;bottom:0;left:0;width:100%;height:280px;z-index:0;pointer-events:none;overflow:hidden}
+  .ambient-waves svg{width:100%;height:100%;display:block}
+  .wave-group{transform-box:fill-box;transform-origin:center bottom}
+  .wave-path{transform-box:fill-box;transform-origin:center bottom}
+  .wave-group-1{animation:flowX1 20s ease-in-out infinite alternate}
+  .wave-group-2{animation:flowX2 25s ease-in-out infinite alternate}
+  .wave-group-3{animation:flowX3 30s ease-in-out infinite alternate}
+  @keyframes flowX1{0%{transform:translateX(-3%) rotate(.6deg)}100%{transform:translateX(3%) rotate(-1.2deg)}}
+  @keyframes flowX2{0%{transform:translateX(3%) rotate(-1.2deg)}100%{transform:translateX(-3%) rotate(1.2deg)}}
+  @keyframes flowX3{0%{transform:translateX(-2%) rotate(.9deg)}100%{transform:translateX(4%) rotate(-.6deg)}}
+  .wave-path-1{animation:breatheY1 12s ease-in-out infinite}
+  .wave-path-2{animation:breatheY2 15s ease-in-out infinite 2s}
+  .wave-path-3{animation:breatheY3 18s ease-in-out infinite 4s}
+  @keyframes breatheY1{0%,100%{transform:translateY(0) scaleY(1);opacity:.45}50%{transform:translateY(-14px) scaleY(1.08);opacity:.8}}
+  @keyframes breatheY2{0%,100%{transform:translateY(0) scaleY(1);opacity:.35}50%{transform:translateY(-20px) scaleY(1.12);opacity:.7}}
+  @keyframes breatheY3{0%,100%{transform:translateY(0) scaleY(1);opacity:.25}50%{transform:translateY(-10px) scaleY(1.05);opacity:.55}}
+
+  /* ===== هدر ===== */
+  .header-section{text-align:center;margin-bottom:25px;position:relative;z-index:2;animation:fadeInDown .8s ease both}
+  .joy-logo-container{position:relative;display:inline-block;margin-bottom:15px}
+  .joy-logo-container::before{
+    content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:160px;height:160px;background:radial-gradient(circle,rgba(255,112,67,.3) 0%,transparent 70%);
+    border-radius:50%;z-index:-1;animation:pulseGlow 3.5s ease-in-out infinite;
+  }
+  .joy-logo-frame{
+    width:120px;height:120px;border-radius:50%;background:#fff;
+    border:3px solid rgba(255,255,255,.9);
+    box-shadow:0 10px 30px rgba(216,67,21,.18),inset 0 0 20px rgba(255,112,67,.12);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    position:relative;animation:float 3.5s ease-in-out infinite;
+  }
+  .joy-logo-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease}
+  h1{color:#bf360c;font-size:24px;font-weight:800;margin:0;letter-spacing:-.5px}
+  .subtitle{font-size:12px;color:var(--text-muted);margin-top:5px;font-weight:500;letter-spacing:1px}
+
+  /* ===== دکمه بازگشت ===== */
+  .back-home{
+    display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    color:var(--text-muted);font-size:13px;font-weight:600;
+    padding:10px 18px;border-radius:50px;
+    background:rgba(255,255,255,.6);border:1px solid var(--card-border);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    margin-bottom:15px;position:relative;z-index:2;transition:all .3s ease;
+  }
+  .back-home:hover{background:#fff;color:var(--text-main);box-shadow:0 4px 15px rgba(0,0,0,.05);transform:translateX(5px)}
+  .back-home svg{width:16px;height:16px}
+
+  /* ===== کارت سوال ===== */
+  .question-card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--radius-lg);padding:35px 25px;
+    box-shadow:var(--shadow),inset 0 2px 10px rgba(255,255,255,.5);
+    margin-bottom:25px;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);
+    position:relative;z-index:2;overflow:hidden;animation:fadeInUp .6s ease both;
+  }
+  .question-card::before{
+    content:"";position:absolute;top:-60px;left:-40px;
+    width:180px;height:180px;background:radial-gradient(circle,rgba(255,112,67,.18) 0%,transparent 70%);
+    border-radius:50%;z-index:0;
+  }
+  .question-icon{display:flex;justify-content:center;margin-bottom:15px;position:relative;z-index:1}
+  .question-icon svg{width:32px;height:32px;color:var(--anger-primary-dark);filter:drop-shadow(0 4px 8px rgba(255,112,67,.35))}
+  #question{
+    font-size:19px;font-weight:700;line-height:1.9;margin:0;
+    position:relative;z-index:1;text-align:center;min-height:70px;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ===== دکمه‌ها ===== */
+  .buttons-container{display:flex;justify-content:center;gap:15px;position:relative;z-index:2;animation:fadeInUp .6s ease .1s both}
+  button{
+    font-family:var(--font);font-size:16px;font-weight:700;
+    padding:14px 40px;border-radius:50px;border:none;cursor:pointer;
+    transition:all .3s cubic-bezier(.25,.8,.25,1);
+    box-shadow:0 4px 15px rgba(0,0,0,.05);position:relative;overflow:hidden;
+  }
+  #yesBtn{background:linear-gradient(135deg,#ffab91,#ff7043 50%,#e64a19);color:#3a0a00;box-shadow:0 8px 25px rgba(255,112,67,.45)}
+  #yesBtn::after{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);transition:.5s}
+  #yesBtn:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(255,112,67,.55)}
+  #yesBtn:hover::after{left:100%}
+  #noBtn{background:rgba(255,255,255,.7);color:var(--text-muted);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+  #noBtn:hover{background:#fff;color:var(--text-main);transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+  button:active{transform:translateY(0) scale(.96)}
+
+  /* ===== کارت نتیجه ===== */
+  #result{
+    background:linear-gradient(145deg,#fff3ed,#ffe4d6);
+    border:1px solid rgba(255,112,67,.3);padding:25px;margin-top:25px;
+    border-radius:var(--radius-lg);display:none;line-height:2;
+    font-size:15px;font-weight:500;color:#5a2410;
+    box-shadow:0 10px 30px rgba(216,67,21,.1),inset 0 2px 10px rgba(255,255,255,.5);
+    position:relative;z-index:2;text-align:right;
+  }
+  .result-header{
+    display:flex;align-items:center;gap:10px;margin-bottom:15px;
+    padding-bottom:12px;border-bottom:1px dashed rgba(255,112,67,.35);
+    font-weight:700;font-size:16px;color:var(--anger-primary-dark);
+  }
+  .result-header svg{width:24px;height:24px;color:var(--anger-primary);flex-shrink:0}
+  #resultText{white-space:pre-wrap;margin-bottom:20px;line-height:2}
+
+  /* ===== کارت معجون ===== */
+  .potion-inner{
+    background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.9);
+    border-radius:22px;padding:20px;margin-top:10px;
+    text-align:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 6px 20px rgba(216,67,21,.1);
+    animation:fadeInUp .5s ease both;
+  }
+  .potion-inner .potion-svg{width:140px;height:140px;margin:0 auto 12px;display:block;overflow:visible}
+  .potion-title{font-size:20px;font-weight:800;color:var(--anger-primary-dark);margin:0 0 6px}
+  .potion-desc{font-size:13px;color:var(--text-muted);line-height:1.9;margin:0 0 16px}
+  .potion-content{
+    text-align:right;margin-top:18px;padding-top:16px;
+    border-top:1px dashed rgba(255,112,67,.35);
+  }
+  .potion-content h3{font-size:15px;font-weight:800;color:#bf360c;margin:18px 0 8px}
+  .potion-content h3:first-child{margin-top:0}
+  .potion-content p{font-size:14px;color:#4a1a0a;margin:0 0 12px;line-height:1.95}
+  .potion-content ul,.potion-content ol{padding-right:20px;margin:0 0 14px;font-size:14px;color:#4a1a0a}
+  .potion-content li{margin-bottom:7px;line-height:1.85}
+  .potion-content blockquote{
+    background:rgba(255,224,178,.6);border-right:4px solid #ff7043;
+    border-radius:6px;padding:10px 14px;margin:14px 0;
+    font-style:italic;color:#8c3a10;font-size:14px;
+  }
+  .potion-content .highlight{
+    background:rgba(255,224,178,.7);padding:12px 16px;
+    border-right:4px solid #ff7043;border-radius:8px;margin:14px 0;
+    font-size:14px;line-height:1.95;
+  }
+  .potion-content .note{
+    margin-top:18px;padding:14px 16px;background:rgba(255,235,230,.75);
+    border-right:4px solid #d84315;border-radius:12px;
+    color:#8c2a10;font-weight:500;font-size:14px;line-height:1.9;
+  }
+
+  /* ===== دکمه‌های پایانی ===== */
+  .result-actions{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:18px}
+  .result-actions button{font-size:14px;padding:12px 32px;width:100%;max-width:280px}
+  #continueBtn{background:linear-gradient(135deg,#ffab91,#ff7043 50%,#e64a19);color:#3a0a00;box-shadow:0 8px 25px rgba(255,112,67,.45)}
+  #continueBtn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(255,112,67,.55)}
+  .restart-btn{background:#fff;color:var(--anger-primary-dark);border:1px solid rgba(255,112,67,.3);box-shadow:0 4px 15px rgba(216,67,21,.15)}
+  .restart-btn:hover{background:#fff8f5;transform:translateY(-2px);box-shadow:0 6px 20px rgba(216,67,21,.2)}
+
+  /* ===== پیام نهایی ===== */
+  #final{
+    background:linear-gradient(135deg,#f0f9f4,#dcfce7);color:#166534;
+    padding:30px 25px;margin-top:25px;border:2px dashed #86efac;
+    border-radius:var(--radius-lg);font-size:16px;font-weight:600;line-height:2;
+    display:none;text-align:center;position:relative;z-index:2;
+    box-shadow:0 10px 30px rgba(22,101,52,.08);white-space:pre-wrap;
+  }
+
+  /* ===== انیمیشن SVG ===== */
+  .bottle{transform-box:fill-box;transform-origin:center;animation:float 4s ease-in-out infinite}
+  .liquid{animation:liquid 3s ease-in-out infinite alternate}
+  .bubble{animation:bubble 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .b2{animation-delay:1s}
+  .b3{animation-delay:1.8s}
+  .glow{animation:glow 4s ease-in-out infinite}
+
+  @keyframes float{0%,100%{transform:translateY(0) rotate(-1.2deg)}50%{transform:translateY(-12px) rotate(1.2deg)}}
+  @keyframes liquid{from{transform:translateY(3px)}to{transform:translateY(-4px)}}
+  @keyframes bubble{0%,100%{transform:translateY(5px);opacity:.35}50%{transform:translateY(-12px);opacity:1}}
+  @keyframes glow{0%,100%{opacity:.25}50%{opacity:.55}}
+  @keyframes pulseGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.85}50%{transform:translate(-50%,-50%) scale(1.25);opacity:1}}
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+  @media (min-width:601px){
+    #question{font-size:21px}
+    .joy-logo-frame{width:140px;height:140px}
+    h1{font-size:28px}
+    .potion-inner .potion-svg{width:180px;height:180px}
+    .potion-title{font-size:24px}
+  }
+  @media (max-width:400px){
+    #question{font-size:17px}
+    .joy-logo-frame{width:100px;height:100px}
+    button{padding:12px 30px;font-size:15px}
+    h1{font-size:22px}
+    .question-card{padding:25px 20px}
+    .potion-inner .potion-svg{width:120px;height:120px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+    .ambient-waves{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- امواج گرم -->
+<div class="ambient-waves" aria-hidden="true">
+  <svg viewBox="0 0 600 210" preserveAspectRatio="none">
+    <g class="wave-group wave-group-3"><path class="wave-path wave-path-3" d="M-50 145 C130 95 200 195 330 135 S520 90 650 150 L650 220 L-50 220Z" fill="#ff8a65"/></g>
+    <g class="wave-group wave-group-2"><path class="wave-path wave-path-2" d="M-50 105 C110 45 180 165 300 100 S500 45 650 112 L650 220 L-50 220Z" fill="#ffab91"/></g>
+    <g class="wave-group wave-group-1"><path class="wave-path wave-path-1" d="M-50 65 C100 5 160 135 270 70 S470 5 650 78 L650 220 L-50 220Z" fill="#ffccbc"/></g>
+  </svg>
+</div>
+
+<!-- بازگشت -->
+<a href="index.html" class="back-home">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+  بازگشت به قفسه‌ی خشم
+</a>
+
+<!-- هدر -->
+<div class="header-section">
+  <div class="joy-logo-container">
+    <div class="joy-logo-frame">
+      <img src="https://raw.githubusercontent.com/lesehawio/toe/main/ect/%D8%AE%D8%B4%D9%85.svg" alt="لوگوی خشم">
+    </div>
+  </div>
+  <h1>تحلیل خودآگاه خشم</h1>
+  <p class="subtitle">A CONSCIOUS SPACE FOR ANGER</p>
+</div>
+
+<!-- سوال -->
+<div class="question-card" id="questionCard">
+  <div class="question-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  </div>
+  <div id="question"></div>
+</div>
+
+<!-- دکمه‌ها -->
+<div class="buttons-container" id="buttonsContainer">
+  <button id="yesBtn">بله</button>
+  <button id="noBtn">خیر</button>
+</div>
+
+<!-- نتیجه: راهکار + معجون با هم -->
+<div id="result">
+  <div class="result-header">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+    </svg>
+    راهکار پیشنهادی
+  </div>
+  <div id="resultText"></div>
+  <div id="potionMount"></div>
+  <div class="result-actions">
+    <button id="continueBtn">ادامه</button>
+    <button class="restart-btn" id="restartBtn">شروع دوباره</button>
+  </div>
+</div>
+
+<!-- پیام نهایی -->
+<div id="final"></div>
+
+<script>
+  /* ============================================================
+     داده‌های کامل ۱۰ معجون خشم
+     ============================================================ */
+  const potions = {
+    breathInFire: {
+      title:"نفسی در آتش",
+      desc:"یک نفس آگاهانه در میانه‌ی شعله‌های خشم، برای حضور به جای واکنش.",
+      colors:{light:"#ffccbc",mid:"#ff7043",dark:"#bf360c"},
+      content:`
+        <p>معجون «نفسی در آتش» برای لحظاتی‌ست که احساس می‌کنی در آستانه‌ی فوران هستی. آن لحظه که حرارت خشم بالا می‌رود، قلبت تند می‌زند، گلویت می‌سوزد و ذهن درگیر هزار صداست. این معجون کمکت می‌کند یک «نفس آگاهانه» در میانه‌ی شعله‌های خشم برداری و به جای جنگ یا گریز، حضور پیدا کنی.</p>
+        <p>در واقع این معجون نه برای خاموش‌کردن خشم است و نه برای رهاکردن افسار آن. بلکه فرصتی‌ست برای تماشای خشم، لمس آن، شنیدن پیامش، و انتخاب آگاهانه‌ی پاسخ به جای واکنش.</p>
+        <h3>اجزای اصلی معجون</h3>
+        <ul><li>نَفَس آگاهانه‌ی سه‌مرحله‌ای: دم عمیق، توقف، بازدم آرام</li><li>تصویرسازی ذهنی شعله و خاکستر</li><li>پرسش درونی: «این خشم از کجاست آمده؟ چه چیز درون من نادیده گرفته شده؟»</li><li>عبارت تأکیدی: «من اجازه می‌دهم این احساس باشد، بدون آن‌که من را ببلعد.»</li></ul>
+        <h3>زمان‌های پیشنهادی استفاده</h3>
+        <ul><li>در حال بحث یا مشاجره</li><li>هنگام فوران خشم بدون راه بیان سالم</li><li>زمانی که خشم از خود، گذشته یا دیگران قلبت را درگیر کرده</li></ul>
+        <h3>اثرات بعد از استفاده</h3>
+        <ul><li>آرام‌شدن سیستم عصبی بدون سرکوب خشم</li><li>شناخت لایه‌ی زیرین خشم (طرد، شرم یا ترس)</li><li>ایجاد فاصله‌ی سالم بین تو و واکنش فوری</li><li>تبدیل خشم به مرزگذاری، گفت‌وگو یا تغییر رفتار</li></ul>
+        <div class="note">خشم دشمن تو نیست، پیام‌رسانی‌ست از اعماق وجودت.<br>«نفسی در آتش» به تو قدرت می‌دهد تا صدای خشم را بشنوی، بدون آن‌که در شعله‌هایش بسوزی.<br>این معجون دعوتی‌ست برای در آتش بودن، اما آتش نشدن.</div>
+      `
+    },
+    fireExtinguisher: {
+      title:"آتش خاموش‌کن",
+      desc:"پاسخ اورژانسی برای لحظاتی که خشم در آستانه‌ی انفجار است.",
+      colors:{light:"#ffcdd2",mid:"#ef5350",dark:"#b71c1c"},
+      content:`
+        <p>معجون «آتش خاموش‌کن» یک پاسخ اورژانسی برای لحظاتی‌ست که خشم درونت شعله می‌کشد و در آستانه‌ی انفجار قرار می‌گیری. این معجون نه سرکوب می‌کند، نه انکار، بلکه با مهارتی خاص، شعله‌ها را از درون خاموش می‌کند تا تو بتوانی نفس بکشی، فکر کنی، و واکنش آگاهانه‌تری داشته باشی.</p>
+        <h3>ترکیبات احساسی و ذهنی</h3>
+        <ul><li>مکث‌های آگاهانه در لحظه‌ی برافروختگی</li><li>نفس‌های طولانی با شمارش معکوس (مثلاً ۵ تا ۱)</li><li>تصویرسازی ذهنی: تصور کن آتشی درونت شعله می‌کشد و با هر دم و بازدم، آب خنکی بر آن می‌ریزی</li><li>استفاده از واژه‌ی رمز مانند «بس کن» یا «الان نه»</li><li>لمس یک جسم سرد یا آشنا (سنگ، صدف، پارچه‌ی آرامش‌بخش)</li></ul>
+        <h3>مناسب برای لحظاتی که...</h3>
+        <ul><li>ناگهان حس می‌کنی کنترل از دستت خارج شده</li><li>کسی رفتاری می‌کند که تو را شدیداً تحریک می‌کند</li><li>افکاری پر از قضاوت و خشونت در ذهنت می‌چرخند</li><li>ترس داری که واکنش مخربی نشان بدهی</li></ul>
+        <h3>کارکردهای عمیق‌تر</h3>
+        <ul><li>حفظ مرزهای سالم بدون آتش‌زدن پل‌ها</li><li>جلوگیری از تخلیه‌ی خشم به روش‌های آسیب‌زا</li><li>افزایش ظرفیت بدن برای بازگشت به آرامش</li><li>یادگیری اینکه خشم می‌آید و می‌رود، بدون ویرانی</li></ul>
+        <div class="highlight">"من می‌توانم شعله‌ها را با آگاهی خاموش کنم، نه با انکار، نه با انفجار. سکوت من، قدرت من است."</div>
+      `
+    },
+    strongWind: {
+      title:"باد تند کنترل",
+      desc:"مدیریت خشم ناگهانی، بازگرداندن کنترل، درک لایه‌های زیرین خشم.",
+      colors:{light:"#ffab91",mid:"#ff5722",dark:"#bf360c"},
+      content:`
+        <p>معجون «باد تند کنترل» تجسم لحظه‌ای‌ست که خشم، مثل بادی تند و بی‌خبر، به روان انسان هجوم می‌آورد. لحظه‌ای که احساس می‌کنی می‌خواهی منفجر شوی، چیزی را فریاد بزنی، یا از خودت بیرون بزنی. این معجون طراحی شده تا به تو یادآوری کند که در آن لحظه، تو فقط یک انسان عصبانی نیستی، بلکه انسانی توانمند برای انتخاب واکنش خود هستی.</p>
+        <p>درون این معجون، تمرین‌ها و تکنیک‌هایی جای گرفته‌اند که به تو کمک می‌کنند در دل خشم، آگاه بمانی. نه برای سرکوب احساس، بلکه برای شناخت و هدایت آن.</p>
+        <h3>چرا این معجون مهم است؟</h3>
+        <ul><li>خشم، یکی از قدرتمندترین و در عین حال خطرناک‌ترین احساسات انسانی‌ست.</li><li>یاد نگرفته‌ایم با خشم مهربان باشیم — یا آن را سرکوب می‌کنیم، یا آن را می‌پاشیم.</li><li>این معجون کمک می‌کند لحظه‌ی فوران را تبدیل به مکث کنی و گفت‌وگوی درونی بسازی.</li><li>می‌آموزی پشت خشم، چه نیازی یا دردی پنهان است — و چگونه واکنش بهتری داشته باشی.</li></ul>
+        <h3>مواد اصلی معجون</h3>
+        <ul><li><strong>تنفس آگاهانه (4-7-8 یا مربع):</strong> خشم مغز را به حالت هشدار می‌برد. تنفس آگاهانه ضربان قلب را آرام کرده و کنترل را به تو بازمی‌گرداند.</li><li><strong>مکث سه‌ثانیه‌ای:</strong> این توقف، مانند افسار اسب رم‌کرده‌ی خشم است. قدرت دارد.</li><li><strong>نوشتن بدون سانسور:</strong> خشم‌ات را روی کاغذ بریز. این یک تخلیه‌ی امن است.</li><li><strong>جست‌وجوی ریشه:</strong> پشت خشم، معمولاً ترس، شرم، درد یا نیاز پنهان است. شناخت این لایه‌ها، کلید رهایی است.</li><li><strong>عبارت جادویی:</strong> «الان خشمگینم، اما هنوز انتخاب دارم.»</li></ul>
+        <div class="highlight">«باد تند می‌وزد، اما در درون من جایی هست که هنوز آرام است.»</div>
+      `
+    },
+    innerStorm: {
+      title:"طوفان درون",
+      desc:"شناخت لایه‌های پنهان خشم، مهار قدرت ویرانگر درون، تبدیل انرژی خشم به آگاهی.",
+      colors:{light:"#ef9a9a",mid:"#e53935",dark:"#8e0000"},
+      content:`
+        <p>«طوفان درون»، آن لحظه‌ای‌ست که نه فریاد می‌زنی و نه چیزی را می‌شکنی؛ ولی در درونت غوغاست. دل‌تنگی، ترس، خشم، احساس نادیده‌گرفته‌شدن و خستگی‌های پنهان در لایه‌لایه‌ی وجودت ناگهان بیدار می‌شوند و در سکوت، تو را می‌لرزانند.</p>
+        <p>این طوفان، ویرانگر نیست اگر شناخته شود. هدف این معجون، آن است که در دلِ طوفان، تو را از درون فرو نپاشاند؛ بلکه چون ناخدایی آگاه، مرکز طوفان را پیدا کنی، بنشینی، نفس بکشی، نگاه کنی و بفهمی: این خشم، فقط خشم نیست. این، صدای بخش‌هایی از توست که مدت‌ها نادیده گرفته شده‌اند.</p>
+        <h3>کاربردها و تمرین‌های پیشنهادی</h3>
+        <ul><li>نوشتن بی‌وقفه درباره‌ی علت‌های خشم پنهان</li><li>کشیدن تصویر یا نمودار طوفان درون با نمادهایی برای هر حس یا خاطره</li><li>مدیتیشن نفس‌محور در سکوت، برای تماس با «مرکز طوفان»</li><li>گفت‌وگوی درونی با صدای خشم: چه می‌خواهد بگوید؟ از کی رنجیده؟ چه چیزی نادیده مانده؟</li><li>پرسش کلیدی: «اگر این خشم زبان داشت، چه می‌گفت؟»</li><li>تخلیه‌ی نمادین انرژی با ورزش، رقص یا نوشتن و پاره‌کردن خشم</li></ul>
+        <div class="highlight">طوفان همیشه نمی‌ماند.<br>اما اگر نادیده‌اش بگیری، هر بار سهمگین‌تر بازمی‌گردد.<br>یاد بگیر بنشینی در دل طوفان، با چای یا آوازی آرام، تا بفهمی که این خشم، در حقیقت نیاز است… و صداست… نه دشمن.</div>
+      `
+    },
+    thunderSilence: {
+      title:"سکوت رعدآسا",
+      desc:"کنترل خشم قبل از فوران، حفظ قدرت در سکوت، شنیدن صدای حقیقت درون.",
+      colors:{light:"#d7ccc8",mid:"#8d6e63",dark:"#3e2723"},
+      content:`
+        <p>«سکوت رعدآسا» تجربه‌ای‌ست از نوعی خشم پنهان‌شده؛ آن لحظه‌ای که درونت می‌غرّده اما بیرونت خاموش می‌ماند. این معجون به تو نمی‌آموزد خشم را سرکوب کنی، بلکه یادت می‌دهد چطور در سکوت معنا پیدا کنی، چطور صبرت را از ضعف به قدرت تبدیل کنی، و چطور انرژی انفجار را به بینش تبدیل نمایی.</p>
+        <h3>نشانه‌ها و زمان مصرف</h3>
+        <ul><li>وقتی کسی عمیقاً آزارت داده اما توان پاسخ نداری</li><li>وقتی حس می‌کنی حرف‌هایت شنیده نمی‌شوند و بغضت به آتش تبدیل می‌شود</li><li>زمانی که میان گفتن یا سکوت‌کردن در جدالی درونی هستی</li><li>وقتی نیاز به فاصله‌داری تا پیش از واکنش، فکر کنی</li></ul>
+        <h3>ترکیبات درونی</h3>
+        <ul><li>آگاهی لحظه‌ای از بدن: حس کردن نقاطی که می‌لرزند یا داغ می‌شوند</li><li>تنفس مهارگر: دم عمیق – مکث – بازدم آهسته برای شکستن مدار فوران</li><li>تجسم رعد: تصور آسمانی درونت که صاعقه‌ها را نگه‌داشته اما هنوز نباریده</li><li>نوشتن بی‌سانسور: نوشتن تمام آنچه هست، برای خود، نه برای انتشار</li></ul>
+        <div class="highlight">"سکوتت اگر از جنس آگاهی باشه، از هزار فریاد قوی‌تره."<br><br>این معجون یادآور اینه که گاهی، سکوت نکردن یعنی تسلیم شدن به فوران.<br>اما اگر در سکوت بمونی و ببینی، اون وقت خشم تبدیل میشه به حکمت.</div>
+      `
+    },
+    pebbleCalm: {
+      title:"سنگریزه‌ی آرامش",
+      desc:"بازگرداندن تمرکز، مهار واکنش‌های فوری، یافتن مرکز درونی در میان آشفتگی.",
+      colors:{light:"#cfd8dc",mid:"#78909c",dark:"#37474f"},
+      content:`
+        <p>«سنگریزه‌ی آرامش» یک ابزار ذهنی/احساسی کوچک اما بسیار قدرتمند است. همان‌طور که یک سنگریزه در کف دست می‌تواند توجه ما را از آشوب بیرون به لمس ساده‌ی اکنون بیاورد، این تمرین نیز ذهن را از خشم آنی، احساسات پررنگ یا افکار تهاجمی بیرون کشیده و به یک نقطه‌ی بی‌صدا و امن بازمی‌گرداند.</p>
+        <h3>شیوه‌ی استفاده</h3>
+        <ul><li>چشم‌ها را برای لحظه‌ای ببند.</li><li>یک دستت را مشت کن، انگار که در آن یک سنگریزه‌ی نمادین نگه داشته‌ای.</li><li>نفس عمیق بکش و تصور کن سنگریزه، نقطه‌ای سرد و پایدار در دل گرمای خشم است.</li><li>تمام تمرکزت را بر حس آن نقطه بگذار: آرام، کوچک، بی‌نیاز از واکنش.</li><li>با خود بگو: «همه‌چیز می‌گذرد. من مرکز خودم هستم.»</li><li>مشتت را باز کن و بگذار خشم، همراه بازدم، خارج شود.</li></ul>
+        <h3>زمان مناسب</h3>
+        <p>در اوج واکنش‌های ناگهانی، هنگام مشاجره، یا زمانی که احساس می‌کنی یک حرف یا حرکت می‌تواند اوضاع را بدتر کند. این معجون تو را به لحظه‌ی مکث بازمی‌گرداند.</p>
+        <h3>اثرات بلندمدت</h3>
+        <p>تمرین «سنگریزه‌ی آرامش» اگر به طور مداوم انجام شود، توانایی مغز در تنظیم هیجانات و تقویت بخش پیش‌پیشانی مغز (مرکز تصمیم‌گیری آگاهانه) را افزایش می‌دهد. می‌تواند بخشی از برنامه‌ی روزانه‌ی خودمراقبتی یا مدیتیشن‌های کوتاه‌مدت باشد.</p>
+        <div class="highlight">گاهی برای حفظ قدرت، نیازی به فوران نیست.<br>یک سنگریزه‌ی آرام، می‌تواند مسیر رودخانه را تغییر دهد.</div>
+      `
+    },
+    burningRiver: {
+      title:"رودخانه‌ی خشم‌سو",
+      desc:"تبدیل خشم به جریان حرکت، بازشناسی انگیزه‌های درونی، پیدا کردن مسیر رهایی.",
+      colors:{light:"#ffab91",mid:"#e64a19",dark:"#5d1900"},
+      content:`
+        <p>«رودخانه‌ی خشم‌سو» یک تمرین/معجون روان‌انگیز و آرام‌بر است که به ما یادآوری می‌کند خشم، برخلاف آن‌چه آموزش دیده‌ایم، لزوماً ویرانگر یا شر نیست؛ بلکه نیرویی جاری، طبیعی و زنده‌ست. این معجون کمک می‌کند تا خشم خود را نه پنهان کنیم، نه فوران، بلکه آن را به رودخانه‌ای زلال و پرقدرت تبدیل کنیم که می‌تواند ما را به سوی رشد، مرزگذاری، صداقت و اقدام هدایت کند.</p>
+        <h3>کارکردهای درونی</h3>
+        <ul><li>کشف ریشه‌های خشم (آسیب، ترس، احساس نادیده‌گرفته‌شدن)</li><li>هدایت خشم به سمت بیان سالم به‌جای انفجار</li><li>ارتباط‌گیری با خودِ خشمگین، بدون قضاوت</li><li>تمرین گفت‌وگوی درونی: «خشم من چه می‌خواهد به من بگوید؟»</li><li>پذیرش این حقیقت که خشم، گاهی تنها زبان دفاع از خود است</li></ul>
+        <h3>شیوه‌ی استفاده از معجون</h3>
+        <ul><li>در یک فضای آرام و امن بنشین. چشم‌ها را ببند.</li><li>احساسی را که خشمگینت کرده تصور کن، بی‌هیچ فیلتر یا سانسوری.</li><li>تصور کن در دل یک رودخانه‌ای. جریانش نه تند است، نه آرام. فقط جاری است.</li><li>هر جمله‌ای از خشم خود می‌شنوی، بلند تکرار کن یا بنویس.</li><li>در پایان از خود بپرس: «کجا می‌تونم این انرژی رو به کاری سازنده هدایت کنم؟»</li></ul>
+        <h3>برای چه زمانی؟</h3>
+        <ul><li>وقتی احساس می‌کنی از درون می‌جوشی و هیچ‌کس نمی‌فهمد</li><li>وقتی دلت می‌خواهد فریاد بزنی اما نمی‌خواهی کسی را برنجانی</li><li>وقتی احساس بی‌عدالتی، تحقیر یا نادیده‌گرفته‌شدن داری</li><li>بعد از دعواها یا تنش‌های شدید، برای پردازش احساسی</li></ul>
+        <h3>تأثیرات بلندمدت</h3>
+        <p>افزایش خودآگاهی نسبت به الگوهای عصبانیت<br>ساختن مسیر امن برای بیان خشم، بدون سرکوب یا خشونت<br>تبدیل خشم به مرز سالم، قاطعیت و صداقت در روابط<br>کاهش فشار درونی ناشی از خشم انباشته</p>
+      `
+    },
+    peaceBridge: {
+      title:"پل صلح",
+      desc:"بازسازی پیوندهای شکسته، عبور از دلخوری‌ها، آغاز دوباره بدون انکار درد.",
+      colors:{light:"#b2dfdb",mid:"#26a69a",dark:"#004d40"},
+      content:`
+        <p>معجون «پل صلح» برای زمانی‌ست که زخمی در دل نشسته، کلامی نابه‌جا فاصله انداخته، یا رنجی قدیمی مثل دیواری بلند بین دو دل قد کشیده است. این معجون، نه برای فراموش کردن، بلکه برای به یاد آوردن با شفقت است؛ برای عبور از خشم، بدون انکارِ آن.</p>
+        <p>پل صلح دعوتی‌ست به گفت‌وگوی سازنده، به آرام کردن آتش‌هایی که زیر خاکستر مانده‌اند، و به بازسازی پلی از انسانیت، مهر و درک متقابل — حتی اگر آن‌سو، کسی پاسخ ندهد.</p>
+        <h3>اجزای تشکیل‌دهنده</h3>
+        <ul><li>قطره‌هایی از پذیرش تلخی واقعیت</li><li>ذرات همدلی فعال با خود و دیگری</li><li>نور مه‌آلود خاطرات مشترک، بدون قضاوت</li><li>عصاره‌ی گفت‌وگوی بی‌نیاز از برنده‌شدن</li><li>گرمای درونیِ میل به پایان‌دادن رنج تکرارشونده</li></ul>
+        <h3>شیوه‌ی مصرف</h3>
+        <ul><li>در خلوتی آرام، نام یا چهره‌ی کسی که دلخوری با او داری را در ذهن بیاور.</li><li>نفس عمیق بکش و تصور کن این پل، از دل تو به سمت او ساخته می‌شود.</li><li>بنویس یا بگو: «من انتخاب می‌کنم که رنج را متوقف کنم، حتی اگر هنوز زخم هست.»</li><li>اگر آمادگی داشتی، گفت‌وگویی کوتاه، بی‌اتهام و ساده آغاز کن؛ اگر نه، پل را درونت نگه‌دار تا روزی شاید عبور کند.</li></ul>
+        <h3>نکات کاربردی</h3>
+        <ul><li>پل صلح به معنای صلح کامل نیست، بلکه آغاز یک نیت صلح‌جویانه است.</li><li>نیازی نیست رابطه مثل قبل شود؛ گاهی فقط دل سبک می‌شود، حتی در سکوت.</li><li>این معجون برای رابطه‌هایی مفید است که هنوز امکان ترمیم دارند — یا برای دل‌هایی که از چرخه‌ی خشم رنج می‌برند.</li></ul>
+      `
+    },
+    kindHand: {
+      title:"دست مهربان",
+      desc:"لمس مهربانانه‌ی خود در اوج خشم، برای یادآوری امنیت و مرز.",
+      colors:{light:"#ffccbc",mid:"#ff8a65",dark:"#bf360c"},
+      content:`
+        <p>معجون «دست مهربان» برای لحظاتی‌ست که خشم، تو را از خودت دور کرده. یک دست مهربان روی قلبت، روی شانه‌ات، یا روی دستت — یادآوری ساده‌ای‌ست که تو هنوز اینجایی، امنی، و حق داری آرام باشی.</p>
+        <h3>چطور ازش استفاده کنم؟</h3>
+        <ul><li>دستت را آرام روی قلبت بگذار.</li><li>نفس عمیق بکش. حس کن که دستت گرم است، زنده است.</li><li>به خودت بگو: «من با خودم مهربانم، حتی وقتی خشمگینم.»</li><li>دستت را روی شانه‌ات بگذار و آرام فشار بده — یک آغوش کوچک برای خودت.</li><li>چند نفس عمیق بکش و حس کن که خشم، آرام‌تر می‌شود.</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>فعال‌سازی سیستم آرامش‌بخش بدن (اکسی‌توسین)</li><li>کاهش تنش عضلانی و ضربان قلب</li><li>بازگشت به حس امنیت درونی</li><li>یادآوری این‌که خشم، تو را از خودت جدا نمی‌کند</li></ul>
+        <div class="highlight">گاهی مهربان‌ترین کار در اوج خشم،<br>لمس آرام خود است —<br>نه برای خاموش‌کردن خشم،<br>بلکه برای یادآوری این‌که تو هنوز اینجایی.</div>
+      `
+    },
+    smartDistance: {
+      title:"فاصله‌ی هوشمندانه",
+      desc:"ایجاد فاصله‌ی سالم از منبع خشم، برای بازگشت به تعادل و انتخاب آگاهانه.",
+      colors:{light:"#c5cae9",mid:"#5c6bc0",dark:"#1a237e"},
+      content:`
+        <p>معجون «فاصله‌ی هوشمندانه» برای لحظاتی‌ست که خشم، تو را درگیر کرده و نیاز داری از منبع آن فاصله بگیری — نه برای فرار، بلکه برای بازگشت به تعادل و انتخاب آگاهانه‌ی پاسخ.</p>
+        <h3>چطور ازش استفاده کنم؟</h3>
+        <ul><li>از موقعیت فیزیکی فاصله بگیر — حتی ۲ دقیقه.</li><li>از موقعیت ذهنی فاصله بگیر — به چیز دیگری فکر کن، حتی برای چند لحظه.</li><li>از موقعیت عاطفی فاصله بگیر — به خودت بگو: «این احساس، من نیستم. من بزرگ‌تر از اینم.»</li><li>بعد از فاصله، تصمیم بگیر: برگردم و حرف بزنم؟ سکوت کنم؟ راه دیگری بروم؟</li></ul>
+        <h3>اثر معجون</h3>
+        <ul><li>شکستن مدار فوران</li><li>بازگشت به تفکر آگاهانه</li><li>کاهش احتمال واکنش آسیب‌زا</li><li>انتخاب پاسخ به جای واکنش</li></ul>
+        <div class="highlight">فاصله، فرار نیست.<br>فاصله، فضایی‌ست برای نفس کشیدن،<br>دیدن واضح‌تر،<br>و انتخاب مهربان‌تر.</div>
+      `
+    }
+  };
+
+  /* ============================================================
+     الگوریتم درخت تصمیم خشم
+     ============================================================ */
+  const steps = [
+    {
+      text:"آیا الان در خطر فوری یا حمله قرار دارم؟",
+      yes: {
+        message:"فوراً از خودت محافظت کن، دور شو یا کمک بگیر.\n\nاین مرحله‌ی امنیت است، نه تحلیل.",
+        next: "done",
+        potion: "smartDistance"
+      },
+      no: {
+        message:"به خودت بگو: «الان امنم، فقط احساس دارم نه تهدید واقعی»\n۵ نفس عمیق با بازدم طولانی بکش (۴ ثانیه دم، ۸ ثانیه بازدم)\nاز محل فعلی کمی فاصله بگیر حتی برای ۲ دقیقه",
+        next: 1,
+        potion: "fireExtinguisher"
+      }
+    },
+    {
+      text:"آیا مرزم زیر پا گذاشته شده؟ (احترام، وقت، بدن، فضا...)",
+      yes: 2,
+      no: {
+        message:"شاید علت خشم چیز دیگه‌ایه: خستگی؟ شرم؟ حسادتی سرکوب‌شده؟\n\n• بنویس یا ضبط کن: «چی ممکنه پشت این خشم باشه؟»\n• بپرس: «من الان واقعاً از چی می‌ترسم یا ناراحتم؟»",
+        next: "done",
+        potion: "innerStorm"
+      }
+    },
+    {
+      text:"آیا قبلاً سعی کردم این مرز رو بدون خشونت بیان کنم؟",
+      yes: {
+        message:"✅ خشم تو یک پیام درست داره — حالا می‌تونی با قدرت و بدون خشونت از خودت دفاع کنی.\n\n→ از صدات استفاده کن، اما بدون فریاد\n→ از بدنت استفاده کن، اما بدون خشونت\n→ و از مرزت دفاع کن، نه از غرورت",
+        next: "done",
+        potion: "breathInFire"
+      },
+      no: {
+        message:"جمله تمرینی: «وقتی این اتفاق افتاد، من احساس (مثلاً تحقیر) کردم. می‌خوام از این به بعد (خواسته‌ت رو بگو).»\n\nیا بنویسش اول برای خودت، بعد آروم و واضح بگو.",
+        next: "done",
+        potion: "peaceBridge"
+      }
+    }
+  ];
+
+  const finalMessage = "تو مسیر خشم رو دیدی و همراهی کردی.\n\nاین خودش یک قدم بزرگه.\n\nیادت باشه: خشم، پایان نیست — فقط یک پیامه.\n\nو تو، می‌تونی پیامش رو بشنوی، بدون این‌که در شعله‌هاش بسوزی. 🔥";
+
+  let currentStep = 0;
+  let nextStep = null;
+  let finalPotion = null;
+
+  const questionEl = document.getElementById("question");
+  const questionCard = document.getElementById("questionCard");
+  const resultEl = document.getElementById("result");
+  const resultTextEl = document.getElementById("resultText");
+  const potionMount = document.getElementById("potionMount");
+  const finalEl = document.getElementById("final");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const continueBtn = document.getElementById("continueBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const buttonsContainer = document.getElementById("buttonsContainer");
+
+  /* ===== SVG بطری ===== */
+  function potionSVG(colors){
+    const id = colors.mid.replace("#","");
+    return `
+      <svg class="potion-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="glass-${id}" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#ffffff" stop-opacity=".4"/>
+            <stop offset=".35" stop-color="#b9e8e6" stop-opacity=".08"/>
+            <stop offset=".7" stop-color="#ffffff" stop-opacity=".02"/>
+            <stop offset="1" stop-color="#9bd8dc" stop-opacity=".35"/>
+          </linearGradient>
+          <linearGradient id="potion-${id}" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="${colors.light}"/>
+            <stop offset=".45" stop-color="${colors.mid}"/>
+            <stop offset="1" stop-color="${colors.dark}"/>
+          </linearGradient>
+          <linearGradient id="cork-${id}" x1="0" y1="0" x2="1" y2="0">
+            <stop stop-color="#80502f"/><stop offset=".5" stop-color="#d5a16b"/><stop offset="1" stop-color="#88512d"/>
+          </linearGradient>
+          <clipPath id="inside-${id}">
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 319 258 319 L142 319 Q124 319 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z"/>
+          </clipPath>
+          <filter id="blur-${id}"><feGaussianBlur stdDeviation="15"/></filter>
+        </defs>
+
+        <g class="glow"><ellipse cx="200" cy="225" rx="115" ry="130" fill="${colors.mid}" opacity=".35" filter="url(#blur-${id})"/></g>
+        <ellipse cx="200" cy="345" rx="77" ry="12" fill="#000" opacity=".3"/>
+
+        <g class="bottle">
+          <g>
+            <path d="M170 58 Q170 48 180 48 L220 48 Q230 48 230 58 L225 107 L175 107Z" fill="url(#cork-${id})" stroke="#6b432e" stroke-width="2"/>
+            <path d="M180 53 Q175 65 180 88" fill="none" stroke="#f4c38c" stroke-width="4" opacity=".5"/>
+            <path d="M190 52 L190 99" stroke="#71462d" opacity=".25"/>
+            <rect x="174" y="100" width="52" height="9" rx="3" fill="#70452f"/>
+          </g>
+          <g>
+            <path d="M166 105 L234 105 L234 151 Q234 165 252 182 L148 182 Q166 165 166 151Z" fill="url(#glass-${id})" stroke="#c4e7e9" stroke-width="3"/>
+          </g>
+          <g clip-path="url(#inside-${id})">
+            <rect x="120" y="225" width="160" height="110" fill="url(#potion-${id})"/>
+            <g class="liquid">
+              <path d="M115 227 Q150 215 180 227 Q220 239 250 223 Q270 216 290 225 L290 340 L110 340Z" fill="${colors.light}" opacity=".7"/>
+            </g>
+            <g fill="#fff">
+              <circle class="bubble" cx="157" cy="270" r="5" opacity=".6"/>
+              <circle class="bubble b2" cx="225" cy="285" r="4"/>
+              <circle class="bubble b3" cx="190" cy="248" r="3"/>
+              <circle class="bubble b2" cx="245" cy="258" r="2.5"/>
+              <circle class="bubble b3" cx="170" cy="300" r="2"/>
+            </g>
+          </g>
+          <g>
+            <path d="M165 127 L235 127 L235 151 Q235 165 253 182 Q276 205 276 230 L276 302 Q276 322 256 322 L144 322 Q124 322 124 302 L124 230 Q124 205 147 182 Q165 165 165 151Z" fill="url(#glass-${id})" stroke="#c6e9ed" stroke-width="3.5"/>
+            <path d="M140 224 Q140 203 157 185 Q175 167 175 150 L175 137" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".65"/>
+            <path d="M260 232 L260 298" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+            <path d="M136 307 Q200 317 264 307" fill="none" stroke="#fff" stroke-width="2" opacity=".4"/>
+          </g>
+          <g>
+            <circle cx="200" cy="252" r="25" fill="#fff" fill-opacity=".12" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/>
+            <path d="M200 231 L204 246 L219 252 L204 258 L200 273 L196 258 L181 252 L196 246Z" fill="#fff" opacity=".9"/>
+          </g>
+        </g>
+
+        <g fill="${colors.light}">
+          <path class="bubble" d="M105 157 L109 169 L121 173 L109 177 L105 189 L101 177 L89 173 L101 169Z"/>
+          <path class="bubble b2" d="M290 130 L293 139 L302 142 L293 145 L290 154 L287 145 L278 142 L287 139Z"/>
+          <circle class="bubble b3" cx="290" cy="190" r="3"/>
+        </g>
+      </svg>
+    `;
+  }
+
+  /* ===== نمایش سوال ===== */
+  function showQuestion(stepIndex){
+    currentStep = stepIndex;
+    const step = steps[stepIndex];
+
+    questionEl.style.animation = "none";
+    void questionEl.offsetHeight;
+    questionEl.style.animation = "fadeInUp .5s ease both";
+    questionEl.textContent = step.text;
+
+    resultEl.style.display = "none";
+    finalEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+    buttonsContainer.style.display = "flex";
+    yesBtn.style.display = "inline-block";
+    noBtn.style.display = "inline-block";
+  }
+
+  /* ===== نمایش راهکار + معجون با هم ===== */
+  function showResult(message, potionKey){
+    const p = potions[potionKey];
+    resultTextEl.textContent = message;
+    potionMount.innerHTML = `
+      <div class="potion-inner">
+        ${potionSVG(p.colors)}
+        <h3 class="potion-title">${p.title}</h3>
+        <p class="potion-desc">${p.desc}</p>
+        <div class="potion-content">${p.content}</div>
+      </div>
+    `;
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "block";
+    resultEl.style.animation = "none";
+    void resultEl.offsetHeight;
+    resultEl.style.animation = "fadeInUp .5s ease both";
+    resultEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== نمایش پیام نهایی + معجون ===== */
+  function showFinal(message, potionKey){
+    questionCard.style.display = "none";
+    buttonsContainer.style.display = "none";
+    resultEl.style.display = "none";
+
+    finalEl.textContent = message;
+    finalEl.style.display = "block";
+    finalEl.style.animation = "none";
+    void finalEl.offsetHeight;
+    finalEl.style.animation = "fadeInUp .6s ease both";
+
+    if(potionKey){
+      const p = potions[potionKey];
+      const wrap = document.createElement("div");
+      wrap.id = "finalPotionMount";
+      wrap.innerHTML = `
+        <div class="potion-inner" style="margin-top:20px;background:rgba(255,255,255,.9);">
+          ${potionSVG(p.colors)}
+          <h3 class="potion-title">${p.title}</h3>
+          <p class="potion-desc">${p.desc}</p>
+          <div class="potion-content">${p.content}</div>
+        </div>
+      `;
+      const old = document.getElementById("finalPotionMount");
+      if(old) old.remove();
+      finalEl.appendChild(wrap);
+    }
+
+    finalEl.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  /* ===== دکمه بله ===== */
+  yesBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.yes === "number"){
+      showQuestion(step.yes);
+    } else if(step.yes && typeof step.yes === "object"){
+      nextStep = step.yes.next;
+      finalPotion = step.yes.potion;
+      showResult(step.yes.message, step.yes.potion);
+    }
+  };
+
+  /* ===== دکمه خیر ===== */
+  noBtn.onclick = () => {
+    const step = steps[currentStep];
+    if(typeof step.no === "number"){
+      showQuestion(step.no);
+    } else if(step.no && typeof step.no === "object"){
+      nextStep = step.no.next;
+      finalPotion = step.no.potion;
+      showResult(step.no.message, step.no.potion);
+    }
+  };
+
+  /* ===== ادامه ===== */
+  continueBtn.onclick = () => {
+    if(nextStep === "done"){
+      showFinal(finalMessage, finalPotion);
+    } else if(typeof nextStep === "number"){
+      showQuestion(nextStep);
+    }
+  };
+
+  /* ===== شروع دوباره ===== */
+  function resetApp(){
+    currentStep = 0;
+    nextStep = null;
+    finalPotion = null;
+    finalEl.style.display = "none";
+    finalEl.innerHTML = "";
+    resultEl.style.display = "none";
+    potionMount.innerHTML = "";
+    questionCard.style.display = "block";
+    showQuestion(0);
+    window.scrollTo({ top:0, behavior:"smooth" });
+  }
+
+  restartBtn.onclick = resetApp;
+
+  /* ===== شروع ===== */
+  showQuestion(0);
+</script>
+
+</body>
+</html>
