@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اتاق خاطرات — بنویس، بسوزان، پاره کن، مهر و موم کن</title>
+<script src="https://cdn.jsdelivr.net/npm/polygon-clipping@0.15.7/dist/polygon-clipping.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    background: radial-gradient(ellipse at 50% 25%, #14100d 0%, #080605 60%, #020101 100%);
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #d1c7bc;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* افکت نور شمع */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at 65% 35%, rgba(255,160,70,0.05), transparent 45%);
+    pointer-events: none;
+    z-index: 2;
+    animation: flicker 4s infinite ease-in-out;
+  }
+  @keyframes flicker {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 0.55; }
+  }
+
+  .app {
+    position: relative;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 5;
+  }
+
+  /* ============ حالت نوشتن ============ */
+  .write-screen {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 26px; width: 100%; height: 100%;
+    animation: fadeInScreen 0.7s ease;
+  }
+  .write-screen.hidden { display: none; }
+
+  @keyframes fadeInScreen {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .write-paper {
+    position: relative;
+    width: min(480px, 92vw);
+    height: min(540px, 72vh);
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.22), transparent 45%),
+                linear-gradient(180deg, #f4ecda 0%, #ddcfb3 100%);
+    border-radius: 6px;
+    padding: 34px 38px;
+    box-shadow: 0 25px 55px rgba(0,0,0,0.75), inset 0 0 60px rgba(180,150,110,0.15);
+    display: flex; flex-direction: column;
+    color: #1c1a18;
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .write-paper::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' seed='22'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    pointer-events: none; border-radius: 6px;
+  }
+
+  .write-paper textarea {
+    flex: 1;
+    width: 100%;
+    background: transparent; border: none; outline: none;
+    font-family: 'Vazirmatn', sans-serif; font-size: 16px; line-height: 2.1;
+    color: #1c1a18; resize: none; text-align: right;
+    text-shadow: 0 0 1px rgba(0,0,0,.15);
+    position: relative; z-index: 2;
+  }
+  .write-paper textarea::placeholder { color: #8a8279; text-shadow: none; }
+
+  .write-footer {
+    position: relative; z-index: 2;
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid rgba(0,0,0,0.12);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11.5px; color: #7a7268;
+  }
+  .write-footer .date-label { font-weight: 500; }
+
+  /* ============ منوی پایین ============ */
+  .action-bar {
+    display: flex; gap: 10px;
+    padding: 12px 16px;
+    background: rgba(28, 24, 21, 0.85);
+    border: 1px solid rgba(255,180,100,0.18);
+    border-radius: 999px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06);
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .action-btn {
+    font-family: inherit; font-size: 13.5px; font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #e8dcc8;
+    background: transparent;
+    white-space: nowrap;
+  }
+  .action-btn:hover:not(:disabled) { transform: translateY(-2px); }
+  .action-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .action-btn .ico { font-size: 16px; }
+
+  .btn-burn {
+    border-color: rgba(255,120,50,0.3);
+    background: rgba(60,18,8,0.4);
+  }
+  .btn-burn:hover:not(:disabled) {
+    border-color: rgba(255,120,50,0.7);
+    background: rgba(90,28,10,0.6);
+    color: #ffd0b8;
+    box-shadow: 0 8px 25px rgba(255,80,10,0.25);
+  }
+
+  .btn-tear {
+    border-color: rgba(100,180,255,0.28);
+    background: rgba(10,28,45,0.45);
+  }
+  .btn-tear:hover:not(:disabled) {
+    border-color: rgba(100,180,255,0.7);
+    background: rgba(18,45,70,0.65);
+    color: #b8e0ff;
+    box-shadow: 0 8px 25px rgba(70,150,255,0.22);
+  }
+
+  .btn-seal {
+    border-color: rgba(220,90,110,0.32);
+    background: rgba(45,12,18,0.45);
+  }
+  .btn-seal:hover:not(:disabled) {
+    border-color: rgba(220,90,110,0.7);
+    background: rgba(70,18,28,0.65);
+    color: #ffc8d0;
+    box-shadow: 0 8px 25px rgba(200,60,90,0.25);
+  }
+
+  .btn-back {
+    border-color: rgba(200,200,200,0.18);
+    background: rgba(30,28,26,0.5);
+    color: #a89a8c;
+  }
+  .btn-back:hover:not(:disabled) {
+    border-color: rgba(200,200,200,0.45);
+    color: #fff;
+  }
+
+  /* ============ اسکرین‌ها ============ */
+  .scene-screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 22px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s;
+  }
+  .scene-screen.active {
+    opacity: 1; pointer-events: auto;
+  }
+  .scene-screen .stage-wrap {
+    position: relative;
+    width: min(580px, 94vw);
+    height: min(580px, 94vw);
+    max-height: 70vh;
+  }
+
+  /* --- صحنه سوختن (از نسخه اول) --- */
+  .burn-stage {
+    position: relative;
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.9));
+  }
+  .burn-stage svg { width: 100%; height: 100%; overflow: visible; }
+
+  /* --- صحنه پاره کردن (از نسخه دوم) --- */
+  .tear-stage {
+    position: relative;
+    width: 100%; height: 100%;
+    filter: drop-shadow(0 25px 50px rgba(0,0,0,0.85));
+    touch-action: none;
+  }
+  .tear-stage svg { width: 100%; height: 100%; overflow: visible; }
+
+  /* --- صحنه نامه (از نسخه سوم) --- */
+  .letter-scene-stage {
+    position: relative;
+    width: min(560px, 94vw);
+    height: min(600px, 74vh);
+    display: flex; align-items: center; justify-content: center;
+    perspective: 1200px;
+  }
+
+  .letter-card {
+    position: absolute;
+    width: 440px; height: 500px;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.22), transparent 45%),
+                linear-gradient(180deg, #f1eadc 0%, #ded3bd 100%);
+    border-radius: 6px; padding: 32px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+    display: flex; flex-direction: column; justify-content: space-between;
+    z-index: 20; color: #1c1a18;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 90vw;
+  }
+  .letter-card .letter-body {
+    flex: 1;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 15.5px; line-height: 2.1;
+    color: #1c1a18;
+    overflow-y: auto;
+    text-align: right;
+    padding: 4px 2px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-shadow: 0 0 1px rgba(0,0,0,.15);
+  }
+  .letter-card .letter-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(0,0,0,0.1); padding-top: 14px;
+    font-size: 11.5px; color: #7a7268;
+  }
+
+  .envelope {
+    position: absolute; width: 440px; height: 280px;
+    background: #23201e; border-radius: 8px;
+    border: 1px solid #36322e;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+    z-index: 50; opacity: 0; pointer-events: none;
+    transform: translateY(40px) scale(0.9);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 90vw;
+  }
+  .envelope.visible-appear {
+    opacity: 1; pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+  .envelope-pocket { position: absolute; inset: 0; background: #23201e; border-radius: 8px; z-index: 4; }
+  .envelope-flap {
+    position: absolute; top: 0; left: 0; width: 100%; height: 140px;
+    background: #2b2724; clip-path: polygon(0 0, 50% 100%, 100% 0);
+    transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 60;
+    border-bottom: 1px solid #36322e;
+  }
+  .envelope.open-flap .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+
+  .stamp {
+    position: absolute; right: 20px; top: 20px;
+    width: 45px; height: 55px; border: 2px dashed #6b5c4a;
+    display: flex; align-items: center; justify-content: center;
+    color: #6b5c4a; transform: rotate(7deg); z-index: 55; font-size: 16px;
+    background: rgba(255,255,255,0.01);
+  }
+
+  .wax-seal {
+    position: absolute; left: 50%; top: 90px;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff7777 0%, #c62020 40%, #7b1010 100%);
+    box-shadow: inset 0 3px 10px rgba(255,255,255,.3), inset 0 -8px 12px rgba(0,0,0,.35), 0 8px 20px rgba(0,0,0,.45);
+    z-index: 70; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: #500a0a; text-shadow: 0 1px 1px rgba(255,100,100,0.4);
+    opacity: 0; transform: translateX(-50%) scale(0.4);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+  }
+  .wax-seal.visible { opacity: 1; transform: translateX(-50%) scale(1); }
+
+  .seal-break { animation: breakSeal 0.7s forwards !important; }
+  @keyframes breakSeal {
+    0% { transform: translateX(-50%) scale(1); opacity: 1; }
+    50% { transform: translateX(-50%) scale(1.15) rotate(8deg); }
+    100% { opacity: 0; transform: translateX(-50%) scale(0.2) rotate(35deg); }
+  }
+
+  .open-animation { animation: openArchiveLetter 0.9s cubic-bezier(.16,1,.3,1) forwards; }
+  @keyframes openArchiveLetter {
+    0% { transform: translateY(100px) rotateX(50deg) scale(.6); opacity: 0; }
+    100% { transform: translateY(0) rotateX(0deg) scale(1); opacity: 1; }
+  }
+
+  .particle {
+    position: absolute; width: 3px; height: 3px; background: #dfd6c0; border-radius: 50%; pointer-events: none; z-index: 100;
+  }
+
+  .letter-card.fold-in {
+    transform: translateY(180px) scale(0.3) rotateX(30deg);
+    opacity: 0;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .envelope.fly-away {
+    transform: scale(0.2) translateX(-350px) translateY(-220px);
+    opacity: 0;
+    transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ============ آرشیو ============ */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 340px;
+    background: rgba(20, 18, 17, 0.96); backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex; flex-direction: column; z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 88vw;
+  }
+  .sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    padding: 22px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .sidebar-header-top {
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: 500; font-size: 14px; color: #b8aba0; margin-bottom: 12px;
+  }
+  .archive-stats { font-size: 11px; color: #7a7067; }
+  .close-sidebar { background: none; border: none; color: #a1958b; cursor: pointer; font-size: 18px; }
+
+  .sidebar-list {
+    flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .archive-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 14px; border-radius: 10px; cursor: pointer; transition: all 0.2s;
+  }
+  .archive-card:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
+  .archive-meta {
+    font-size: 11px; color: #8a7e74; margin-bottom: 6px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .archive-snippet {
+    font-size: 13px; color: #ded4cb;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px;
+  }
+  .mood-tag {
+    display: inline-block; font-size: 10.5px;
+    background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; color: #a1958b;
+  }
+
+  .archive-toggle-btn {
+    position: fixed; top: 20px; left: 20px; z-index: 500;
+    background: rgba(30, 27, 25, 0.8); border: 1px solid rgba(255,255,255,0.08); color: #d1c7bc;
+    padding: 9px 16px; border-radius: 8px; cursor: pointer;
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+    backdrop-filter: blur(10px);
+  }
+  .archive-toggle-btn:hover { background: rgba(45, 41, 38, 0.9); color: #fff; }
+
+  /* ============ کیبورد تایپ و افکت ============ */
+  .confetti-dot {
+    position: fixed; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; z-index: 900;
+  }
+
+  /* کوچیک‌تر شدن UI در موبایل */
+  @media (max-width: 520px) {
+    .write-paper { padding: 26px 24px; }
+    .action-bar { padding: 10px 12px; gap: 6px; }
+    .action-btn { font-size: 12px; padding: 8px 13px; }
+    .action-btn .ico { font-size: 14px; }
+    .action-btn .label { display: none; }
+    .action-btn { padding: 9px 12px; }
+    .letter-card { padding: 24px; }
+    .letter-card .letter-body { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- آرشیو -->
+<button class="archive-toggle-btn" id="archiveToggle">📜 <span>آرشیو</span></button>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-header-top">
+      <span>قفسه نامه‌های محرمانه</span>
+      <button class="close-sidebar" id="closeSidebar">✕</button>
+    </div>
+    <div class="archive-stats" id="archiveStats">۰ نامه مهر و موم شده</div>
+  </div>
+  <div class="sidebar-list" id="archiveList"></div>
+</div>
+
+<!-- اپ اصلی -->
+<div class="app" id="app">
+
+  <!-- ============ اسکرین نوشتن ============ -->
+  <div class="write-screen" id="writeScreen">
+    <div class="write-paper">
+      <textarea id="mainInput" placeholder="اینجا خانهٔ امن افکار و دلتنگی‌های توست... بنویس، بعد تصمیم بگیر چه بلایی سرش بیاوری."></textarea>
+      <div class="write-footer">
+        <span class="date-label" id="dateLabel"></span>
+        <span>سطرها: <span id="charCount">۰</span> حرف</span>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="action-btn btn-burn" id="goBurnBtn">
+        <span class="ico">🔥</span><span class="label">بسوزان</span>
+      </button>
+      <button class="action-btn btn-tear" id="goTearBtn">
+        <span class="ico">✂️</span><span class="label">پاره کن</span>
+      </button>
+      <button class="action-btn btn-seal" id="goSealBtn">
+        <span class="ico">🕯️</span><span class="label">مهر و موم</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ اسکرین سوختن ============ -->
+  <div class="scene-screen" id="burnScreen">
+    <div class="stage-wrap">
+      <div class="burn-stage">
+        <svg id="burnScene" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="paperGradB" x1="0%" y1="0%" x2="20%" y2="100%">
+              <stop offset="0%" stop-color="#fcf9f2"/>
+              <stop offset="30%" stop-color="#f2ebd9"/>
+              <stop offset="70%" stop-color="#ded0b6"/>
+              <stop offset="100%" stop-color="#c5b293"/>
+            </linearGradient>
+            <linearGradient id="burnEdge" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stop-color="#000000"/>
+              <stop offset="12%" stop-color="#0d0300"/>
+              <stop offset="28%" stop-color="#300d00"/>
+              <stop offset="45%" stop-color="#802600"/>
+              <stop offset="62%" stop-color="#e05500"/>
+              <stop offset="78%" stop-color="#ff8800" stop-opacity=".9"/>
+              <stop offset="90%" stop-color="#ffbb22" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#ffee88" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="ashGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#423b36"/>
+              <stop offset="40%" stop-color="#2c2622"/>
+              <stop offset="80%" stop-color="#171412"/>
+              <stop offset="100%" stop-color="#0a0807"/>
+            </linearGradient>
+            <radialGradient id="flameOuter" cx="50%" cy="75%" r="70%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="15%" stop-color="#fffa70"/>
+              <stop offset="38%" stop-color="#ff6a00"/>
+              <stop offset="65%" stop-color="#cc1a00"/>
+              <stop offset="88%" stop-color="#730000" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#330000" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="flameInner" cx="50%" cy="80%" r="50%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="25%" stop-color="#fffdcc"/>
+              <stop offset="55%" stop-color="#ff8800"/>
+              <stop offset="85%" stop-color="#ff1100" stop-opacity=".45"/>
+              <stop offset="100%" stop-color="#990000" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="7" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="intenseGlow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="14" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="ashBlur"><feGaussianBlur stdDeviation="0.6"/></filter>
+            <filter id="smokeBlur"><feGaussianBlur stdDeviation="7"/></filter>
+            <clipPath id="paperClip">
+              <path d="M 90,75 Q 250,65 410,75 L 410,425 Q 250,435 90,425 Z"/>
+            </clipPath>
+            <filter id="paperTexture">
+              <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="22" result="noise"/>
+              <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0"/>
+            </filter>
+          </defs>
+
+          <g id="burnPaperGroup" clip-path="url(#paperClip)">
+            <rect id="burnPaperSheet" x="80" y="65" width="340" height="370" fill="url(#paperGradB)"/>
+            <rect id="burnPaperTexture" x="80" y="65" width="340" height="370" fill="none" filter="url(#paperTexture)"/>
+            <rect x="80" y="65" width="340" height="370" fill="none" stroke="#bead90" stroke-width="1.5" opacity=".65"/>
+            <foreignObject x="105" y="90" width="290" height="320">
+              <div xmlns="http://www.w3.org/1999/xhtml"
+                   id="burnText"
+                   style="width:100%;height:100%;overflow:hidden;
+                     font-family:'Vazirmatn','Tahoma',sans-serif;font-size:16px;
+                     line-height:1.95;color:#281f17;padding:6px 8px;
+                     word-wrap:break-word;text-align:right;white-space:pre-wrap;"
+              ></div>
+            </foreignObject>
+            <path id="burnPath" fill="url(#burnEdge)" filter="url(#glow)" d="M 90,425 L 410,425 Z"/>
+          </g>
+
+          <g id="burnEmbers"></g>
+          <g id="burnFlameField" opacity="0" filter="url(#intenseGlow)"></g>
+          <g id="burnAshGroup" opacity="0">
+            <path fill="url(#ashGrad)" d="M 110,445 Q 180,412 250,428 Q 320,412 390,445 Q 335,465 250,468 Q 165,465 110,445 Z"/>
+            <path fill="url(#ashGrad)" opacity=".85" d="M 140,445 Q 195,425 250,435 Q 305,425 360,445 Q 305,455 250,457 Q 195,455 140,445 Z"/>
+            <g id="burnAshFlakes" filter="url(#ashBlur)"></g>
+            <g id="burnFinalEmbers"></g>
+          </g>
+          <g id="burnSmokeGroup" opacity="0" filter="url(#smokeBlur)"></g>
+        </svg>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn btn-back" id="burnBackBtn">
+        <span class="ico">↩</span><span class="label">برگرد</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ اسکرین پاره کردن ============ -->
+  <div class="scene-screen" id="tearScreen">
+    <div class="stage-wrap">
+      <div class="tear-stage">
+        <svg id="tearScene" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="paperGradT" x1="0%" y1="0%" x2="30%" y2="100%">
+              <stop offset="0%" stop-color="#fcf9f2"/>
+              <stop offset="40%" stop-color="#f2ebd9"/>
+              <stop offset="80%" stop-color="#ded0b6"/>
+              <stop offset="100%" stop-color="#c5b293"/>
+            </linearGradient>
+            <filter id="paperShadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="1" dy="2.5" stdDeviation="2.5" flood-color="#000" flood-opacity="0.45"/>
+            </filter>
+          </defs>
+          <g id="tearPiecesGroup"></g>
+          <path id="tearCuttingLine" fill="none" stroke="#281f17" stroke-width="2.5" stroke-dasharray="4 3" opacity="0.9"/>
+        </svg>
+      </div>
+    </div>
+    <div class="action-bar">
+      <button class="action-btn btn-back" id="tearResetBtn">
+        <span class="ico">🔁</span><span class="label">ریست</span>
+      </button>
+      <button class="action-btn btn-back" id="tearBackBtn">
+        <span class="ico">↩</span><span class="label">برگرد</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ اسکرین نامه / مهر و موم ============ -->
+  <div class="scene-screen" id="sealScreen">
+    <div class="letter-scene-stage">
+      <div class="letter-card" id="letterCard">
+        <div class="letter-body" id="letterBody"></div>
+        <div class="letter-footer">
+          <span class="date-label" id="letterDate"></span>
+          <span class="mood-tag" id="letterMood">دلتنگی</span>
+        </div>
+      </div>
+
+      <div class="envelope" id="envelope">
+        <div class="stamp">✈</div>
+        <div class="envelope-flap" id="envelopeFlap"></div>
+        <div class="wax-seal" id="waxSeal">🕯️</div>
+        <div class="envelope-pocket"></div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="action-btn btn-seal" id="doSealBtn">
+        <span class="ico">🕯️</span><span class="label">مهر و موم کن</span>
+      </button>
+      <button class="action-btn btn-back" id="sealBackBtn">
+        <span class="ico">↩</span><span class="label">برگرد</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- صداها -->
+<audio id="burnSound" src="https://raw.githubusercontent.com/lesehawio/toe/main/B/%D8%B3%D9%88%D8%AE%D8%AA%D9%86.mp3" preload="auto" loop></audio>
+<audio id="tearSound" src="https://raw.githubusercontent.com/lesehawio/toe/main/B/%D9%BE%D8%A7%D8%B1%D9%87.mp3" preload="auto"></audio>
+
+<script>
+(function () {
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+
+  // ============ عناصر مشترک ============
+  const mainInput   = $('mainInput');
+  const dateLabel   = $('dateLabel');
+  const charCount   = $('charCount');
+  const writeScreen = $('writeScreen');
+  const burnScreen  = $('burnScreen');
+  const tearScreen  = $('tearScreen');
+  const sealScreen  = $('sealScreen');
+
+  const burnSound   = $('burnSound');
+  const tearSound   = $('tearSound');
+
+  // ============ وضعیت اپ ============
+  let currentText = '';
+  let currentMode = 'write';
+
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const currentDate = new Date().toLocaleDateString('fa-IR', options);
+  dateLabel.textContent = currentDate;
+
+  // شمارنده حروف
+  function updateCharCount() {
+    const len = mainInput.value.length;
+    const faNum = len.toLocaleString('fa-IR');
+    charCount.textContent = faNum;
+  }
+  mainInput.addEventListener('input', updateCharCount);
+  updateCharCount();
+    // ============ مدیریت اسکرین‌ها ============
+  function showScreen(mode) {
+    currentMode = mode;
+    writeScreen.classList.add('hidden');
+    burnScreen.classList.remove('active');
+    tearScreen.classList.remove('active');
+    sealScreen.classList.remove('active');
+
+    if (mode === 'write') {
+      writeScreen.classList.remove('hidden');
+    } else if (mode === 'burn') {
+      burnScreen.classList.add('active');
+      prepareBurnScreen(currentText);
+    } else if (mode === 'tear') {
+      tearScreen.classList.add('active');
+      prepareTearScreen(currentText);
+    } else if (mode === 'seal') {
+      sealScreen.classList.add('active');
+      prepareSealScreen(currentText);
+    }
+  }
+
+  // ============ دکمه‌های منو ============
+  $('goBurnBtn').addEventListener('click', () => {
+    currentText = mainInput.value.trim();
+    if (!currentText) {
+      mainInput.focus();
+      mainInput.style.transition = 'box-shadow 0.3s';
+      mainInput.style.boxShadow = '0 0 0 2px rgba(255,100,50,0.5)';
+      setTimeout(() => { mainInput.style.boxShadow = 'none'; }, 800);
+      return;
+    }
+    showScreen('burn');
+  });
+
+  $('goTearBtn').addEventListener('click', () => {
+    currentText = mainInput.value.trim();
+    if (!currentText) {
+      mainInput.focus();
+      mainInput.style.transition = 'box-shadow 0.3s';
+      mainInput.style.boxShadow = '0 0 0 2px rgba(100,180,255,0.5)';
+      setTimeout(() => { mainInput.style.boxShadow = 'none'; }, 800);
+      return;
+    }
+    showScreen('tear');
+  });
+
+  $('goSealBtn').addEventListener('click', () => {
+    currentText = mainInput.value.trim();
+    if (!currentText) {
+      mainInput.focus();
+      mainInput.style.transition = 'box-shadow 0.3s';
+      mainInput.style.boxShadow = '0 0 0 2px rgba(220,90,110,0.5)';
+      setTimeout(() => { mainInput.style.boxShadow = 'none'; }, 800);
+      return;
+    }
+    showScreen('seal');
+  });
+
+  $('burnBackBtn').addEventListener('click', () => {
+    stopBurnSound(0);
+    resetBurn();
+    showScreen('write');
+  });
+
+  $('tearBackBtn').addEventListener('click', () => {
+    showScreen('write');
+  });
+
+  $('sealBackBtn').addEventListener('click', () => {
+    showScreen('write');
+  });
+
+  // ============================================================
+  // ================= بخش سوختن ================================
+  // ============================================================
+  const burnPaperGroup  = $('burnPaperGroup');
+  const burnPaperSheet  = $('burnPaperSheet');
+  const burnPaperTexture= $('burnPaperTexture');
+  const burnText        = $('burnText');
+  const burnPath        = $('burnPath');
+  const burnFlameField  = $('burnFlameField');
+  const burnEmbersEl    = $('burnEmbers');
+  const burnAshGroup    = $('burnAshGroup');
+  const burnAshFlakes   = $('burnAshFlakes');
+  const burnFinalEmbers = $('burnFinalEmbers');
+  const burnSmokeGroup  = $('burnSmokeGroup');
+
+  const PAPER_TOP = 65, PAPER_BOT = 435, PAPER_L = 90, PAPER_R = 410;
+  const PAPER_H = PAPER_BOT - PAPER_TOP;
+
+  let burnState = 'idle';
+  let burnRaf = null;
+  const burnFlames = [];
+  let burnFlameIdCounter = 0;
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const el = (tag, attrs) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  };
+
+  function prepareBurnScreen(text) {
+    // ریست اولیه
+    resetBurn();
+    burnText.textContent = text;
+    burnText.style.opacity = 1;
+    // کمی تأخیر برای اطمینان از رندر شدن DOM، سپس شروع آتش
+    setTimeout(() => startBurn(), 400);
+  }
+
+  function createBurnFlame(x, y, scale) {
+    const g = el('g', {});
+    const outer = el('path', {
+      fill: 'url(#flameOuter)',
+      d: 'M 0,0 Q -20,-35 0,-76 Q 14,-45 9,-64 Q 24,-36 18,-20 Q 30,-28 33,-13 Q 27,9 0,14 Q -11,14 -20,5 Z'
+    });
+    const inner = el('path', {
+      fill: 'url(#flameInner)',
+      d: 'M 0,5 Q -11,-24 0,-52 Q 8,-32 7,-44 Q 15,-24 11,-11 Q 18,-18 19,-7 Q 14,9 0,12 Z'
+    });
+    g.appendChild(outer);
+    g.appendChild(inner);
+    g.setAttribute('transform', `translate(${x}, ${y}) scale(${scale})`);
+    burnFlameField.appendChild(g);
+
+    const f = {
+      id: ++burnFlameIdCounter,
+      x, y, scale,
+      node: g, inner,
+      born: performance.now(),
+      life: rand(700, 1900),
+      phase: rand(0, Math.PI * 2),
+      swayAmp: rand(1.2, 2.8),
+      swayFreq: rand(0.0025, 0.005),
+      flickerSpeed: rand(0.005, 0.009)
+    };
+    burnFlames.push(f);
+    return f;
+  }
+
+  function updateBurnFlames(now) {
+    for (let i = burnFlames.length - 1; i >= 0; i--) {
+      const f = burnFlames[i];
+      const age = now - f.born;
+      let lifeScale = 1;
+      if (age > f.life * 0.45) {
+        const k = (age - f.life * 0.45) / (f.life * 0.55);
+        lifeScale = 1 - k;
+        if (lifeScale <= 0) {
+          f.node.remove();
+          burnFlames.splice(i, 1);
+          continue;
+        }
+      }
+      const flick = 0.7 + 0.3 * Math.sin(now * f.flickerSpeed + f.phase);
+      const sway = Math.sin(now * f.swayFreq + f.phase) * f.swayAmp;
+      const s = f.scale * lifeScale * flick;
+      f.node.setAttribute('transform', `translate(${f.x + sway}, ${f.y}) scale(${s})`);
+      f.inner.setAttribute('opacity', 0.85 + 0.15 * Math.sin(now * f.flickerSpeed * 1.8 + f.phase));
+    }
+  }
+
+  function spawnBurnEmber(y) {
+    const c = el('circle', {
+      cx: rand(PAPER_L + 15, PAPER_R - 15),
+      cy: y - 2,
+      r: rand(1.4, 3.8),
+      fill: Math.random() < .45 ? '#ffff88' : (Math.random() < .7 ? '#ff7700' : '#ff2200'),
+      opacity: 1
+    });
+    burnEmbersEl.appendChild(c);
+    const life = rand(500, 1300);
+    const t0 = performance.now();
+    const drift = rand(-40, 40), rise = rand(50, 120);
+    (function anim(t) {
+      const p = (t - t0) / life;
+      if (p >= 1 || burnState === 'idle') { c.remove(); return; }
+      c.setAttribute('cy', y - 2 - p * rise);
+      c.setAttribute('cx', parseFloat(c.getAttribute('cx')) + drift * 0.025);
+      c.setAttribute('opacity', (1 - p) * 0.95);
+      c.setAttribute('r', Math.max(0.1, 3.8 * (1 - p)));
+      requestAnimationFrame(anim);
+    })(t0);
+  }
+
+  function spawnBurnAshFlake() {
+    const x = rand(100, 400);
+    const f = el('ellipse', {
+      cx: x, cy: rand(430, 455),
+      rx: rand(3, 7), ry: rand(1.4, 3.5),
+      fill: Math.random() < .5 ? '#38302b' : '#221c18',
+      opacity: 0
+    });
+    burnAshFlakes.appendChild(f);
+    const dur = rand(2200, 4600);
+    const driftX = rand(-160, 160);
+    const driftY = rand(-240, -120);
+    const t0 = performance.now();
+    (function anim(t) {
+      const p = (t - t0) / dur;
+      if (p >= 1) { f.remove(); return; }
+      const ease = p * p * (3 - 2 * p);
+      f.setAttribute('cx', x + driftX * ease + Math.sin(p * 14) * 22);
+      f.setAttribute('cy', 435 + driftY * ease);
+      f.setAttribute('opacity', Math.sin(p * Math.PI) * .88);
+      f.setAttribute('rx', 6 * (1 - p * .5));
+      requestAnimationFrame(anim);
+    })(t0);
+  }
+
+  function spawnBurnSmoke() {
+    const cx = rand(150, 350), cy = rand(380, 425);
+    const e = el('ellipse', {
+      cx, cy,
+      rx: rand(22, 38), ry: rand(14, 22),
+      fill: Math.random() < .4 ? '#1f1b18' : '#332c27',
+      opacity: 0
+    });
+    burnSmokeGroup.appendChild(e);
+    const dur = rand(3000, 5000);
+    const dx = rand(-100, 110), dy = rand(-340, -200);
+    const rot = rand(-35, 35);
+    const t0 = performance.now();
+    (function anim(t) {
+      const p = (t - t0) / dur;
+      if (p >= 1) { e.remove(); return; }
+      const e2 = p * p * (3 - 2 * p);
+      e.setAttribute('cx', cx + dx * e2 + Math.sin(p * 8) * 24);
+      e.setAttribute('cy', cy + dy * e2);
+      e.setAttribute('rx', 28 + p * 60);
+      e.setAttribute('ry', 16 + p * 35);
+      e.setAttribute('opacity', Math.sin(p * Math.PI) * .26);
+      e.setAttribute('transform', `rotate(${rot * p} ${cx + dx * e2} ${cy + dy * e2})`);
+      requestAnimationFrame(anim);
+    })(t0);
+  }
+
+  function playBurnSound() {
+    try {
+      burnSound.currentTime = 0;
+      burnSound.volume = 0;
+      const p = burnSound.play();
+      if (p && p.catch) p.catch(err => console.warn('پخش صدا ناموفق:', err));
+      const targetVol = 0.75, dur = 1500, t0 = performance.now();
+      (function fadeIn(t) {
+        if (burnSound.paused) return;
+        const k = Math.min(1, (t - t0) / dur);
+        burnSound.volume = targetVol * k;
+        if (k < 1) requestAnimationFrame(fadeIn);
+      })(t0);
+    } catch (e) {}
+  }
+
+  function stopBurnSound(fadeDuration = 1400) {
+    if (burnSound.paused) {
+      burnSound.currentTime = 0;
+      burnSound.volume = 0.75;
+      return;
+    }
+    if (fadeDuration <= 0) {
+      burnSound.pause();
+      burnSound.currentTime = 0;
+      burnSound.volume = 0.75;
+      return;
+    }
+    const startVol = burnSound.volume;
+    const t0 = performance.now();
+    (function fadeOut(t) {
+      const p = Math.min(1, (t - t0) / fadeDuration);
+      burnSound.volume = Math.max(0, startVol * (1 - p));
+      if (p < 1 && !burnSound.paused) requestAnimationFrame(fadeOut);
+      else {
+        burnSound.pause();
+        burnSound.currentTime = 0;
+        burnSound.volume = 0.75;
+      }
+    })(t0);
+  }
+
+  function startBurn() {
+    if (burnState !== 'idle') return;
+    burnState = 'burning';
+    playBurnSound();
+
+    const duration = 10000;
+    const t0 = performance.now();
+    let lastEmber = 0, lastSmoke = 0, lastAsh = 0, lastFlameSpawn = 0;
+    let frontY = PAPER_BOT;
+
+    burnSmokeGroup.setAttribute('opacity', 1);
+
+    const step = (t) => {
+      if (burnState !== 'burning') return;
+      let p = (t - t0) / duration;
+      if (p > 1) p = 1;
+      const ease = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      frontY = PAPER_BOT - ease * (PAPER_H + 20);
+
+      let burnPathData = `M ${PAPER_L},${PAPER_BOT} `;
+      const stepsCount = 22;
+      const stepWidth = (PAPER_R - PAPER_L) / stepsCount;
+      for (let i = 0; i <= stepsCount; i++) {
+        const x = PAPER_L + i * stepWidth;
+        const wave = Math.sin(i * 1.8 + t * 0.009) * 10 + Math.cos(i * 2.7 + t * 0.005) * 6;
+        const currentY = Math.max(frontY, Math.min(PAPER_BOT, frontY + wave * (1 - ease * 0.4)));
+        burnPathData += `L ${x},${currentY} `;
+      }
+      burnPathData += `L ${PAPER_R},${PAPER_BOT} Z`;
+      burnPath.setAttribute('d', burnPathData);
+
+      const visibleTop = PAPER_TOP + ease * PAPER_H;
+      burnPaperSheet.setAttribute('y', visibleTop);
+      burnPaperSheet.setAttribute('height', Math.max(0, PAPER_BOT - visibleTop));
+      burnPaperTexture.setAttribute('y', visibleTop);
+      burnPaperTexture.setAttribute('height', Math.max(0, PAPER_BOT - visibleTop));
+      burnText.style.opacity = Math.max(0, 1 - ease * 1.45);
+
+      if (p < 1) {
+        burnFlameField.setAttribute('opacity', 1);
+        const spawnInterval = 30 + Math.max(0, (ease - 0.2)) * 40;
+        if (t - lastFlameSpawn > spawnInterval) {
+          const fx = rand(PAPER_L + 10, PAPER_R - 10);
+          const fy = frontY + rand(-8, 22);
+          createBurnFlame(fx, fy, rand(0.8, 1.5));
+          lastFlameSpawn = t;
+        }
+        if (Math.random() < 0.4) {
+          const fx = rand(PAPER_L + 20, PAPER_R - 20);
+          const fy = frontY + rand(-5, 16);
+          createBurnFlame(fx, fy, rand(1.1, 1.9));
+        }
+      }
+      updateBurnFlames(t);
+
+      if (t - lastEmber > 18) { spawnBurnEmber(frontY); lastEmber = t; }
+      if (t - lastSmoke > 100) { spawnBurnSmoke(); lastSmoke = t; }
+      if (ease > .15 && t - lastAsh > 160) { spawnBurnAshFlake(); lastAsh = t; }
+
+      if (p < 1) burnRaf = requestAnimationFrame(step);
+      else finishBurn();
+    };
+    burnRaf = requestAnimationFrame(step);
+  }
+
+  function finishBurn() {
+    burnState = 'done';
+    cancelAnimationFrame(burnRaf);
+    stopBurnSound(1400);
+
+    burnFlames.forEach(f => { f.life = performance.now() - f.born + 450; });
+    const fadeLoop = (t) => {
+      updateBurnFlames(t);
+      if (burnFlames.length > 0) requestAnimationFrame(fadeLoop);
+      else burnFlameField.setAttribute('opacity', 0);
+    };
+    requestAnimationFrame(fadeLoop);
+
+    burnPaperGroup.style.transition = 'opacity 0.9s';
+    burnPaperGroup.style.opacity = 0;
+    burnEmbersEl.innerHTML = '';
+
+    burnAshGroup.style.transition = 'opacity 1.3s';
+    burnAshGroup.setAttribute('opacity', 1);
+
+    for (let i = 0; i < 25; i++) {
+      const c = el('circle', {
+        cx: rand(120, 380), cy: rand(430, 460),
+        r: rand(1, 3.2),
+        fill: Math.random() < .5 ? '#ff5500' : '#ffaa11',
+        opacity: rand(.4, .95)
+      });
+      burnFinalEmbers.appendChild(c);
+      const per = rand(600, 1400), ph = Math.random() * Math.PI * 2;
+      (function pulse(t) {
+        if (burnState !== 'done') return;
+        c.setAttribute('opacity', 0.3 + 0.65 * (0.5 + 0.5 * Math.sin(t / per + ph)));
+        requestAnimationFrame(pulse);
+      })(performance.now());
+    }
+
+    const ashTimer = setInterval(() => {
+      if (burnState !== 'done') { clearInterval(ashTimer); return; }
+      spawnBurnAshFlake();
+      if (Math.random() < .6) spawnBurnAshFlake();
+    }, 180);
+
+    const smokeTimer = setInterval(() => {
+      if (burnState !== 'done') { clearInterval(smokeTimer); return; }
+      spawnBurnSmoke();
+    }, 320);
+
+    setTimeout(() => {
+      clearInterval(smokeTimer);
+      burnSmokeGroup.style.transition = 'opacity 1.4s';
+      burnSmokeGroup.setAttribute('opacity', 0);
+    }, 4500);
+  }
+
+  function resetBurn() {
+    cancelAnimationFrame(burnRaf);
+    burnState = 'idle';
+
+    burnFlames.forEach(f => f.node.remove());
+    burnFlames.length = 0;
+    burnFlameField.innerHTML = '';
+    burnFlameField.setAttribute('opacity', 0);
+
+    burnEmbersEl.innerHTML = '';
+    burnAshFlakes.innerHTML = '';
+    burnFinalEmbers.innerHTML = '';
+    burnSmokeGroup.innerHTML = '';
+
+    burnPaperGroup.style.transition = 'none';
+    burnPaperGroup.style.opacity = 1;
+    burnPaperSheet.setAttribute('y', PAPER_TOP);
+    burnPaperSheet.setAttribute('height', PAPER_H);
+    burnPaperTexture.setAttribute('y', PAPER_TOP);
+    burnPaperTexture.setAttribute('height', PAPER_H);
+    burnText.style.opacity = 1;
+    burnPath.setAttribute('d', `M ${PAPER_L},${PAPER_BOT} L ${PAPER_R},${PAPER_BOT} Z`);
+
+    burnAshGroup.style.transition = 'none';
+    burnAshGroup.setAttribute('opacity', 0);
+    burnSmokeGroup.style.transition = 'none';
+    burnSmokeGroup.setAttribute('opacity', 0);
+  }
+
+  // ============================================================
+  // ================= بخش پاره کردن ============================
+  // ============================================================
+  const tearScene        = $('tearScene');
+  const tearPiecesGroup  = $('tearPiecesGroup');
+  const tearCuttingLine  = $('tearCuttingLine');
+
+  let tearPieces = [];
+  let isDrawing = false;
+  let cutPoints = [];
+  let draggedPiece = null;
+  let dragOffset = { x: 0, y: 0 };
+
+  function getSvgPoint(e) {
+    const pt = tearScene.createSVGPoint();
+    pt.x = e.clientX || (e.touches && e.touches[0].clientX);
+    pt.y = e.clientY || (e.touches && e.touches[0].clientY);
+    return pt.matrixTransform(tearScene.getScreenCTM().inverse());
+  }
+
+  function playTearSound() {
+    try {
+      const clone = tearSound.cloneNode();
+      clone.volume = 0.65 + Math.random() * 0.25;
+      const rate = 0.92 + Math.random() * 0.18;
+      if (clone.playbackRate !== undefined) clone.playbackRate = rate;
+      const p = clone.play();
+      if (p && p.catch) p.catch(err => console.warn('پخش صدا ناموفق:', err));
+    } catch (e) {}
+  }
+
+  function initTearPaper(text) {
+    tearPieces = [{
+      id: 'p_main',
+      pts: [
+        {x: 100, y: 80},
+        {x: 400, y: 80},
+        {x: 400, y: 420},
+        {x: 100, y: 420}
+      ],
+      dx: 0, dy: 0,
+      text: text
+    }];
+    renderTearPieces();
+  }
+
+  function renderTearPieces() {
+    tearPiecesGroup.innerHTML = '';
+    tearPieces.forEach((p) => {
+      const g = el('g', {
+        filter: 'url(#paperShadow)',
+        transform: `translate(${p.dx}, ${p.dy})`,
+        style: 'cursor: grab;'
+      });
+
+      let d = `M ${p.pts[0].x} ${p.pts[0].y} `;
+      for (let i = 1; i < p.pts.length; i++) d += `L ${p.pts[i].x} ${p.pts[i].y} `;
+      d += 'Z';
+
+      const path = el('path', {
+        d: d,
+        fill: 'url(#paperGradT)',
+        stroke: '#bead90',
+        'stroke-width': '1.2',
+        'stroke-linejoin': 'round'
+      });
+
+      const cx = p.pts.reduce((s, pt) => s + pt.x, 0) / p.pts.length;
+      const cy = p.pts.reduce((s, pt) => s + pt.y, 0) / p.pts.length;
+
+      const fo = el('foreignObject', {
+        x: cx - 70, y: cy - 40, width: 140, height: 80
+      });
+
+      const div = document.createElement('div');
+      div.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+      div.contentEditable = 'false';
+      div.style.cssText = 'width:100%; height:100%; outline:none; overflow:hidden; font-family:Vazirmatn,Tahoma,sans-serif; font-size:12px; line-height:1.5; color:#281f17; padding:2px; word-wrap:break-word; text-align:right;';
+      div.innerHTML = p.text;
+
+      fo.appendChild(div);
+      g.appendChild(path);
+      g.appendChild(fo);
+
+      g.addEventListener('pointerdown', (e) => {
+        draggedPiece = p;
+        const pt = getSvgPoint(e);
+        dragOffset.x = pt.x - p.dx;
+        dragOffset.y = pt.y - p.dy;
+        g.style.cursor = 'grabbing';
+        e.stopPropagation();
+      });
+
+      tearPiecesGroup.appendChild(g);
+    });
+  }
+
+  function prepareTearScreen(text) {
+    initTearPaper(text);
+  }
+
+  tearScene.addEventListener('pointerdown', (e) => {
+    if (e.target.tagName === 'DIV' || e.target.tagName === 'FOREIGNOBJECT') return;
+    const p = getSvgPoint(e);
+    isDrawing = true;
+    cutPoints = [p];
+  });
+
+  tearScene.addEventListener('pointermove', (e) => {
+    const p = getSvgPoint(e);
+    if (draggedPiece) {
+      draggedPiece.dx = p.x - dragOffset.x;
+      draggedPiece.dy = p.y - dragOffset.y;
+      renderTearPieces();
+      return;
+    }
+    if (!isDrawing) return;
+    cutPoints.push(p);
+    let pathStr = '';
+    cutPoints.forEach((pt, idx) => {
+      const wobble = Math.sin(idx * 1.5) * 2;
+      pathStr += (idx === 0 ? `M ${pt.x + wobble},${pt.y} ` : `L ${pt.x + wobble},${pt.y} `);
+    });
+    tearCuttingLine.setAttribute('d', pathStr);
+  });
+
+  tearScene.addEventListener('pointerup', () => {
+    draggedPiece = null;
+    if (!isDrawing) return;
+    isDrawing = false;
+    tearCuttingLine.setAttribute('d', '');
+    if (cutPoints.length < 5) return;
+    splitTearPiece(cutPoints);
+    cutPoints = [];
+  });
+
+  function splitTearPiece(line) {
+    const newPieces = [];
+    let splitDone = false;
+
+    const cutterPoly = [];
+    for (let i = 0; i < line.length; i++) {
+      const pt = line[i];
+      const w = Math.sin(i * 1.5) * 3 + 2;
+      cutterPoly.push([pt.x + w, pt.y]);
+    }
+    for (let i = line.length - 1; i >= 0; i--) {
+      const pt = line[i];
+      const w = Math.sin(i * 1.5) * 3 + 2;
+      cutterPoly.push([pt.x - w, pt.y]);
+    }
+
+    tearPieces.forEach(piece => {
+      if (splitDone) { newPieces.push(piece); return; }
+      const absPts = piece.pts.map(pt => [pt.x + piece.dx, pt.y + piece.dy]);
+      try {
+        const result = polygonClipping.difference([absPts], [cutterPoly]);
+        if (result && result.length > 1) {
+          result.forEach((polyRing, idx) => {
+            const ring = polyRing[0];
+            const localPts = ring.map(c => ({ x: c[0] - piece.dx, y: c[1] - piece.dy }));
+            newPieces.push({
+              id: 'p_' + Math.random(),
+              pts: localPts,
+              dx: piece.dx,
+              dy: piece.dy,
+              text: idx === 0 ? piece.text : ''
+            });
+          });
+          splitDone = true;
+        } else {
+          newPieces.push(piece);
+        }
+      } catch (err) {
+        newPieces.push(piece);
+      }
+    });
+
+    if (splitDone) {
+      playTearSound();
+      tearPieces = newPieces;
+      renderTearPieces();
+    }
+  }
+
+  $('tearResetBtn').addEventListener('click', () => {
+    initTearPaper(currentText);
+  });
+
+  // ============================================================
+  // ================= بخش مهر و موم ============================
+  // ============================================================
+  const letterBody  = $('letterBody');
+  const letterDate  = $('letterDate');
+  const envelope    = $('envelope');
+  const waxSeal     = $('waxSeal');
+  const letterCard  = $('letterCard');
+
+  const STORAGE_KEY = 'secret_letters_v8';
+
+  function prepareSealScreen(text) {
+    letterBody.textContent = text;
+    letterDate.textContent = currentDate;
+    letterCard.style.display = 'flex';
+    letterCard.classList.remove('fold-in');
+    envelope.classList.remove('visible-appear', 'fly-away', 'open-flap');
+    waxSeal.classList.remove('visible', 'seal-break');
+  }
+
+  function playSealSound(type) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      if (type === 'paper') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(130, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(45, ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        osc.start(); osc.stop(ctx.currentTime + 0.3);
+      } else {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(90, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(220, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+        osc.start(); osc.stop(ctx.currentTime + 0.15);
+      }
+    } catch (e) {}
+  }
+
+  function spawnSealDust() {
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      document.body.appendChild(p);
+      const rect = waxSeal.getBoundingClientRect();
+      const startX = rect.left + rect.width / 2;
+      const startY = rect.top + rect.height / 2;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 35 + Math.random() * 65;
+      p.animate([
+        { transform: `translate(${startX}px, ${startY}px) scale(1)`, opacity: 1 },
+        { transform: `translate(${startX + Math.cos(angle) * dist}px, ${startY + Math.sin(angle) * dist}px) scale(0)`, opacity: 0 }
+      ], { duration: 700, easing: 'ease-out' });
+      setTimeout(() => p.remove(), 700);
+    }
+  }
+
+  async function hashText(text) {
+    const data = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return [...new Uint8Array(digest)].map(x => x.toString(16).padStart(2, '0')).join('').substring(0, 16);
+  }
+
+  let sealingInProgress = false;
+
+  $('doSealBtn').addEventListener('click', async () => {
+    if (sealingInProgress) return;
+    sealingInProgress = true;
+    $('doSealBtn').disabled = true;
+    playSealSound('paper');
+
+    envelope.classList.add('visible-appear', 'open-flap');
+
+    setTimeout(() => { letterCard.classList.add('fold-in'); }, 400);
+    setTimeout(() => {
+      envelope.classList.remove('open-flap');
+      waxSeal.classList.add('visible');
+      playSealSound('seal');
+      spawnSealDust();
+    }, 1100);
+    setTimeout(() => { envelope.classList.add('fly-away'); }, 1600);
+
+    const hash = await hashText(currentText);
+
+    setTimeout(() => {
+      let letters = getLetters();
+      letters.unshift({
+        id: Date.now(),
+        timestamp: Date.now(),
+        date: currentDate,
+        hash: hash,
+        content: currentText,
+        preview: currentText.substring(0, 32) + (currentText.length > 32 ? '...' : '')
+      });
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(letters)); } catch (e) {}
+
+      // پاک کردن متن و برگشت
+      mainInput.value = '';
+      updateCharCount();
+      currentText = '';
+      sealingInProgress = false;
+      $('doSealBtn').disabled = false;
+      showScreen('write');
+      renderArchive();
+    }, 2400);
+  });
+
+  function getLetters() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch (e) { return []; }
+  }
+
+  // ============================================================
+  // ================= آرشیو ====================================
+  // ============================================================
+  const sidebar      = $('sidebar');
+  const archiveList  = $('archiveList');
+  const archiveStats = $('archiveStats');
+
+  $('archiveToggle').addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    renderArchive();
+  });
+  $('closeSidebar').addEventListener('click', () => sidebar.classList.remove('open'));
+
+  function renderArchive() {
+    const letters = getLetters();
+    archiveList.innerHTML = '';
+    archiveStats.textContent = `${letters.length.toLocaleString('fa-IR')} نامه مهر و موم شده`;
+
+    if (letters.length === 0) {
+      archiveList.innerHTML = '<div style="color:#7a7067; font-size:12px; text-align:center; margin-top:30px;">هنوز نامه‌ای مهر و موم نکرده‌ای...</div>';
+      return;
+    }
+
+    letters.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'archive-card';
+      card.innerHTML = `
+        <div class="archive-meta">
+          <span>📜 نامه شماره ${(letters.length - index).toLocaleString('fa-IR')}</span>
+        </div>
+        <div class="archive-snippet">${item.preview}</div>
+        <div style="font-size:10px; color:#7a7067;">🕯️ ${item.date} | کد: #${item.hash}</div>
+      `;
+      card.addEventListener('click', () => {
+        mainInput.value = item.content;
+        updateCharCount();
+        sidebar.classList.remove('open');
+      });
+      archiveList.appendChild(card);
+    });
+  }
+
+  // ============ شروع ============
+  renderArchive();
+
+})();
+</script>
+</body>
+</html>
